@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { famillesAPI } from '../services/api';
 import type { Famille } from '../types';
 
-const navigate = useNavigate();
-
 const Familles = () => {
+  const navigate = useNavigate();  // ✅ Hook appelé DANS le composant
   const [familles, setFamilles] = useState<Famille[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -33,7 +32,7 @@ const Familles = () => {
     e.preventDefault();
     try {
       await famillesAPI.create(formData);
-      setFormData({ nom: '', description: '', is_public: formData.is_public,});
+      setFormData({ nom: '', description: '', is_public: false });
       setShowModal(false);
       loadFamilles();
     } catch (error) {
@@ -54,31 +53,20 @@ const Familles = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-6 md:py-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-christmas-red">
-          👨‍👩‍👧‍👦 Mes Familles
-        </h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
         <div>
-  <label className="flex items-center gap-2 cursor-pointer">
-    <input
-      type="checkbox"
-      checked={formData.is_public}
-      onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
-      className="w-4 h-4"
-    />
-    <span className="text-sm font-medium">
-      Rendre cette famille publique (visible dans la recherche)
-    </span>
-  </label>
-  <p className="text-xs text-gray-500 mt-1 ml-6">
-    Les autres utilisateurs pourront demander à rejoindre cette famille
-  </p>
-</div>
+          <h1 className="text-2xl md:text-3xl font-bold text-christmas-red mb-2">
+            👨‍👩‍👧‍👦 Mes Familles
+          </h1>
+          <p className="text-sm md:text-base text-gray-600">
+            Gérez vos groupes familiaux
+          </p>
+        </div>
         <button
           onClick={() => setShowModal(true)}
-          className="btn-primary"
+          className="btn-primary w-full md:w-auto"
         >
           + Créer une famille
         </button>
@@ -87,7 +75,7 @@ const Familles = () => {
       {/* Liste des familles */}
       {familles.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-xl text-gray-600 mb-4">
+          <p className="text-lg md:text-xl text-gray-600 mb-4">
             Vous n'avez pas encore de famille
           </p>
           <button
@@ -98,27 +86,31 @@ const Familles = () => {
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {familles.map((famille) => (
-  <div
-    key={famille.id}
-    className="card hover:shadow-xl transition cursor-pointer"
-    onClick={() => navigate(`/familles/${famille.id}`)}
-  >
-    <div className="flex justify-between items-start mb-3">
-      <h3 className="text-xl font-bold">{famille.nom}</h3>
-      {famille.is_public && (
-        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-          🌍 Publique
-        </span>
-      )}
-    </div>
-    <p className="text-gray-600 mb-4">{famille.description}</p>
-    <p className="text-sm text-gray-500">
-      👥 {famille.membres?.length || 0} membres
-    </p>
-  </div>
-))}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {familles.map((famille) => (
+            <div
+              key={famille.id}
+              className="card hover:shadow-xl transition cursor-pointer"
+              onClick={() => navigate(`/familles/${famille.id}`)}
+            >
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-lg md:text-xl font-bold break-words flex-1">
+                  {famille.nom}
+                </h3>
+                {famille.is_public && (
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full ml-2 whitespace-nowrap">
+                    🌍 Publique
+                  </span>
+                )}
+              </div>
+              <p className="text-sm md:text-base text-gray-600 mb-4 break-words">
+                {famille.description}
+              </p>
+              <p className="text-xs md:text-sm text-gray-500">
+                👥 {famille.membres?.length || 0} membres
+              </p>
+            </div>
+          ))}
         </div>
       )}
 
@@ -126,7 +118,7 @@ const Familles = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="card max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">Créer une famille</h2>
+            <h2 className="text-xl md:text-2xl font-bold mb-4">Créer une famille</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -156,6 +148,23 @@ const Familles = () => {
                   value={formData.description}
                   onChange={handleChange}
                 />
+              </div>
+
+              <div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.is_public}
+                    onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm font-medium">
+                    Rendre cette famille publique (visible dans la recherche)
+                  </span>
+                </label>
+                <p className="text-xs text-gray-500 mt-1 ml-6">
+                  Les autres utilisateurs pourront demander à rejoindre cette famille
+                </p>
               </div>
 
               <div className="flex gap-3">
