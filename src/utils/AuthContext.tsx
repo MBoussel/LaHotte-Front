@@ -20,21 +20,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      try {
-        const response = await authAPI.getMe();
-        setUser(response.data);
-      } catch (error) {
-        localStorage.removeItem('access_token');
-      }
+    try {
+      // Le cookie est envoyé automatiquement
+      const response = await authAPI.getMe();
+      setUser(response.data);
+    } catch (error) {
+      // Pas authentifié ou token expiré
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  const logout = () => {
-    localStorage.removeItem('access_token');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authAPI.logout();
+    } catch (error) {
+      console.error('Erreur logout:', error);
+    } finally {
+      setUser(null);
+      window.location.href = '/login';
+    }
   };
 
   return (

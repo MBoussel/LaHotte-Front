@@ -7,27 +7,30 @@ const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',  // Peut être username OU email
+    username: '',
     password: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
+      // Login (le cookie est défini automatiquement par le backend)
       const response = await authAPI.login(formData.username, formData.password);
-      localStorage.setItem('access_token', response.data.access_token);
-
-      // Récupérer les infos utilisateur
-      const userResponse = await authAPI.getMe();
-      setUser(userResponse.data);
+      
+      // Mettre à jour le contexte avec les infos utilisateur
+      setUser(response.data.user);
 
       navigate('/familles');
     } catch (err: any) {
       console.error('Erreur login:', err);
       setError(err.response?.data?.detail || 'Identifiants incorrects');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,6 +66,7 @@ const Login = () => {
               placeholder="email@example.com"
               value={formData.username}
               onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
@@ -77,12 +81,13 @@ const Login = () => {
               className="input"
               value={formData.password}
               onChange={handleChange}
+              disabled={loading}
               required
             />
           </div>
 
-          <button type="submit" className="btn-primary w-full">
-            Se connecter
+          <button type="submit" className="btn-primary w-full" disabled={loading}>
+            {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
 

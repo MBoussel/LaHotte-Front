@@ -1,42 +1,22 @@
 import axios, { type AxiosInstance } from 'axios';
 import type { User, Famille, Cadeau, Invitation, Contribution, ContributionWithUser } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
-// Fonctions cookies
-export const setToken = (token: string): void => {
-  document.cookie = `token=${token}; path=/; max-age=${7 * 24 * 60 * 60}`;
-};
-
-export const getToken = (): string | null => {
-  const match = document.cookie.match(/token=([^;]+)/);
-  return match ? match[1] : null;
-};
-
-export const deleteToken = (): void => {
-  document.cookie = 'token=; path=/; max-age=0';
-};
-
-// Instance Axios
+// Configuration Axios
 const api: AxiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,  // ← IMPORTANT : Envoie les cookies
 });
 
-// Ajouter le token automatiquement
-api.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
+// Intercepteur pour gérer les erreurs 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       // Token invalide ou expiré
-      localStorage.removeItem('access_token');
       if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
         window.location.href = '/login';
       }
@@ -63,11 +43,13 @@ export const authAPI = {
     }),
   
   login: (username: string, password: string) =>
-    api.post<{ access_token: string; token_type: string }>(
+    api.post<{ message: string; user: User }>(
       '/auth/login',
       new URLSearchParams({ username, password }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     ),
+  
+  logout: () => api.post('/auth/logout'),
   
   getMe: () => api.get<User>('/auth/me'),
 };
