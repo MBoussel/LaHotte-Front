@@ -1,19 +1,16 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
 import { useAuth } from '../utils/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { setUser } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
   const [error, setError] = useState('');
-
-  const redirectUrl = searchParams.get('redirect');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,12 +24,7 @@ const Login = () => {
       const userResponse = await authAPI.getMe();
       setUser(userResponse.data);
 
-      // Rediriger
-      if (redirectUrl) {
-        navigate(redirectUrl);
-      } else {
-        navigate('/familles');
-      }
+      navigate('/familles');
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Identifiants incorrects');
     }
@@ -43,10 +35,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red to-christmas-green px-4">
       <div className="card max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-christmas-red mb-2">
+          <h1 className="text-4xl font-bold text-christmas-red mb-2">
             🎄 Liste de Noël
           </h1>
           <p className="text-gray-600">Connectez-vous à votre compte</p>
@@ -55,12 +47,6 @@ const Login = () => {
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
-          </div>
-        )}
-
-        {redirectUrl && (
-          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4 text-sm">
-            ℹ️ Connectez-vous pour continuer
           </div>
         )}
 
@@ -100,10 +86,7 @@ const Login = () => {
 
         <p className="text-center text-sm text-gray-600 mt-6">
           Pas encore de compte ?{' '}
-          <Link
-            to={redirectUrl ? `/register?redirect=${redirectUrl}` : '/register'}
-            className="text-christmas-red hover:underline font-semibold"
-          >
+          <Link to="/register" className="text-christmas-red hover:underline font-semibold">
             Créer un compte
           </Link>
         </p>
