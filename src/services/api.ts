@@ -45,18 +45,20 @@ export const famillesAPI = {
   create: (data: Partial<Famille>) => api.post<Famille>('/familles/', data),
   update: (id: number, data: Partial<Famille>) => api.put<Famille>(`/familles/${id}`, data),
   delete: (id: number) => api.delete(`/familles/${id}`),
-  addMember: (familleId: number, userId: number) => api.post(`/familles/${familleId}/membres/${userId}`),
-  removeMember: (familleId: number, userId: number) => api.delete(`/familles/${familleId}/membres/${userId}`),
+  invite: (familleId: number, email: string) => api.post(`/familles/${familleId}/invite`, { email }),
+  getPendingInvitations: () => api.get<Invitation[]>('/familles/invitations/pending'),
+  acceptInvitation: (token: string) => api.post(`/familles/invitations/${token}/accept`),
   
-  // Invitations
-  createInvitation: (familleId: number, email: string) => 
-    api.post<Invitation>(`/familles/${familleId}/invitations`, { email }),
-  getInvitations: (familleId: number) => 
-    api.get<Invitation[]>(`/familles/${familleId}/invitations`),
-  getPendingInvitations: () => 
-    api.get<Invitation[]>('/familles/invitations/pending'),
-  acceptInvitation: (token: string) => 
-    api.post(`/familles/invitations/${token}/accept`),
+  // Nouvelles routes de recherche
+  searchPublic: (query: string = '') => api.get<Famille[]>(`/familles/search?query=${query}`),
+  requestToJoin: (familleId: number, message: string = '') => 
+    api.post(`/familles/${familleId}/demander-adhesion`, { message }),
+  getDemandes: (familleId: number) => 
+    api.get(`/familles/${familleId}/demandes`),
+  acceptDemande: (demandeId: number) => 
+    api.post(`/familles/demandes/${demandeId}/accepter`),
+  rejectDemande: (demandeId: number) => 
+    api.delete(`/familles/demandes/${demandeId}`),
 };
 
 // Cadeaux

@@ -14,6 +14,7 @@ export interface Famille {
   description: string;
   creator_id: number;
   created_at: string;
+  is_public?: boolean;
   membres?: Membre[];
 }
 

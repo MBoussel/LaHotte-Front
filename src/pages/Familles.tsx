@@ -1,7 +1,9 @@
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { famillesAPI } from '../services/api';
 import type { Famille } from '../types';
+
+const navigate = useNavigate();
 
 const Familles = () => {
   const [familles, setFamilles] = useState<Famille[]>([]);
@@ -10,6 +12,7 @@ const Familles = () => {
   const [formData, setFormData] = useState({
     nom: '',
     description: '',
+    is_public: false,
   });
 
   useEffect(() => {
@@ -30,7 +33,7 @@ const Familles = () => {
     e.preventDefault();
     try {
       await famillesAPI.create(formData);
-      setFormData({ nom: '', description: '' });
+      setFormData({ nom: '', description: '', is_public: formData.is_public,});
       setShowModal(false);
       loadFamilles();
     } catch (error) {
@@ -57,6 +60,22 @@ const Familles = () => {
         <h1 className="text-3xl font-bold text-christmas-red">
           👨‍👩‍👧‍👦 Mes Familles
         </h1>
+        <div>
+  <label className="flex items-center gap-2 cursor-pointer">
+    <input
+      type="checkbox"
+      checked={formData.is_public}
+      onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
+      className="w-4 h-4"
+    />
+    <span className="text-sm font-medium">
+      Rendre cette famille publique (visible dans la recherche)
+    </span>
+  </label>
+  <p className="text-xs text-gray-500 mt-1 ml-6">
+    Les autres utilisateurs pourront demander à rejoindre cette famille
+  </p>
+</div>
         <button
           onClick={() => setShowModal(true)}
           className="btn-primary"
@@ -80,20 +99,26 @@ const Familles = () => {
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {familles.map((famille) => (
-            <Link
-              key={famille.id}
-              to={`/familles/${famille.id}`}
-              className="card hover:shadow-xl transition cursor-pointer"
-            >
-              <h3 className="text-xl font-bold mb-2">{famille.nom}</h3>
-              <p className="text-gray-600 mb-4">{famille.description}</p>
-              <div className="flex items-center justify-between text-sm text-gray-500">
-                <span>👥 {famille.membres?.length || 0} membres</span>
-                <span className="text-christmas-gold">Voir →</span>
-              </div>
-            </Link>
-          ))}
+        {familles.map((famille) => (
+  <div
+    key={famille.id}
+    className="card hover:shadow-xl transition cursor-pointer"
+    onClick={() => navigate(`/familles/${famille.id}`)}
+  >
+    <div className="flex justify-between items-start mb-3">
+      <h3 className="text-xl font-bold">{famille.nom}</h3>
+      {famille.is_public && (
+        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+          🌍 Publique
+        </span>
+      )}
+    </div>
+    <p className="text-gray-600 mb-4">{famille.description}</p>
+    <p className="text-sm text-gray-500">
+      👥 {famille.membres?.length || 0} membres
+    </p>
+  </div>
+))}
         </div>
       )}
 

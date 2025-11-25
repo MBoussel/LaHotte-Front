@@ -1,9 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './utils/AuthContext';
 import Navbar from './components/layout/Navbar';
-import ProtectedRoute from './components/layout/ProtectedRoute';
-
-// Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,6 +8,8 @@ import Familles from './pages/Familles';
 import FamilleDetail from './pages/FamilleDetail';
 import MesCadeaux from './pages/MesCadeaux';
 import AcceptInvitation from './pages/AcceptInvitation';
+import RechercherFamilles from './pages/RechercherFamilles';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
   return (
@@ -23,6 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/invitation/:token" element={<AcceptInvitation />} />
 
             {/* Routes protégées */}
             <Route
@@ -41,7 +41,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/invitation/:token" element={<AcceptInvitation />} />
             <Route
               path="/cadeaux"
               element={
@@ -50,8 +49,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/rechercher"
+              element={
+                <ProtectedRoute>
+                  <RechercherFamilles />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Redirect pour les routes inconnues */}
+            {/* Redirect */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
