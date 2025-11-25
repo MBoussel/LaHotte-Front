@@ -4,7 +4,7 @@ import { famillesAPI } from '../services/api';
 import type { Famille } from '../types';
 
 const Familles = () => {
-  const navigate = useNavigate();  // ✅ Hook appelé DANS le composant
+  const navigate = useNavigate();
   const [familles, setFamilles] = useState<Famille[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -30,18 +30,31 @@ const Familles = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    
+    console.log('📤 Envoi des données:', formData);  // Debug
+    
     try {
-      await famillesAPI.create(formData);
+      await famillesAPI.create({
+        nom: formData.nom,
+        description: formData.description,
+        is_public: formData.is_public,  // ← IMPORTANT
+      });
       setFormData({ nom: '', description: '', is_public: false });
       setShowModal(false);
       loadFamilles();
     } catch (error) {
+      console.error('❌ Erreur:', error);
       alert('Erreur lors de la création');
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCheckboxChange = (checked: boolean): void => {
+    console.log('✅ Checkbox changée:', checked);  // Debug
+    setFormData({ ...formData, is_public: checked });
   };
 
   if (loading) {
@@ -150,21 +163,30 @@ const Familles = () => {
                 />
               </div>
 
-              <div>
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+                <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={formData.is_public}
-                    onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
-                    className="w-4 h-4"
+                    onChange={(e) => handleCheckboxChange(e.target.checked)}
+                    className="w-5 h-5 mt-0.5 flex-shrink-0"
                   />
-                  <span className="text-sm font-medium">
-                    Rendre cette famille publique (visible dans la recherche)
-                  </span>
+                  <div>
+                    <span className="text-sm font-medium block">
+                      🌍 Rendre cette famille publique
+                    </span>
+                    <p className="text-xs text-gray-600 mt-1">
+                      Les autres utilisateurs pourront demander à rejoindre cette famille via la recherche
+                    </p>
+                  </div>
                 </label>
-                <p className="text-xs text-gray-500 mt-1 ml-6">
-                  Les autres utilisateurs pourront demander à rejoindre cette famille
-                </p>
+                
+                {/* Debug visuel */}
+                <div className="mt-2 pt-2 border-t border-gray-300">
+                  <p className="text-xs text-gray-500">
+                    État actuel : {formData.is_public ? '✅ Public' : '❌ Privé'}
+                  </p>
+                </div>
               </div>
 
               <div className="flex gap-3">
