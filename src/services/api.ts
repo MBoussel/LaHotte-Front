@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
-import type { User, Famille, Cadeau, LoginCredentials, RegisterData, AuthResponse, Invitation, Contribution, ContributionWithUser } from '../types';
+import type { User, Famille, Cadeau, Invitation, Contribution, ContributionWithUser } from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
@@ -33,8 +33,16 @@ api.interceptors.request.use((config) => {
 
 // Auth
 export const authAPI = {
-  register: (userData: RegisterData) => api.post<User>('/auth/register', userData),
-  login: (credentials: LoginCredentials) => api.post<AuthResponse>('/auth/login', new URLSearchParams(credentials as any)),
+  register: (username: string, email: string, password: string) =>
+    api.post<User>('/auth/register', { username, email, password }),
+  
+  login: (username: string, password: string) =>
+    api.post<{ access_token: string; token_type: string }>(
+      '/auth/login',
+      new URLSearchParams({ username, password }),
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+    ),
+  
   getMe: () => api.get<User>('/auth/me'),
 };
 
@@ -48,6 +56,8 @@ export const famillesAPI = {
   invite: (familleId: number, email: string) => api.post(`/familles/${familleId}/invite`, { email }),
   getPendingInvitations: () => api.get<Invitation[]>('/familles/invitations/pending'),
   acceptInvitation: (token: string) => api.post(`/familles/invitations/${token}/accept`),
+   getInvitations: (familleId: number) => 
+    api.get<Invitation[]>(`/familles/${familleId}/invitations`),
   
   // Nouvelles routes de recherche
   searchPublic: (query: string = '') => api.get<Famille[]>(`/familles/search?query=${query}`),

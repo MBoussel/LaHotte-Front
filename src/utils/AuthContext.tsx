@@ -1,77 +1,53 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { authAPI, setToken, getToken, deleteToken } from '../services/api';
-import type { User, LoginCredentials, RegisterData, AuthResult } from '../types';
+import { authAPI } from '../services/api';
+import type { User } from '../types';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (credentials: LoginCredentials) => Promise<AuthResult>;
-  register: (userData: RegisterData) => Promise<AuthResult>;
+  setUser: (user: User | null) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-};
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     checkAuth();
   }, []);
 
-  const checkAuth = async (): Promise<void> => {
-    if (getToken()) {
+  const checkAuth = async () => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
       try {
         const response = await authAPI.getMe();
         setUser(response.data);
       } catch (error) {
-        deleteToken();
+        localStorage.removeItem('access_token');
       }
     }
     setLoading(false);
   };
 
-  const login = async (credentials: LoginCredentials): Promise<AuthResult> => {
-    try {
-      const response = await authAPI.login(credentials);
-      setToken(response.data.access_token);
-      await checkAuth();
-      return { success: true };
-    } catch (error: any) {
-      return { success: false, error: error.response?.data?.detail || 'Erreur' };
-    }
-  };
-
-  const register = async (userData: RegisterData): Promise<AuthResult> => {
-    try {
-      await authAPI.register(userData);
-      return { success: true };
-    } catch (error: any) {
-      return { success: false, error: error.response?.data?.detail || 'Erreur' };
-    }
-  };
-
-  const logout = (): void => {
-    deleteToken();
+  const logout = () => {
+    localStorage.removeItem('access_token');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
 };

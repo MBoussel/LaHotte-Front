@@ -1,5 +1,6 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { famillesAPI } from '../../services/api';
+import type { Invitation } from '../../types';
 
 interface InvitationsProps {
   familleId: number;
@@ -10,6 +11,22 @@ const Invitations = ({ familleId, isCreator }: InvitationsProps) => {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+
+  useEffect(() => {
+    if (isCreator) {
+      loadInvitations();
+    }
+  }, [familleId, isCreator]);
+
+  const loadInvitations = async () => {
+    try {
+      const response = await famillesAPI.getInvitations(familleId);
+      setInvitations(response.data);
+    } catch (error) {
+      console.error('Erreur chargement invitations:', error);
+    }
+  };
 
   const handleInvite = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,11 +34,13 @@ const Invitations = ({ familleId, isCreator }: InvitationsProps) => {
 
     try {
       await famillesAPI.invite(familleId, email);
-      alert(`Invitation envoyée à ${email} ! 📧`);
+      alert(`✅ Invitation envoyée à ${email} !`);
       setEmail('');
       setShowModal(false);
+      loadInvitations(); // Recharger la liste
     } catch (error: any) {
-      alert(error.response?.data?.detail || 'Erreur lors de l\'envoi');
+      const errorMessage = error.response?.data?.detail || 'Erreur lors de l\'envoi';
+      alert(`❌ ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -32,12 +51,14 @@ const Invitations = ({ familleId, isCreator }: InvitationsProps) => {
   return (
     <>
       <div className="card mb-6 md:mb-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <div>
-            <h2 className="text-lg md:text-xl font-bold">📧 Inviter des membres</h2>
-            <p className="text-xs md:text-sm text-gray-600 mt-1">
-              Invitez vos proches à rejoindre cette famille
-            </p>
+            <h2 className="text-lg md:text-xl font-bold">📧 Invitations</h2>
+            {invitations.length > 0 && (
+              <p className="text-xs md:text-sm text-gray-600 mt-1">
+                {invitations.length} invitation{invitations.length > 1 ? 's' : ''} en attente
+              </p>
+            )}
           </div>
           <button
             onClick={() => setShowModal(true)}
@@ -46,6 +67,31 @@ const Invitations = ({ familleId, isCreator }: InvitationsProps) => {
             + Inviter quelqu'un
           </button>
         </div>
+
+        {invitations.length > 0 && (
+          <div className="space-y-2">
+            {invitations.map((inv) => (
+              <div
+                key={inv.id}
+                className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 p-3 bg-gray-50 rounded border border-gray-200"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm md:text-base font-medium truncate">{inv.email}</p>
+                  <p className="text-xs md:text-sm">
+                    {inv.accepted ? (
+                      <span className="text-green-600">✅ Acceptée</span>
+                    ) : (
+                      <span className="text-orange-600">⏳ En attente</span>
+                    )}
+                  </p>
+                </div>
+                <p className="text-xs text-gray-400">
+                  {new Date(inv.created_at).toLocaleDateString('fr-FR')}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal Invitation */}
