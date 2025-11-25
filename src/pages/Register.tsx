@@ -7,8 +7,9 @@ const Register = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
+    first_name: '',
+    last_name: '',
     password: '',
-    confirmPassword: '',
   });
   const [error, setError] = useState('');
 
@@ -16,15 +17,17 @@ const Register = () => {
     e.preventDefault();
     setError('');
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
-      return;
-    }
-
     try {
-      await authAPI.register(formData.username, formData.email, formData.password);
+      await authAPI.register(
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.first_name,
+        formData.last_name
+      );
       navigate('/login');
     } catch (err: any) {
+      console.error('Erreur register:', err);
       setError(err.response?.data?.detail || 'Erreur lors de l\'inscription');
     }
   };
@@ -50,6 +53,36 @@ const Register = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Prénom *
+              </label>
+              <input
+                type="text"
+                name="first_name"
+                className="input"
+                value={formData.first_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Nom *
+              </label>
+              <input
+                type="text"
+                name="last_name"
+                className="input"
+                value={formData.last_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium mb-1">
               Nom d'utilisateur *
@@ -87,20 +120,6 @@ const Register = () => {
               name="password"
               className="input"
               value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Confirmer le mot de passe *
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              className="input"
-              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />

@@ -7,7 +7,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',
+    username: '',  // Peut être username OU email
     password: '',
   });
   const [error, setError] = useState('');
@@ -26,6 +26,7 @@ const Login = () => {
 
       navigate('/familles');
     } catch (err: any) {
+      console.error('Erreur login:', err);
       setError(err.response?.data?.detail || 'Identifiants incorrects');
     }
   };
@@ -53,12 +54,13 @@ const Login = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">
-              Nom d'utilisateur
+              Email ou nom d'utilisateur
             </label>
             <input
               type="text"
               name="username"
               className="input"
+              placeholder="email@example.com"
               value={formData.username}
               onChange={handleChange}
               required

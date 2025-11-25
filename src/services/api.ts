@@ -47,8 +47,20 @@ api.interceptors.response.use(
 
 // Auth
 export const authAPI = {
-  register: (username: string, email: string, password: string) =>
-    api.post<User>('/auth/register', { username, email, password }),
+  register: (
+    username: string,
+    email: string,
+    password: string,
+    first_name?: string,
+    last_name?: string
+  ) =>
+    api.post<User>('/auth/register', {
+      username,
+      email,
+      password,
+      first_name: first_name || '',
+      last_name: last_name || '',
+    }),
   
   login: (username: string, password: string) =>
     api.post<{ access_token: string; token_type: string }>(
@@ -59,7 +71,6 @@ export const authAPI = {
   
   getMe: () => api.get<User>('/auth/me'),
 };
-
 // Familles
 export const famillesAPI = {
   getAll: () => api.get<Famille[]>('/familles/'),
