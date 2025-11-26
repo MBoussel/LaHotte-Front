@@ -16,14 +16,14 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
     if (!familleId) return;
 
     try {
-      const response = await cadeauxAPI.getAll();
-      const filteredCadeaux = response.data.filter(c => c.famille_ids?.includes(familleId));
-      setCadeaux(filteredCadeaux);
+      // ✅ Utilise le nouvel endpoint spécifique à la famille
+      const response = await cadeauxAPI.getByFamille(familleId);
+      setCadeaux(response.data);
 
       // Charger les contributions (sauf si propriétaire)
       const contribsData: Record<number, ContributionWithUser[]> = {};
       await Promise.all(
-        filteredCadeaux.map(async (cadeau) => {
+        response.data.map(async (cadeau: Cadeau) => {
           if (cadeau.owner_id !== userId) {
             try {
               const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
