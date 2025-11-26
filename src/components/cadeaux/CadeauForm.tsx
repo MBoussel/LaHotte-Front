@@ -19,8 +19,6 @@ interface CadeauFormProps {
 }
 
 const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: CadeauFormProps) => {
-    console.log('mesFamilles:', mesFamilles);
-  console.log('mesFamilles[0]?.membres:', mesFamilles[0]?.membres);
   const [formData, setFormData] = useState<CadeauFormData>({
     titre: '',
     prix: 0,
