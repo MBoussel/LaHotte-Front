@@ -225,19 +225,21 @@ const FamilleDetail = () => {
       </div>
 
       {/* Modal Création Cadeau */}
-      {showCadeauModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="card max-w-md w-full my-8">
-            <h2 className="text-xl md:text-2xl font-bold mb-4">Ajouter un cadeau</h2>
-            <CadeauForm
-              currentFamilleId={familleId}
-              mesFamilles={mesFamilles}
-              onSubmit={handleCreateCadeau}
-              onCancel={() => setShowCadeauModal(false)}
-            />
-          </div>
-        </div>
-      )}
+{showCadeauModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="sticky top-0 bg-white pb-4 border-b mb-4">
+        <h2 className="text-xl md:text-2xl font-bold">Ajouter un cadeau</h2>
+      </div>
+      <CadeauForm
+        currentFamilleId={familleId}
+        mesFamilles={mesFamilles}
+        onSubmit={handleCreateCadeau}
+        onCancel={() => setShowCadeauModal(false)}
+      />
+    </div>
+  </div>
+)}
 
       {/* Modal Contribution */}
       {selectedCadeau && (
