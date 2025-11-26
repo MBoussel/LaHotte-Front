@@ -62,6 +62,19 @@ const CadeauCard = ({
       {/* Titre et Prix */}
       <h3 className="text-xl font-bold mb-2">{cadeau.titre}</h3>
       <p className="text-2xl font-bold text-christmas-red mb-2">{cadeau.prix} €</p>
+      
+      {/* ✅ BÉNÉFICIAIRES - NOUVEAU */}
+      {cadeau.beneficiaires && cadeau.beneficiaires.length > 0 && (
+        <div className="mb-3">
+          <div className="inline-flex items-center gap-1 text-xs bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
+            <span>👥 Pour:</span>
+            <span className="font-semibold">
+              {cadeau.beneficiaires.map(b => b.username).join(', ')}
+            </span>
+          </div>
+        </div>
+      )}
+      
       {cadeau.description && <p className="text-gray-600 mb-4">{cadeau.description}</p>}
 
       {/* Barre de progression - CACHÉE si propriétaire */}
