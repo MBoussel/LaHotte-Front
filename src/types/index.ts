@@ -24,6 +24,8 @@ export interface Membre {
   email: string;
 }
 
+// Dans src/types/index.ts
+
 export interface Cadeau {
   id: number;
   titre: string;
@@ -34,6 +36,7 @@ export interface Cadeau {
   owner_id: number;
   is_purchased: boolean;
   purchased_by_id?: number | null;
+  beneficiaires?: Array<{ id: number; username: string }>;  
 }
 
 export interface Invitation {

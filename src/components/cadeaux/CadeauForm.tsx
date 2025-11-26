@@ -1,12 +1,5 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import type { Famille } from '../../types';
-
-interface CadeauFormProps {
-  currentFamilleId: number;
-  mesFamilles: Famille[];
-  onSubmit: (data: CadeauFormData) => Promise<void>;
-  onCancel: () => void;
-}
 
 export interface CadeauFormData {
   titre: string;
@@ -15,120 +8,119 @@ export interface CadeauFormData {
   photo_url: string;
   lien_achat: string;
   famille_ids: number[];
+  beneficiaire_ids: number[];  
+}
+
+interface CadeauFormProps {
+  currentFamilleId: number;
+  mesFamilles: Famille[];
+  onSubmit: (data: CadeauFormData) => void;
+  onCancel: () => void;
 }
 
 const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: CadeauFormProps) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CadeauFormData>({
     titre: '',
-    prix: '',
+    prix: 0,
     description: '',
     photo_url: '',
     lien_achat: '',
     famille_ids: [currentFamilleId],
+    beneficiaire_ids: [],  
   });
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFamilleToggle = (familleId: number) => {
-    setFormData((prev) => {
-      const newIds = prev.famille_ids.includes(familleId)
-        ? prev.famille_ids.filter((id) => id !== familleId)
-        : [...prev.famille_ids, familleId];
-      return { ...prev, famille_ids: newIds };
-    });
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    
     if (formData.famille_ids.length === 0) {
       alert('Veuillez sélectionner au moins une famille');
       return;
     }
-
-    setLoading(true);
-    try {
-      await onSubmit({
-        titre: formData.titre,
-        prix: parseFloat(formData.prix),
-        description: formData.description,
-        photo_url: formData.photo_url,
-        lien_achat: formData.lien_achat,
-        famille_ids: formData.famille_ids,
-      });
-    } catch (error) {
-      alert('Erreur lors de la création');
-    } finally {
-      setLoading(false);
-    }
+    
+    onSubmit({
+      titre: formData.titre,
+      prix: formData.prix,
+      description: formData.description,
+      photo_url: formData.photo_url,
+      lien_achat: formData.lien_achat,
+      famille_ids: formData.famille_ids,
+      beneficiaire_ids: formData.beneficiaire_ids,
+    });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Titre */}
       <div>
-        <label className="block text-sm font-medium mb-1">Titre *</label>
+        <label className="block text-sm font-medium mb-1">
+          Titre du cadeau *
+        </label>
         <input
           type="text"
-          name="titre"
           className="input"
-          placeholder="iPhone 15"
           value={formData.titre}
-          onChange={handleChange}
+          onChange={(e) => setFormData({ ...formData, titre: e.target.value })}
           required
+          placeholder="Ex: PlayStation 5"
         />
       </div>
 
+      {/* Prix */}
       <div>
-        <label className="block text-sm font-medium mb-1">Prix (€) *</label>
+        <label className="block text-sm font-medium mb-1">
+          Prix (€) *
+        </label>
         <input
           type="number"
-          name="prix"
           step="0.01"
           min="0"
           className="input"
-          placeholder="999.99"
-          value={formData.prix}
-          onChange={handleChange}
+          value={formData.prix || ''}
+          onChange={(e) => setFormData({ ...formData, prix: parseFloat(e.target.value) })}
           required
+          placeholder="Ex: 499.99"
         />
       </div>
 
+      {/* Description */}
       <div>
-        <label className="block text-sm font-medium mb-1">URL de la photo</label>
-        <input
-          type="url"
-          name="photo_url"
-          className="input"
-          placeholder="https://example.com/image.jpg"
-          value={formData.photo_url}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium mb-1">Lien d'achat</label>
-        <input
-          type="url"
-          name="lien_achat"
-          className="input"
-          placeholder="https://amazon.fr/produit"
-          value={formData.lien_achat}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium mb-1">Description</label>
+        <label className="block text-sm font-medium mb-1">
+          Description
+        </label>
         <textarea
-          name="description"
           className="input"
-          placeholder="Détails..."
           rows={3}
           value={formData.description}
-          onChange={handleChange}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          placeholder="Description optionnelle du cadeau..."
+        />
+      </div>
+
+      {/* URL Photo */}
+      <div>
+        <label className="block text-sm font-medium mb-1">
+          URL de la photo
+        </label>
+        <input
+          type="url"
+          className="input"
+          value={formData.photo_url}
+          onChange={(e) => setFormData({ ...formData, photo_url: e.target.value })}
+          placeholder="https://..."
+        />
+      </div>
+
+      {/* Lien d'achat */}
+      <div>
+        <label className="block text-sm font-medium mb-1">
+          Lien d'achat
+        </label>
+        <input
+          type="url"
+          className="input"
+          value={formData.lien_achat}
+          onChange={(e) => setFormData({ ...formData, lien_achat: e.target.value })}
+          placeholder="https://..."
         />
       </div>
 
@@ -137,7 +129,7 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
         <label className="block text-sm font-medium mb-2">
           Ajouter ce cadeau dans ces familles * (au moins 1)
         </label>
-        <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-300 rounded-lg p-3">
+        <div className="space-y-2 max-h-40 overflow-y-auto border rounded p-2">
           {mesFamilles.map((fam) => (
             <label
               key={fam.id}
@@ -146,34 +138,78 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
               <input
                 type="checkbox"
                 checked={formData.famille_ids.includes(fam.id)}
-                onChange={() => handleFamilleToggle(fam.id)}
-                className="w-4 h-4"
+                onChange={() => {
+                  const newIds = formData.famille_ids.includes(fam.id)
+                    ? formData.famille_ids.filter((id) => id !== fam.id)
+                    : [...formData.famille_ids, fam.id];
+                  setFormData({ ...formData, famille_ids: newIds });
+                }}
+                className="rounded"
               />
-              <span className="text-sm">{fam.nom}</span>
-              {fam.id === currentFamilleId && (
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
-                  Famille actuelle
-                </span>
-              )}
+              <span className="text-sm font-medium">{fam.nom}</span>
             </label>
           ))}
         </div>
         {formData.famille_ids.length === 0 && (
-          <p className="text-xs text-red-600 mt-1">Sélectionnez au moins une famille</p>
+          <p className="text-xs text-red-600 mt-1">
+            ⚠️ Sélectionnez au moins une famille
+          </p>
         )}
       </div>
 
-      <div className="flex gap-3">
+      {/* Sélection des bénéficiaires */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          👥 Bénéficiaires (optionnel)
+        </label>
+        <p className="text-xs text-gray-600 mb-2">
+          Si ce cadeau est pour plusieurs personnes (ex: toi et ton/ta partenaire)
+        </p>
+        <div className="space-y-2 max-h-40 overflow-y-auto border rounded p-2">
+          {mesFamilles
+            .filter(fam => formData.famille_ids.includes(fam.id))
+            .flatMap(fam => fam.membres || [])
+            .filter((membre, index, self) => 
+              self.findIndex(m => m.id === membre.id) === index // Déduplique
+            )
+            .map(membre => (
+              <label key={membre.id} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                <input
+                  type="checkbox"
+                  checked={formData.beneficiaire_ids.includes(membre.id)}
+                  onChange={() => {
+                    const newIds = formData.beneficiaire_ids.includes(membre.id)
+                      ? formData.beneficiaire_ids.filter(id => id !== membre.id)
+                      : [...formData.beneficiaire_ids, membre.id];
+                    setFormData({ ...formData, beneficiaire_ids: newIds });
+                  }}
+                  className="rounded"
+                />
+                <span className="text-sm">{membre.username}</span>
+              </label>
+            ))}
+        </div>
+        {formData.beneficiaire_ids.length > 0 && (
+          <p className="text-xs text-green-600 mt-1">
+            ✅ {formData.beneficiaire_ids.length} bénéficiaire(s) sélectionné(s)
+          </p>
+        )}
+      </div>
+
+      {/* Boutons */}
+      <div className="flex gap-3 pt-2">
         <button
           type="button"
           onClick={onCancel}
           className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg transition"
-          disabled={loading}
         >
           Annuler
         </button>
-        <button type="submit" className="flex-1 btn-primary" disabled={loading}>
-          {loading ? 'Création...' : 'Ajouter'}
+        <button
+          type="submit"
+          className="flex-1 btn-primary"
+        >
+          Créer le cadeau
         </button>
       </div>
     </form>
