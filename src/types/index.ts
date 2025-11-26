@@ -34,7 +34,6 @@ export interface Cadeau {
   owner_id: number;
   is_purchased: boolean;
   purchased_by_id?: number | null;
-  famille_ids: number[];
 }
 
 export interface Invitation {

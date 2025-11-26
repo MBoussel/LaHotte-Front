@@ -230,8 +230,7 @@ const MesCadeaux = () => {
                         </a>
                       )}
                       <div className="text-xs md:text-sm text-gray-500 mt-2">
-                        Dans {cadeau.famille_ids?.length || 0} famille
-                        {cadeau.famille_ids?.length > 1 ? 's' : ''}
+                       {/* Nombre de familles non disponible */}
                       </div>
 
                       {/* Info : Contributions cachées */}
