@@ -99,8 +99,8 @@ export const contributionsAPI = {
     api.get<ContributionWithUser[]>(`/contributions/cadeaux/${cadeauId}`),
   getMine: () => 
     api.get<Contribution[]>('/contributions/mes-contributions'),
-   getStats: () =>  
-    api.get<{ total_contribue: number; nombre_contributions: number }>('/contributions/stats'),
+  getStats: () =>
+  api.get<{ total_contribue: number; nombre_contributions: number }>('/contributions/statistics'),
   delete: (id: number) => 
     api.delete(`/contributions/${id}`),
 };
