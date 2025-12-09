@@ -71,6 +71,9 @@ const Navbar = () => {
                 <Link to="/cadeaux" className="hover:text-christmas-gold transition">
                   Mes Cadeaux
                 </Link>
+                                <Link to="/contributions" className="hover:text-christmas-gold transition">
+   Mes Contributions
+</Link>
                 <Link to="/rechercher" className="hover:text-christmas-gold transition">
                   🔍 Rechercher
                 </Link>
@@ -125,9 +128,13 @@ const Navbar = () => {
                 >
                   🎁 Mes Cadeaux
                 </Link>
-                                <Link to="/contributions" className="hover:text-christmas-gold transition">
-  💝 Mes Contributions
-</Link>
+                 <Link
+          to="/contributions"
+          className="px-4 py-2 hover:bg-red-700 rounded transition"
+          onClick={closeMenu}
+        >
+          💝 Mes Contributions
+        </Link>
                 <Link
                   to="/rechercher"
                   className="px-4 py-2 hover:bg-red-700 rounded transition"
