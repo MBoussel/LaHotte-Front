@@ -9,8 +9,8 @@ import FamilleDetail from './pages/FamilleDetail';
 import MesCadeaux from './pages/MesCadeaux';
 import AcceptInvitation from './pages/AcceptInvitation';
 import RechercherFamilles from './pages/RechercherFamilles';
-import ProtectedRoute from './components/auth/ProtectedRoute';
 import MesContributions from './pages/MesContributions';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/invitation/:token" element={<AcceptInvitation />} />
-<Route path="/contributions" element={<MesContributions />} />
+            
             {/* Routes protégées */}
             <Route
               path="/familles"
@@ -47,6 +47,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <MesCadeaux />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contributions"
+              element={
+                <ProtectedRoute>
+                  <MesContributions />
                 </ProtectedRoute>
               }
             />
