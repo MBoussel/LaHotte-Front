@@ -100,9 +100,10 @@ export const contributionsAPI = {
   getMine: () => 
     api.get<Contribution[]>('/contributions/mes-contributions'),
   getStats: () =>
-  api.get<{ total_contribue: number; nombre_contributions: number }>('/contributions/statistics'),
+    api.get<{ total_contribue: number; nombre_contributions: number }>('/contributions/statistics'),
+  update: (id: number, data: { montant?: number; message?: string; is_anonymous?: boolean }) =>  // ✅ NOUVEAU
+    api.put<Contribution>(`/contributions/${id}`, data),
   delete: (id: number) => 
     api.delete(`/contributions/${id}`),
 };
-
 export default api;

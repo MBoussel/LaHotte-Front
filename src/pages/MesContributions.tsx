@@ -14,6 +14,12 @@ const MesContributions = () => {
   const [contributions, setContributions] = useState<ContributionWithCadeau[]>([]);
   const [stats, setStats] = useState({ total_contribue: 0, nombre_contributions: 0 });
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    montant: 0,
+    message: '',
+    is_anonymous: false,
+  });
 
   useEffect(() => {
     loadData();
@@ -51,6 +57,26 @@ const MesContributions = () => {
       console.error('Erreur:', error);
     }
     setLoading(false);
+  };
+
+  const handleEdit = (contrib: ContributionWithCadeau) => {
+    setEditingId(contrib.id);
+    setEditFormData({
+      montant: contrib.montant,
+      message: contrib.message || '',
+      is_anonymous: contrib.is_anonymous,
+    });
+  };
+
+  const handleUpdate = async (id: number) => {
+    try {
+      await contributionsAPI.update(id, editFormData);
+      setEditingId(null);
+      loadData();
+      alert('Contribution modifiée ✅');
+    } catch (error) {
+      alert('Erreur lors de la modification');
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -112,45 +138,113 @@ const MesContributions = () => {
         <div className="space-y-4">
           {contributions.map((contrib) => (
             <div key={contrib.id} className="card">
-              <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-                {/* Infos contribution */}
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold mb-1">
+              {editingId === contrib.id ? (
+                // Mode édition
+                <div className="space-y-3">
+                  <h3 className="text-lg font-bold mb-2">
                     {contrib.cadeau?.titre || 'Cadeau supprimé'}
                   </h3>
-                  <p className="text-2xl font-bold text-christmas-green mb-2">
-                    {contrib.montant} €
-                  </p>
-                  {contrib.cadeau && (
-                    <p className="text-sm text-gray-600 mb-2">
-                      Prix total du cadeau : {contrib.cadeau.prix} €
-                    </p>
-                  )}
-                  {contrib.message && (
-                    <p className="text-sm text-gray-700 italic mb-2">
-                      💬 "{contrib.message}"
-                    </p>
-                  )}
-                  <div className="flex flex-wrap gap-2 text-xs">
-                    {contrib.is_anonymous && (
-                      <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
-                        🎭 Anonyme
-                      </span>
-                    )}
-                    <span className="text-gray-500">
-                      {new Date(contrib.created_at).toLocaleDateString('fr-FR')}
-                    </span>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Montant (€)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      className="input"
+                      value={editFormData.montant}
+                      onChange={(e) => setEditFormData({ ...editFormData, montant: parseFloat(e.target.value) })}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Message</label>
+                    <textarea
+                      className="input"
+                      rows={2}
+                      value={editFormData.message}
+                      onChange={(e) => setEditFormData({ ...editFormData, message: e.target.value })}
+                      placeholder="Message optionnel..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={editFormData.is_anonymous}
+                        onChange={(e) => setEditFormData({ ...editFormData, is_anonymous: e.target.checked })}
+                        className="rounded"
+                      />
+                      <span className="text-sm">Contribution anonyme 🎭</span>
+                    </label>
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      onClick={() => setEditingId(null)}
+                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={() => handleUpdate(contrib.id)}
+                      className="flex-1 btn-primary"
+                    >
+                      Enregistrer
+                    </button>
                   </div>
                 </div>
+              ) : (
+                // Mode affichage
+                <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                  {/* Infos contribution */}
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold mb-1">
+                      {contrib.cadeau?.titre || 'Cadeau supprimé'}
+                    </h3>
+                    <p className="text-2xl font-bold text-christmas-green mb-2">
+                      {contrib.montant} €
+                    </p>
+                    {contrib.cadeau && (
+                      <p className="text-sm text-gray-600 mb-2">
+                        Prix total du cadeau : {contrib.cadeau.prix} €
+                      </p>
+                    )}
+                    {contrib.message && (
+                      <p className="text-sm text-gray-700 italic mb-2">
+                        💬 "{contrib.message}"
+                      </p>
+                    )}
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      {contrib.is_anonymous && (
+                        <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
+                          🎭 Anonyme
+                        </span>
+                      )}
+                      <span className="text-gray-500">
+                        {new Date(contrib.created_at).toLocaleDateString('fr-FR')}
+                      </span>
+                    </div>
+                  </div>
 
-                {/* Bouton supprimer */}
-                <button
-                  onClick={() => handleDelete(contrib.id)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition whitespace-nowrap"
-                >
-                  🗑️ Supprimer
-                </button>
-              </div>
+                  {/* Boutons d'action */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(contrib)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition whitespace-nowrap"
+                    >
+                      ✏️ Modifier
+                    </button>
+                    <button
+                      onClick={() => handleDelete(contrib.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition whitespace-nowrap"
+                    >
+                      🗑️ Supprimer
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
