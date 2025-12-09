@@ -125,7 +125,9 @@ const Navbar = () => {
                 >
                   🎁 Mes Cadeaux
                 </Link>
-                
+                                <Link to="/contributions" className="hover:text-christmas-gold transition">
+  💝 Mes Contributions
+</Link>
                 <Link
                   to="/rechercher"
                   className="px-4 py-2 hover:bg-red-700 rounded transition"
@@ -133,7 +135,6 @@ const Navbar = () => {
                 >
                   🔍 Rechercher
                 </Link>
-                
                 <div className="px-4">
                   <PendingInvitations />
                 </div>
