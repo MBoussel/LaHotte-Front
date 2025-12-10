@@ -11,6 +11,7 @@ import AcceptInvitation from './pages/AcceptInvitation';
 import RechercherFamilles from './pages/RechercherFamilles';
 import MesContributions from './pages/MesContributions';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import RecapContributions from './pages/RecapContributions';
 
 function App() {
   return (
@@ -58,6 +59,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+  path="/familles/:id/contributions-recap"
+  element={
+    <ProtectedRoute>
+      <RecapContributions/>
+    </ProtectedRoute> 
+  }
+/>
+
             <Route
               path="/rechercher"
               element={

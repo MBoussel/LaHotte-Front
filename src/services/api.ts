@@ -76,6 +76,8 @@ export const famillesAPI = {
     api.post(`/familles/demandes/${demandeId}/accepter`),
   rejectDemande: (demandeId: number) => 
     api.delete(`/familles/demandes/${demandeId}`),
+  getContributionsRecap: (familleId: number) => 
+    api.get(`/familles/${familleId}/contributions-recap`),
 };
 
 // Cadeaux

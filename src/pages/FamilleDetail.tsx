@@ -183,6 +183,14 @@ const FamilleDetail = () => {
               + Ajouter un cadeau
             </button>
           )}
+          {(isCreator || user?.is_admin) && (
+  <button
+    onClick={() => navigate(`/familles/${familleId}/contributions-recap`)}
+    className="btn-secondary w-full md:w-auto whitespace-nowrap"
+  >
+    📊 Voir les contributions
+  </button>
+)}
         </div>
       </div>
 
