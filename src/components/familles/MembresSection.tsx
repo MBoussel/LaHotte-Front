@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Membre } from '../../types';
 
 interface MembresSectionProps {
@@ -7,12 +7,25 @@ interface MembresSectionProps {
 
 const MembresSection = ({ membres = [] }: MembresSectionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Détecte si on est sur mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile(); // Check initial
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   if (!membres || membres.length === 0) {
     return null;
   }
 
-  const defaultCount = typeof window !== 'undefined' && window.innerWidth < 768 ? 2 : 3;
+  const defaultCount = isMobile ? 2 : 3;
   const displayedMembres = isExpanded ? membres : membres.slice(0, defaultCount);
   const hasMore = membres.length > defaultCount;
 
@@ -27,7 +40,6 @@ const MembresSection = ({ membres = [] }: MembresSectionProps) => {
               key={membre.id}
               className="flex items-center gap-2 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition"
             >
-              {/* Avatar avec image ou initiale */}
               {membre.avatar_url ? (
                 <img
                   src={membre.avatar_url}
