@@ -24,7 +24,39 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+api.interceptors.response.use((response) => {
+  // Convertir les strings numériques (Decimal de PostgreSQL) en nombres
+  const convertDecimals = (obj: any): any => {
+    if (obj === null || obj === undefined) return obj;
+    
+    if (Array.isArray(obj)) {
+      return obj.map(convertDecimals);
+    }
+    
+    if (typeof obj === 'object') {
+      const converted: any = {};
+      for (const key in obj) {
+        // Convertir les champs monétaires connus
+        if (key === 'prix' || key === 'montant' || key === 'total_contribue' || 
+            key === 'reste' || key === 'total_contributions') {
+          const value = obj[key];
+          converted[key] = typeof value === 'string' ? parseFloat(value) : value;
+        } else {
+          converted[key] = convertDecimals(obj[key]);
+        }
+      }
+      return converted;
+    }
+    
+    return obj;
+  };
+  
+  if (response.data) {
+    response.data = convertDecimals(response.data);
+  }
+  
+  return response;
+});
 // Auth
 export const authAPI = {
   register: (
