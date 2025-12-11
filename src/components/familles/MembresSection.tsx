@@ -12,8 +12,10 @@ const MembresSection = ({ membres = [] }: MembresSectionProps) => {
     return null;
   }
 
-  const displayedMembres = isExpanded ? membres : membres.slice(0, 6);
-  const hasMore = membres.length > 6;
+  // Affiche 2 sur mobile, 3 sur desktop
+  const defaultCount = window.innerWidth < 768 ? 2 : 3;
+  const displayedMembres = isExpanded ? membres : membres.slice(0, defaultCount);
+  const hasMore = membres.length > defaultCount;
 
   return (
     <div className="mb-6">
@@ -46,7 +48,7 @@ const MembresSection = ({ membres = [] }: MembresSectionProps) => {
             {isExpanded ? (
               <>↑ Voir moins</>
             ) : (
-              <>↓ Voir tous les membres ({membres.length - 6} de plus)</>
+              <>↓ Voir tous les membres ({membres.length - defaultCount} de plus)</>
             )}
           </button>
         )}
