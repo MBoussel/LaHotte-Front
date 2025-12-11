@@ -110,7 +110,6 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
               name="montant"
               step="0.01"
               min="0.01"
-              max={reste > 0 ? reste : undefined}
               className="input"
               placeholder={reste > 0 ? `Max: ${reste.toFixed(2)} €` : "0.00"}
               value={formData.montant}
