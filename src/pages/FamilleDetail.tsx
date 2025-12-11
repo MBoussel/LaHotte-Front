@@ -201,9 +201,7 @@ const FamilleDetail = () => {
       {/* Membres */}
       <MembresSection membres={famille.membres} />
 
-    // Dans la partie où tu affiches les cadeaux, remplace par :
-
-{/* Liste des cadeaux groupés par utilisateur */}
+{/* Liste des cadeaux */}
 <div>
   <h2 className="text-xl md:text-2xl font-bold mb-4">🎁 Cadeaux de la famille</h2>
 
@@ -218,83 +216,39 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <>
-      {/* Grouper les cadeaux par propriétaire et séparer achetés/non achetés */}
       {(() => {
-        // Séparer cadeaux achetés et non achetés
-        const nonAchetes = cadeaux.filter(c => !c.is_purchased);
-        const achetes = cadeaux.filter(c => c.is_purchased);
-
-        // Grouper par owner_id
-        const groupByOwner = (cadeauxList: typeof cadeaux) => {
-          const grouped: Record<number, typeof cadeaux> = {};
-          cadeauxList.forEach(cadeau => {
-            if (!grouped[cadeau.owner_id]) {
-              grouped[cadeau.owner_id] = [];
-            }
-            grouped[cadeau.owner_id].push(cadeau);
-          });
-          return grouped;
-        };
-
-        const nonAchetesGroupes = groupByOwner(nonAchetes);
-        const achetesGroupes = groupByOwner(achetes);
+        // Séparer et trier les cadeaux
+        const nonAchetes = cadeaux
+          .filter(c => !c.is_purchased)
+          .sort((a, b) => a.owner_id - b.owner_id); // Grouper par owner_id
+        
+        const achetes = cadeaux
+          .filter(c => c.is_purchased)
+          .sort((a, b) => a.owner_id - b.owner_id);
 
         return (
-          <div className="space-y-8">
-            {/* Cadeaux non achetés (par utilisateur) */}
-            {Object.entries(nonAchetesGroupes).map(([ownerId, cadeauxUser]) => {
-              const owner = famille.membres?.find(m => m.id === parseInt(ownerId));
-              
-              return (
-                <div key={ownerId} className="space-y-4">
-                  {/* En-tête utilisateur */}
-                  <div className="flex items-center gap-3 pb-2 border-b-2 border-christmas-red">
-                    {owner?.avatar_url ? (
-                      <img
-                        src={owner.avatar_url}
-                        alt={owner.username}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-christmas-red"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <div className="w-12 h-12 bg-christmas-red text-white rounded-full flex items-center justify-center text-xl font-bold">
-                        {owner?.username.charAt(0).toUpperCase() || '?'}
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="text-xl font-bold">
-                        Liste de {owner?.username || `User #${ownerId}`}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        {cadeauxUser.length} cadeau{cadeauxUser.length > 1 ? 'x' : ''}
-                      </p>
-                    </div>
-                  </div>
+          <div className="space-y-6">
+            {/* Cadeaux non achetés */}
+            {nonAchetes.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {nonAchetes.map((cadeau) => (
+                  <CadeauCard
+                    key={cadeau.id}
+                    cadeau={cadeau}
+                    contributions={contributions[cadeau.id] || []}
+                    membres={famille.membres}
+                    currentUserId={user?.id}
+                    onContribute={setSelectedCadeau}
+                    onMarkPurchased={handleMarkPurchased}
+                    onUnmarkPurchased={handleUnmarkPurchased}
+                  />
+                ))}
+              </div>
+            )}
 
-                  {/* Cadeaux de cet utilisateur */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    {cadeauxUser.map((cadeau) => (
-                      <CadeauCard
-                        key={cadeau.id}
-                        cadeau={cadeau}
-                        contributions={contributions[cadeau.id] || []}
-                        membres={famille.membres}
-                        currentUserId={user?.id}
-                        onContribute={setSelectedCadeau}
-                        onMarkPurchased={handleMarkPurchased}
-                        onUnmarkPurchased={handleUnmarkPurchased}
-                      />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-
-            {/* Séparateur si il y a des cadeaux achetés */}
+            {/* Séparateur */}
             {achetes.length > 0 && (
-              <div className="py-6">
+              <div className="py-4">
                 <div className="flex items-center gap-4">
                   <div className="flex-1 border-t-2 border-gray-300"></div>
                   <h3 className="text-lg font-bold text-gray-600">
@@ -305,56 +259,23 @@ const FamilleDetail = () => {
               </div>
             )}
 
-            {/* Cadeaux achetés (par utilisateur) */}
-            {Object.entries(achetesGroupes).map(([ownerId, cadeauxUser]) => {
-              const owner = famille.membres?.find(m => m.id === parseInt(ownerId));
-              
-              return (
-                <div key={`achetes-${ownerId}`} className="space-y-4 opacity-60">
-                  {/* En-tête utilisateur */}
-                  <div className="flex items-center gap-3 pb-2 border-b-2 border-gray-300">
-                    {owner?.avatar_url ? (
-                      <img
-                        src={owner.avatar_url}
-                        alt={owner.username}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 grayscale"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <div className="w-10 h-10 bg-gray-400 text-white rounded-full flex items-center justify-center text-lg font-bold">
-                        {owner?.username.charAt(0).toUpperCase() || '?'}
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-600">
-                        Liste de {owner?.username || `User #${ownerId}`}
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {cadeauxUser.length} cadeau{cadeauxUser.length > 1 ? 'x' : ''} acheté{cadeauxUser.length > 1 ? 's' : ''}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Cadeaux achetés de cet utilisateur */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    {cadeauxUser.map((cadeau) => (
-                      <CadeauCard
-                        key={cadeau.id}
-                        cadeau={cadeau}
-                        contributions={contributions[cadeau.id] || []}
-                        membres={famille.membres}
-                        currentUserId={user?.id}
-                        onContribute={setSelectedCadeau}
-                        onMarkPurchased={handleMarkPurchased}
-                        onUnmarkPurchased={handleUnmarkPurchased}
-                      />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+            {/* Cadeaux achetés (en bas, légèrement grisés) */}
+            {achetes.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 opacity-60">
+                {achetes.map((cadeau) => (
+                  <CadeauCard
+                    key={cadeau.id}
+                    cadeau={cadeau}
+                    contributions={contributions[cadeau.id] || []}
+                    membres={famille.membres}
+                    currentUserId={user?.id}
+                    onContribute={setSelectedCadeau}
+                    onMarkPurchased={handleMarkPurchased}
+                    onUnmarkPurchased={handleUnmarkPurchased}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         );
       })()}
