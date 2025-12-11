@@ -6,6 +6,7 @@ export interface User {
   last_name: string;
   is_active: boolean;
   is_admin?: boolean;
+  avatar_url?: string;
   created_at: string;
 }
 
@@ -23,6 +24,7 @@ export interface Membre {
   id: number;
   username: string;
   email: string;
+  avatar_url?: string;
 }
 
 // Dans src/types/index.ts

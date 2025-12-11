@@ -84,6 +84,9 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
   
   getMe: () => api.get<User>('/auth/me'),
+  
+  updateAvatar: (avatar_url: string) =>  
+    api.put('/auth/me/avatar', null, { params: { avatar_url } }),
 };
 // Familles
 export const famillesAPI = {

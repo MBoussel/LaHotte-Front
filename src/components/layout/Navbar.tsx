@@ -79,7 +79,10 @@ const Navbar = () => {
                 </Link>
                 <PendingInvitations />
                 <div className="flex items-center gap-3">
-                  <span className="text-sm">Bonjour, {user.username} 👋</span>
+                  <Link to="/profil" className="hover:text-christmas-gold transition">
+     Mon profil
+  </Link>
+                  <span className="text-sm">Bonjour, {user.username} </span>
                   <button
                     onClick={handleLogout}
                     className="bg-white text-christmas-red px-4 py-1 rounded hover:bg-gray-100 transition"
@@ -110,7 +113,7 @@ const Navbar = () => {
             {user ? (
               <div className="flex flex-col space-y-3">
                 <div className="px-4 py-2 bg-red-700 rounded">
-                  <span className="text-sm font-semibold">👋 {user.username}</span>
+                  <span className="text-sm font-semibold"> {user.username}</span>
                 </div>
                 
                 <Link
@@ -142,6 +145,13 @@ const Navbar = () => {
                 >
                   🔍 Rechercher
                 </Link>
+                <Link
+  to="/profil"
+  className="px-4 py-2 hover:bg-red-700 rounded transition"
+  onClick={closeMenu}
+>
+  👤 Mon profil
+</Link>
                 <div className="px-4">
                   <PendingInvitations />
                 </div>

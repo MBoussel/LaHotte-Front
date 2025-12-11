@@ -12,6 +12,7 @@ import RechercherFamilles from './pages/RechercherFamilles';
 import MesContributions from './pages/MesContributions';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import RecapContributions from './pages/RecapContributions';
+import Profil from './pages/Profil';
 
 function App() {
   return (
@@ -59,6 +60,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+  path="/profil"
+  element={
+    <ProtectedRoute>
+      <Profil/>
+    </ProtectedRoute>
+  }
+/>
             <Route
   path="/familles/:id/contributions-recap"
   element={
