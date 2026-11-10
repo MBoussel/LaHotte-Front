@@ -3,9 +3,11 @@ import type { Membre } from '../../types';
 
 interface MembresSectionProps {
   membres?: Membre[];
+  pereNoelId?: number | null;
+  currentUserId?: number;
 }
 
-const MembresSection = ({ membres = [] }: MembresSectionProps) => {
+const MembresSection = ({ membres = [], pereNoelId, currentUserId }: MembresSectionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -31,6 +33,12 @@ const MembresSection = ({ membres = [] }: MembresSectionProps) => {
 
   return (
     <div className="mb-6">
+      {currentUserId != null && pereNoelId === currentUserId && (
+        <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900">
+          <p className="font-bold">🎅 Tu es le Père Noël de cette famille !</p>
+          <p className="text-sm mt-1">Tu peux suivre les contributions aux cadeaux des autres membres.</p>
+        </div>
+      )}
       <h2 className="text-xl md:text-2xl font-bold mb-4">👥 Membres ({membres.length})</h2>
       
       <div className="card">
@@ -62,7 +70,12 @@ const MembresSection = ({ membres = [] }: MembresSectionProps) => {
               </div>
               
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm truncate">{membre.username}</p>
+                <div className="flex flex-wrap items-center gap-1">
+                  <p className="font-semibold text-sm truncate">{membre.username}</p>
+                  {pereNoelId != null && membre.id === pereNoelId && (
+                    <span className="text-[10px] font-bold rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">Père Noël</span>
+                  )}
+                </div>
                 <p className="text-xs text-gray-600 truncate">{membre.email}</p>
               </div>
             </div>
