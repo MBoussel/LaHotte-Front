@@ -109,7 +109,7 @@ const FamilleDetail = () => {
 
   const isCreator = user?.id === famille.creator_id;
   const isPereNoel = user?.id === famille.pere_noel_id;
-  const canSeeRecap = isCreator || isPereNoel;
+  const canSeeRecap = isPereNoel || (isCreator && famille.pere_noel_id != null);
   const canManagePereNoel = isCreator;
 
   const handleSetPereNoel = async (event: ChangeEvent<HTMLSelectElement>) => {
@@ -300,6 +300,7 @@ const FamilleDetail = () => {
                     contributions={contributions[cadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
+                    canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
                     onContribute={setSelectedCadeau}
                     onMarkPurchased={handleMarkPurchased}
                     onUnmarkPurchased={handleUnmarkPurchased}
