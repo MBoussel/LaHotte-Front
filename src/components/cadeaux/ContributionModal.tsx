@@ -34,8 +34,6 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   };
 
   const totalContribue = contributions.reduce((sum, c) => sum + c.montant, 0);
-  const reste = prixTotal - totalContribue;
-  const pourcentage = Math.min((totalContribue / prixTotal) * 100, 100);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
