@@ -64,7 +64,7 @@ const RecapContributions = () => {
       setData(response.data);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('Vous n'avez pas accès à ce récapitulatif');
+        alert("Vous n'avez pas accès à ce récapitulatif");
         navigate(`/familles/${id}`);
       } else {
         alert('Erreur lors du chargement');
