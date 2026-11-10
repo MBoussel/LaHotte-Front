@@ -1,4 +1,4 @@
-import { useState,  type FormEvent } from 'react';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { useFamille } from '../hooks/useFamille';
@@ -112,7 +112,7 @@ const FamilleDetail = () => {
   const canSeeRecap = isCreator || isPereNoel;
   const canManagePereNoel = isCreator;
 
-  const handleSetPereNoel = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSetPereNoel = async (event: ChangeEvent<HTMLSelectElement>) => {
     const userId = Number(event.target.value);
     if (!famille || !userId) return;
     try {
