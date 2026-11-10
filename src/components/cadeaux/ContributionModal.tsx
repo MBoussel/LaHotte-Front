@@ -8,9 +8,10 @@ interface ContributionModalProps {
   prixTotal: number;
   onClose: () => void;
   onSuccess: () => void;
+  showDetails?: boolean;
 }
 
-const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSuccess }: ContributionModalProps) => {
+const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSuccess, showDetails = false }: ContributionModalProps) => {
   const [contributions, setContributions] = useState<ContributionWithUser[]>([]);
   const [formData, setFormData] = useState({
     montant: '',
@@ -20,8 +21,8 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadContributions();
-  }, [cadeauId]);
+    if (showDetails) loadContributions();
+  }, [cadeauId, showDetails]);
 
   const loadContributions = async () => {
     try {
@@ -78,28 +79,15 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
           </button>
         </div>
 
-        {/* Barre de progression */}
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="font-semibold">{totalContribue.toFixed(2)} € collectés</span>
-            <span className="text-gray-600">{prixTotal.toFixed(2)} € total</span>
+        {showDetails && (
+          <div className="mb-6">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="font-semibold">{totalContribue.toFixed(2)} € collectés</span>
+              <span className="text-gray-600">{prixTotal.toFixed(2)} € total</span>
+            </div>
+            <p className="text-sm text-gray-600">{contributions.length} contribution(s) enregistrée(s)</p>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-4">
-            <div
-              className="bg-christmas-green h-4 rounded-full transition-all duration-500"
-              style={{ width: `${pourcentage}%` }}
-            />
-          </div>
-          {reste > 0 ? (
-            <p className="text-sm text-gray-600 mt-2">
-              Reste à collecter : <span className="font-bold text-christmas-red">{reste.toFixed(2)} €</span>
-            </p>
-          ) : (
-            <p className="text-sm text-christmas-green font-bold mt-2">
-              ✅ Objectif atteint !
-            </p>
-          )}
-        </div>
+        )}
 
         {/* Formulaire de contribution */}
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
@@ -111,11 +99,10 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
               step="0.01"
               min="0.01"
               className="input"
-              placeholder={reste > 0 ? `Max: ${reste.toFixed(2)} €` : "0.00"}
+              placeholder="Montant souhaité"
               value={formData.montant}
               onChange={handleChange}
               required
-              disabled={reste <= 0}
             />
             {reste <= 0 && (
               <p className="text-xs text-gray-500 mt-1">
