@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { cadeauxAPI, contributionsAPI } from '../services/api';
 import type { Cadeau, ContributionWithUser } from '../types';
 
-export const useCadeaux = (familleId: number | undefined, userId: number | undefined) => {
+export const useCadeaux = (familleId: number | undefined, _userId: number | undefined) => {
   const [cadeaux, setCadeaux] = useState<Cadeau[]>([]);
   const [contributions, setContributions] = useState<Record<number, ContributionWithUser[]>>({});
 
@@ -24,13 +24,11 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
       const contribsData: Record<number, ContributionWithUser[]> = {};
       await Promise.all(
         response.data.map(async (cadeau: Cadeau) => {
-          {
-            try {
+          try {
               const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
               contribsData[cadeau.id] = contribRes.data;
-            } catch (error) {
-              contribsData[cadeau.id] = [];
-            }
+          } catch (error) {
+            contribsData[cadeau.id] = [];
           }
         })
       );
