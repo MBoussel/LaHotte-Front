@@ -15,6 +15,7 @@ export interface Famille {
   nom: string;
   description: string;
   creator_id: number;
+  pere_noel_id?: number | null;
   created_at: string;
   is_public?: boolean;
   membres?: Membre[];
