@@ -43,6 +43,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
       if (showDetails) loadContributions();
       onSuccess();
       alert('Merci pour votre contribution ! 🎁');
+      onClose();
     } catch (error: any) {
       alert(error.response?.data?.detail || 'Erreur lors de la contribution');
     }
