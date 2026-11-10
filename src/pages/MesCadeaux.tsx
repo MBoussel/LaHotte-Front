@@ -105,7 +105,7 @@ const MesCadeaux = () => {
           {cadeaux.map((cadeau) => (
             <div
               key={cadeau.id}
-              className={`card ${cadeau.is_purchased ? 'border-4 border-christmas-green' : ''}`}
+              className="card"
             >
               {editingId === cadeau.id ? (
                 // Mode édition
@@ -186,13 +186,6 @@ const MesCadeaux = () => {
               ) : (
                 // Mode affichage
                 <div>
-                  {/* Badge Acheté */}
-                  {cadeau.is_purchased && (
-                    <div className="bg-christmas-green text-white px-4 py-2 rounded-lg mb-3 font-bold text-center text-sm md:text-base">
-                      ✅ Cadeau acheté !
-                    </div>
-                  )}
-
                   <div className="flex flex-col md:flex-row gap-4">
                     {/* Image */}
                     {cadeau.photo_url && (
