@@ -69,7 +69,7 @@ const Home = () => {
               Contribuez et partagez
             </h3>
             <p className="text-gray-600 text-sm md:text-base">
-              Participez aux cadeaux de votre famille et marquez-les comme achetés. Tout reste secret !
+              Participez aux cadeaux de votre famille. Les détails des contributions restent réservés au Père Noël et au créateur.
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ const Home = () => {
                 <div>
                   <h3 className="text-lg md:text-xl font-bold mb-2">Contributions secrètes</h3>
                   <p className="text-gray-600 text-sm md:text-base">
-                    Vous ne voyez pas qui contribue à vos cadeaux ni combien. La surprise est préservée !
+                    Seuls le Père Noël et le créateur voient les contributeurs et les montants. Le bénéficiaire du cadeau ne voit rien.
                   </p>
                 </div>
               </div>
@@ -113,28 +113,6 @@ const Home = () => {
                   <h3 className="text-lg md:text-xl font-bold mb-2">Invitations par email</h3>
                   <p className="text-gray-600 text-sm md:text-base">
                     Invitez vos proches facilement par email. Ils recevront une invitation personnalisée.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="flex items-start gap-4 md:gap-6">
-                <div className="text-3xl md:text-4xl flex-shrink-0">🎭</div>
-                <div>
-                  <h3 className="text-lg md:text-xl font-bold mb-2">Contributions anonymes</h3>
-                  <p className="text-gray-600 text-sm md:text-base">
-                    Choisissez de contribuer anonymement si vous préférez rester discret.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 5 */}
-              <div className="flex items-start gap-4 md:gap-6">
-                <div className="text-3xl md:text-4xl flex-shrink-0">✅</div>
-                <div>
-                  <h3 className="text-lg md:text-xl font-bold mb-2">Statut "Acheté"</h3>
-                  <p className="text-gray-600 text-sm md:text-base">
-                    Marquez un cadeau comme acheté pour que personne d'autre ne l'achète en double.
                   </p>
                 </div>
               </div>

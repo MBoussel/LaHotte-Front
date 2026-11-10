@@ -7,36 +7,32 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
   const [contributions, setContributions] = useState<Record<number, ContributionWithUser[]>>({});
 
   useEffect(() => {
-    if (familleId) {
-      loadCadeaux();
-    }
+    if (familleId) loadCadeaux();
   }, [familleId, userId, creatorId, pereNoelId]);
 
   const loadCadeaux = async () => {
     if (!familleId) return;
-
     try {
-      // ✅ Utilise le nouvel endpoint spécifique à la famille
       const response = await cadeauxAPI.getByFamille(familleId);
       setCadeaux(response.data);
 
-      // Charger les contributions (sauf si propriétaire)
       const contribsData: Record<number, ContributionWithUser[]> = {};
-      await Promise.all(
-        response.data.map(async (cadeau: Cadeau) => {
-          const canSee = (userId === pereNoelId && cadeau.owner_id !== pereNoelId) || (userId === creatorId && pereNoelId != null && cadeau.owner_id === pereNoelId);
-          if (canSee && cadeau.owner_id !== userId) {
-            try {
-              const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
-              contribsData[cadeau.id] = contribRes.data;
-            } catch (error) {
-              contribsData[cadeau.id] = [];
-            }
-          } else {
+      await Promise.all(response.data.map(async (cadeau: Cadeau) => {
+        const canSee =
+          (userId === pereNoelId && cadeau.owner_id !== pereNoelId) ||
+          (userId === creatorId && pereNoelId != null && cadeau.owner_id === pereNoelId);
+
+        if (canSee && cadeau.owner_id !== userId) {
+          try {
+            const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
+            contribsData[cadeau.id] = contribRes.data;
+          } catch {
             contribsData[cadeau.id] = [];
           }
-        })
-      );
+        } else {
+          contribsData[cadeau.id] = [];
+        }
+      }));
       setContributions(contribsData);
     } catch (error) {
       console.error('Erreur chargement cadeaux:', error);
@@ -48,22 +44,5 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
     await loadCadeaux();
   };
 
-  const markPurchased = async (cadeauId: number) => {
-    await cadeauxAPI.markPurchased(cadeauId);
-    await loadCadeaux();
-  };
-
-  const unmarkPurchased = async (cadeauId: number) => {
-    await cadeauxAPI.unmarkPurchased(cadeauId);
-    await loadCadeaux();
-  };
-
-  return {
-    cadeaux,
-    contributions,
-    createCadeau,
-    markPurchased,
-    unmarkPurchased,
-    reload: loadCadeaux,
-  };
+  return { cadeaux, contributions, createCadeau, reload: loadCadeaux };
 };

@@ -23,8 +23,6 @@ const FamilleDetail = () => {
     cadeaux,
     contributions,
     createCadeau,
-    markPurchased,
-    unmarkPurchased,
     reload: reloadCadeaux,
   } = useCadeaux(familleId, user?.id, famille?.creator_id, famille?.pere_noel_id);
 
@@ -44,24 +42,6 @@ const FamilleDetail = () => {
   const handleCreateCadeau = async (data: CadeauFormData) => {
     await createCadeau(data);
     setShowCadeauModal(false);
-  };
-
-  const handleMarkPurchased = async (cadeauId: number) => {
-    if (!confirm('Confirmez-vous avoir acheté ce cadeau ?')) return;
-    try {
-      await markPurchased(cadeauId);
-      alert('Cadeau marqué comme acheté ! 🎁');
-    } catch (error: any) {
-      alert(error.response?.data?.detail || 'Erreur');
-    }
-  };
-
-  const handleUnmarkPurchased = async (cadeauId: number) => {
-    try {
-      await unmarkPurchased(cadeauId);
-    } catch (error: any) {
-      alert(error.response?.data?.detail || 'Erreur');
-    }
   };
 
   const handleEditFamille = () => {
@@ -246,71 +226,19 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <>
-      {(() => {
-        // Séparer et trier les cadeaux
-        const nonAchetes = cadeaux
-          .filter(c => !c.is_purchased)
-          .sort((a, b) => a.owner_id - b.owner_id); // Grouper par owner_id
-        
-        const achetes = cadeaux
-          .filter(c => c.is_purchased)
-          .sort((a, b) => a.owner_id - b.owner_id);
-
-        return (
-          <div className="space-y-6">
-            {/* Cadeaux non achetés */}
-            {nonAchetes.length > 0 && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {nonAchetes.map((cadeau) => (
-                  <CadeauCard
-                    key={cadeau.id}
-                    cadeau={cadeau}
-                    contributions={contributions[cadeau.id] || []}
-                    membres={famille.membres}
-                    currentUserId={user?.id}
-                    canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
-                    onContribute={setSelectedCadeau}
-                    onMarkPurchased={handleMarkPurchased}
-                    onUnmarkPurchased={handleUnmarkPurchased}
-                  />
-                ))}
-              </div>
-            )}
-
-            {/* Séparateur */}
-            {achetes.length > 0 && (
-              <div className="py-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 border-t-2 border-gray-300"></div>
-                  <h3 className="text-lg font-bold text-gray-600">
-                    ✅ Cadeaux achetés ({achetes.length})
-                  </h3>
-                  <div className="flex-1 border-t-2 border-gray-300"></div>
-                </div>
-              </div>
-            )}
-
-            {/* Cadeaux achetés (en bas, légèrement grisés) */}
-            {achetes.length > 0 && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 opacity-60">
-                {achetes.map((cadeau) => (
-                  <CadeauCard
-                    key={cadeau.id}
-                    cadeau={cadeau}
-                    contributions={contributions[cadeau.id] || []}
-                    membres={famille.membres}
-                    currentUserId={user?.id}
-                    canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
-                    onContribute={setSelectedCadeau}
-                    onMarkPurchased={handleMarkPurchased}
-                    onUnmarkPurchased={handleUnmarkPurchased}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })()}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {cadeaux.map((cadeau) => (
+          <CadeauCard
+            key={cadeau.id}
+            cadeau={cadeau}
+            contributions={contributions[cadeau.id] || []}
+            membres={famille.membres}
+            currentUserId={user?.id}
+            canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
+            onContribute={setSelectedCadeau}
+          />
+        ))}
+      </div>
     </>
   )}
 </div>

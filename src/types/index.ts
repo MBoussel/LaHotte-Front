@@ -60,7 +60,6 @@ export interface Contribution {
   user_id: number;
   montant: number;
   message: string;
-  is_anonymous: boolean;
   created_at: string;
 }
 
@@ -68,7 +67,6 @@ export interface ContributionWithUser {
   id: number;
   montant: number;
   message: string;
-  is_anonymous: boolean;
   created_at: string;
   contributeur: string | null;
 }
