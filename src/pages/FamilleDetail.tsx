@@ -34,6 +34,7 @@ const FamilleDetail = () => {
     id: number;
     titre: string;
     prix: number;
+    owner_id: number;
   } | null>(null);
   const [isEditingFamille, setIsEditingFamille] = useState(false);
   const [familleName, setFamilleName] = useState('');
@@ -107,6 +108,22 @@ const FamilleDetail = () => {
   }
 
   const isCreator = user?.id === famille.creator_id;
+  const isPereNoel = user?.id === famille.pere_noel_id;
+
+  const handleSetPereNoel = async (value: string) => {
+    if (!famille || !value) return;
+    try {
+      await famillesAPI.setPereNoel(famille.id, Number(value));
+      await reloadFamille();
+      alert('Père Noël désigné !');
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Impossible de désigner ce membre');
+    }
+  };
+
+  const canSeeGiftContributions = (ownerId: number) =>
+    (isPereNoel && ownerId !== famille.pere_noel_id) ||
+    (isCreator && ownerId === famille.pere_noel_id);
 
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
@@ -183,7 +200,7 @@ const FamilleDetail = () => {
               + Ajouter un cadeau
             </button>
           )}
-          {(isCreator || user?.is_admin) && (
+          {(isCreator || isPereNoel || user?.is_admin) && (
   <button
     onClick={() => navigate(`/familles/${familleId}/contributions-recap`)}
     className="btn-secondary w-full md:w-auto whitespace-nowrap"
@@ -198,6 +215,19 @@ const FamilleDetail = () => {
       <Invitations familleId={familleId} isCreator={isCreator} />
 {/* Demandes d'adhésion (si créateur) */}
 <DemandesAdhesion familleId={familleId} isCreator={isCreator} />
+      {isCreator && (
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+          <label className="block text-sm font-semibold mb-2">Désigner le Père Noël de cette famille</label>
+          <select className="input w-full md:max-w-sm" value={famille.pere_noel_id ?? ''} onChange={(e) => handleSetPereNoel(e.target.value)}>
+            <option value="">Choisir un membre</option>
+            {famille.membres?.filter((m) => m.id !== famille.creator_id).map((membre) => (
+              <option key={membre.id} value={membre.id}>{membre.username}</option>
+            ))}
+          </select>
+          {!famille.pere_noel_id && <p className="text-xs text-gray-600 mt-1">Choisissez un Père Noël pour activer la gestion confidentielle des contributions.</p>}
+        </div>
+      )}
+
       {/* Membres */}
       <MembresSection membres={famille.membres} />
 
@@ -238,6 +268,7 @@ const FamilleDetail = () => {
                     contributions={contributions[cadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
+                    canSeeContributions={canSeeGiftContributions(cadeau.owner_id)}
                     onContribute={setSelectedCadeau}
                     onMarkPurchased={handleMarkPurchased}
                     onUnmarkPurchased={handleUnmarkPurchased}
@@ -308,6 +339,7 @@ const FamilleDetail = () => {
           prixTotal={selectedCadeau.prix}
           onClose={() => setSelectedCadeau(null)}
           onSuccess={reloadCadeaux}
+          canSeeDetails={canSeeGiftContributions(selectedCadeau.owner_id)}
         />
       )}
     </div>
