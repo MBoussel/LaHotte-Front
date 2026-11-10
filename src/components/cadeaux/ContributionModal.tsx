@@ -13,10 +13,7 @@ interface ContributionModalProps {
 
 const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSuccess, showDetails = false }: ContributionModalProps) => {
   const [contributions, setContributions] = useState<ContributionWithUser[]>([]);
-  const [formData, setFormData] = useState({
-    montant: '',
-    message: '',
-  });
+  const [formData, setFormData] = useState({ montant: '', message: '' });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,7 +34,6 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       await contributionsAPI.contribute(cadeauId, {
         montant: parseFloat(formData.montant),
@@ -63,12 +59,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
       <div className="card max-w-2xl w-full my-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Contribuer à : {cadeauTitre}</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
-          >
-            ×
-          </button>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
         </div>
 
         {showDetails && (
@@ -81,63 +72,38 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
           </div>
         )}
 
-        {/* Formulaire de contribution */}
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
           <div>
             <label className="block text-sm font-medium mb-1">Montant (€) *</label>
             <input
-              type="number"
-              name="montant"
-              step="0.01"
-              min="0.01"
-              className="input"
-              placeholder="Montant souhaité"
-              value={formData.montant}
-              onChange={handleChange}
-              required
+              type="number" name="montant" step="0.01" min="0.01"
+              className="input" placeholder="Montant souhaité"
+              value={formData.montant} onChange={handleChange} required
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium mb-1">Message (optionnel)</label>
             <textarea
-              name="message"
-              className="input"
-              placeholder="Un petit message..."
-              rows={3}
-              value={formData.message}
-              onChange={handleChange}
+              name="message" className="input" placeholder="Un petit message..." rows={3}
+              value={formData.message} onChange={handleChange}
             />
           </div>
-
-
-            className="btn-primary w-full"
-            disabled={loading}
-          >
+          <button type="submit" className="btn-primary w-full" disabled={loading}>
             {loading ? 'Contribution...' : 'Contribuer'}
           </button>
         </form>
 
-        {/* Liste des contributions */}
         {showDetails && contributions.length > 0 && (
           <div>
-            <h3 className="text-lg font-bold mb-3">
-              Contributions ({contributions.length})
-            </h3>
+            <h3 className="text-lg font-bold mb-3">Contributions ({contributions.length})</h3>
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {contributions.map((contrib) => (
                 <div key={contrib.id} className="bg-gray-50 p-3 rounded-lg">
                   <div className="flex justify-between items-start mb-1">
-                    <span className="font-semibold">
-                      {`👤 ${contrib.contributeur}`}
-                    </span>
-                    <span className="text-christmas-green font-bold">
-                      {contrib.montant.toFixed(2)} €
-                    </span>
+                    <span className="font-semibold">👤 {contrib.contributeur}</span>
+                    <span className="text-christmas-green font-bold">{contrib.montant.toFixed(2)} €</span>
                   </div>
-                  {contrib.message && (
-                    <p className="text-sm text-gray-600 italic">"{contrib.message}"</p>
-                  )}
+                  {contrib.message && <p className="text-sm text-gray-600 italic">"{contrib.message}"</p>}
                   <p className="text-xs text-gray-400 mt-1">
                     {new Date(contrib.created_at).toLocaleDateString('fr-FR')}
                   </p>
