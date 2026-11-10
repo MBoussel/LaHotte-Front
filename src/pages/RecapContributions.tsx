@@ -13,9 +13,8 @@ interface Contribution {
 }
 
 interface ContributionParMembre {
-  user_id: number;
+  user_id: number | null;
   username: string;
-  email: string;
   total_contribue: number;
   nb_contributions: number;
   contributions: Contribution[];
@@ -65,7 +64,7 @@ const RecapContributions = () => {
       setData(response.data);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('Seul le créateur de la famille peut voir ce récapitulatif');
+        alert("Vous n'avez pas accès à ce récapitulatif");
         navigate(`/familles/${id}`);
       } else {
         alert('Erreur lors du chargement');
@@ -165,11 +164,10 @@ const RecapContributions = () => {
           {data.contributions_par_membre
             .sort((a, b) => b.total_contribue - a.total_contribue)
             .map((membre) => (
-              <div key={membre.user_id} className="card">
+              <div key={membre.contributions[0]?.id ?? membre.username} className="card">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
                   <div>
                     <h3 className="text-lg md:text-xl font-bold">{membre.username}</h3>
-                    <p className="text-sm text-gray-600">{membre.email}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-christmas-green">

@@ -33,7 +33,7 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
     e.preventDefault();
     
     if (formData.famille_ids.length === 0) {
-      alert('Veuillez sélectionner au moins une famille');
+      alert('Une famille doit être sélectionnée');
       return;
     }
     
@@ -124,37 +124,8 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
         />
       </div>
 
-      {/* Sélection des familles */}
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          Ajouter ce cadeau dans ces familles * (au moins 1)
-        </label>
-        <div className="space-y-2 max-h-40 overflow-y-auto border rounded p-2">
-          {mesFamilles.map((fam) => (
-            <label
-              key={fam.id}
-              className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
-            >
-              <input
-                type="checkbox"
-                checked={formData.famille_ids.includes(fam.id)}
-                onChange={() => {
-                  const newIds = formData.famille_ids.includes(fam.id)
-                    ? formData.famille_ids.filter((id) => id !== fam.id)
-                    : [...formData.famille_ids, fam.id];
-                  setFormData({ ...formData, famille_ids: newIds });
-                }}
-                className="rounded"
-              />
-              <span className="text-sm font-medium">{fam.nom}</span>
-            </label>
-          ))}
-        </div>
-        {formData.famille_ids.length === 0 && (
-          <p className="text-xs text-red-600 mt-1">
-            ⚠️ Sélectionnez au moins une famille
-          </p>
-        )}
+      <div className="rounded-lg bg-gray-50 p-3 text-sm text-gray-600">
+        Ce cadeau sera ajouté uniquement à cette famille.
       </div>
 
       {/* Sélection des bénéficiaires */}

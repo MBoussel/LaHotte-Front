@@ -5,7 +5,8 @@ interface CadeauCardProps {
   contributions: ContributionWithUser[];
   membres?: Membre[];
   currentUserId?: number;
-  onContribute: (cadeau: { id: number; titre: string; prix: number }) => void;
+  canSeeContributions?: boolean;
+  onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
   onMarkPurchased: (cadeauId: number) => void;
   onUnmarkPurchased: (cadeauId: number) => void;
 }
@@ -15,6 +16,7 @@ const CadeauCard = ({
   contributions,
   membres,
   currentUserId,
+  canSeeContributions = false,
   onContribute,
   onMarkPurchased,
   onUnmarkPurchased,
@@ -78,7 +80,7 @@ const CadeauCard = ({
       {cadeau.description && <p className="text-gray-600 mb-4">{cadeau.description}</p>}
 
       {/* Barre de progression - CACHÉE si propriétaire */}
-      {!isOwner && contributions.length > 0 && (
+      {canSeeContributions && !isOwner && contributions.length > 0 && (
         <div className="mb-4">
           <div className="flex justify-between text-xs mb-1">
             <span className="font-semibold text-christmas-green">
@@ -107,7 +109,7 @@ const CadeauCard = ({
       )}
 
       {/* Liste des contributeurs - CACHÉE si propriétaire */}
-      {!isOwner && contributions.length > 0 && (
+      {canSeeContributions && !isOwner && contributions.length > 0 && (
         <div className="mb-3 p-2 bg-gray-50 rounded">
           <p className="text-xs font-semibold mb-1">Contributeurs :</p>
           <div className="flex flex-wrap gap-1">
@@ -141,27 +143,12 @@ const CadeauCard = ({
         {/* Boutons pour les NON propriétaires */}
         {!isOwner && (
           <>
-            {/* Bouton Contribuer */}
-            {!cadeau.is_purchased && reste > 0 && (
+            {!cadeau.is_purchased && (
               <button
-                onClick={() =>
-                  onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix })
-                }
+                onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
                 className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
               >
                 💝 Contribuer à ce cadeau
-              </button>
-            )}
-
-            {/* Bouton Voir les contributions */}
-            {!cadeau.is_purchased && reste <= 0 && (
-              <button
-                onClick={() =>
-                  onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix })
-                }
-                className="w-full bg-gray-400 text-white px-4 py-2 rounded-lg cursor-pointer"
-              >
-                👀 Voir les contributions
               </button>
             )}
 

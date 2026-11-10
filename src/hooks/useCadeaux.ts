@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { cadeauxAPI, contributionsAPI } from '../services/api';
 import type { Cadeau, ContributionWithUser } from '../types';
 
-export const useCadeaux = (familleId: number | undefined, userId: number | undefined) => {
+export const useCadeaux = (familleId: number | undefined, userId: number | undefined, creatorId?: number, pereNoelId?: number | null) => {
   const [cadeaux, setCadeaux] = useState<Cadeau[]>([]);
   const [contributions, setContributions] = useState<Record<number, ContributionWithUser[]>>({});
 
@@ -10,7 +10,7 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
     if (familleId) {
       loadCadeaux();
     }
-  }, [familleId]);
+  }, [familleId, userId, creatorId, pereNoelId]);
 
   const loadCadeaux = async () => {
     if (!familleId) return;
@@ -24,7 +24,8 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
       const contribsData: Record<number, ContributionWithUser[]> = {};
       await Promise.all(
         response.data.map(async (cadeau: Cadeau) => {
-          if (cadeau.owner_id !== userId) {
+          const canSee = (userId === pereNoelId && cadeau.owner_id !== pereNoelId) || (userId === creatorId && pereNoelId != null && cadeau.owner_id === pereNoelId);
+          if (canSee && cadeau.owner_id !== userId) {
             try {
               const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
               contribsData[cadeau.id] = contribRes.data;

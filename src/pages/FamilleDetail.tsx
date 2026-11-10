@@ -1,4 +1,4 @@
-import { useState,  type FormEvent } from 'react';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { useFamille } from '../hooks/useFamille';
@@ -26,7 +26,7 @@ const FamilleDetail = () => {
     markPurchased,
     unmarkPurchased,
     reload: reloadCadeaux,
-  } = useCadeaux(familleId, user?.id);
+  } = useCadeaux(familleId, user?.id, famille?.creator_id, famille?.pere_noel_id);
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
@@ -34,6 +34,7 @@ const FamilleDetail = () => {
     id: number;
     titre: string;
     prix: number;
+    owner_id: number;
   } | null>(null);
   const [isEditingFamille, setIsEditingFamille] = useState(false);
   const [familleName, setFamilleName] = useState('');
@@ -107,6 +108,21 @@ const FamilleDetail = () => {
   }
 
   const isCreator = user?.id === famille.creator_id;
+  const isPereNoel = user?.id === famille.pere_noel_id;
+  const canSeeRecap = isPereNoel || (isCreator && famille.pere_noel_id != null);
+  const canManagePereNoel = isCreator;
+
+  const handleSetPereNoel = async (event: ChangeEvent<HTMLSelectElement>) => {
+    const userId = Number(event.target.value);
+    if (!famille || !userId) return;
+    try {
+      await famillesAPI.setPereNoel(famille.id, userId);
+      await reloadFamille();
+      alert('Père Noël désigné !');
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Impossible de désigner le Père Noël');
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
@@ -183,7 +199,7 @@ const FamilleDetail = () => {
               + Ajouter un cadeau
             </button>
           )}
-          {(isCreator || user?.is_admin) && (
+          {canSeeRecap && (
   <button
     onClick={() => navigate(`/familles/${familleId}/contributions-recap`)}
     className="btn-secondary w-full md:w-auto whitespace-nowrap"
@@ -193,6 +209,20 @@ const FamilleDetail = () => {
 )}
         </div>
       </div>
+
+      {canManagePereNoel && (
+        <div className="card mb-6">
+          <h2 className="font-bold mb-2">Désigner le Père Noël</h2>
+          <p className="text-sm text-gray-600 mb-3">Choisissez un membre différent du créateur. Seul le créateur peut modifier ce choix.</p>
+          <select className="input" value={famille.pere_noel_id ?? ''} onChange={handleSetPereNoel}>
+            <option value="">Choisir le Père Noël</option>
+            {famille.membres?.filter(m => m.id !== famille.creator_id).map(membre => (
+              <option key={membre.id} value={membre.id}>{membre.username}</option>
+            ))}
+          </select>
+          {!famille.pere_noel_id && <p className="text-xs text-amber-700 mt-2">Le Père Noël doit être désigné pour activer les récapitulatifs.</p>}
+        </div>
+      )}
 
       {/* Invitations (si créateur) */}
       <Invitations familleId={familleId} isCreator={isCreator} />
@@ -238,6 +268,7 @@ const FamilleDetail = () => {
                     contributions={contributions[cadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
+                    canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
                     onContribute={setSelectedCadeau}
                     onMarkPurchased={handleMarkPurchased}
                     onUnmarkPurchased={handleUnmarkPurchased}
@@ -269,6 +300,7 @@ const FamilleDetail = () => {
                     contributions={contributions[cadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
+                    canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
                     onContribute={setSelectedCadeau}
                     onMarkPurchased={handleMarkPurchased}
                     onUnmarkPurchased={handleUnmarkPurchased}
@@ -308,6 +340,7 @@ const FamilleDetail = () => {
           prixTotal={selectedCadeau.prix}
           onClose={() => setSelectedCadeau(null)}
           onSuccess={reloadCadeaux}
+          showDetails={(isPereNoel && selectedCadeau.owner_id !== famille.pere_noel_id) || (isCreator && selectedCadeau.owner_id === famille.pere_noel_id)}
         />
       )}
     </div>

@@ -94,6 +94,7 @@ export const famillesAPI = {
   getOne: (id: number) => api.get<Famille>(`/familles/${id}`),
   create: (data: Partial<Famille>) => api.post<Famille>('/familles/', data),
   update: (id: number, data: Partial<Famille>) => api.put<Famille>(`/familles/${id}`, data),
+  setPereNoel: (familleId: number, userId: number) => api.put(`/familles/${familleId}/pere-noel`, null, { params: { user_id: userId } }),
   delete: (id: number) => api.delete(`/familles/${id}`),
   invite: (familleId: number, email: string) => api.post(`/familles/${familleId}/invite`, { email }),
   getPendingInvitations: () => api.get<Invitation[]>('/familles/invitations/pending'),
