@@ -65,7 +65,7 @@ const RecapContributions = () => {
       setData(response.data);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        alert('Seul le créateur de la famille peut voir ce récapitulatif');
+        alert('Vous n'avez pas accès à ces informations confidentielles');
         navigate(`/familles/${id}`);
       } else {
         alert('Erreur lors du chargement');
