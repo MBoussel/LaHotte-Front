@@ -39,7 +39,6 @@ export interface Cadeau {
   photo_url?: string;
   lien_achat?: string;
   owner_id: number;
-  purchased_by_id?: number | null;
   beneficiaires?: Array<{ id: number; username: string }>;  
 }
 
