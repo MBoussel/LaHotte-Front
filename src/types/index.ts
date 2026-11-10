@@ -60,7 +60,6 @@ export interface Contribution {
   user_id: number;
   montant: number;
   message: string;
-  is_anonymous: boolean;
   created_at: string;
 }
 
