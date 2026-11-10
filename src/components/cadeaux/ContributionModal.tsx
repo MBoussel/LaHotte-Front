@@ -48,7 +48,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
         is_anonymous: formData.is_anonymous,
       });
       setFormData({ montant: '', message: '', is_anonymous: false });
-      loadContributions();
+      if (showDetails) loadContributions();
       onSuccess();
       alert('Merci pour votre contribution ! 🎁');
     } catch (error: any) {
@@ -104,11 +104,6 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
               onChange={handleChange}
               required
             />
-            {reste <= 0 && (
-              <p className="text-xs text-gray-500 mt-1">
-                L'objectif est atteint, vous ne pouvez plus contribuer.
-              </p>
-            )}
           </div>
 
           <div>
@@ -140,14 +135,14 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
           <button
             type="submit"
             className="btn-primary w-full"
-            disabled={loading || reste <= 0}
+            disabled={loading}
           >
             {loading ? 'Contribution...' : 'Contribuer'}
           </button>
         </form>
 
         {/* Liste des contributions */}
-        {contributions.length > 0 && (
+        {showDetails && contributions.length > 0 && (
           <div>
             <h3 className="text-lg font-bold mb-3">
               Contributions ({contributions.length})
