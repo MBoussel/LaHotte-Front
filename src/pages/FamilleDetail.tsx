@@ -300,6 +300,7 @@ const FamilleDetail = () => {
                     contributions={contributions[cadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
+                    canSeeContributions={canSeeGiftContributions(cadeau.owner_id)}
                     onContribute={setSelectedCadeau}
                     onMarkPurchased={handleMarkPurchased}
                     onUnmarkPurchased={handleUnmarkPurchased}
