@@ -6,7 +6,6 @@ interface Contribution {
   id: number;
   montant: number;
   message: string;
-  is_anonymous: boolean;
   created_at: string;
   cadeau_titre: string;
   cadeau_owner: number | null;
@@ -28,7 +27,6 @@ interface ContributionParCadeau {
   total_contribue: number;
   reste: number;
   pourcentage: number;
-  is_purchased: boolean;
   nb_contributions: number;
 }
 
@@ -193,11 +191,6 @@ const RecapContributions = () => {
                         )}
                         <p className="text-xs text-gray-500 mt-1">
                           {new Date(contrib.created_at).toLocaleDateString('fr-FR')}
-                          {contrib.is_anonymous && (
-                            <span className="ml-2 bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">
-                              🎭 Anonyme
-                            </span>
-                          )}
                         </p>
                       </div>
                       <p className="font-bold text-christmas-green ml-4">{contrib.montant} €</p>
@@ -218,11 +211,6 @@ const RecapContributions = () => {
                   <div className="flex-1">
                     <h3 className="text-lg md:text-xl font-bold">{cadeau.cadeau_titre}</h3>
                     <p className="text-sm text-gray-600">Liste de : {cadeau.owner}</p>
-                    {cadeau.is_purchased && (
-                      <span className="inline-block mt-1 bg-christmas-green text-white px-2 py-1 rounded text-xs">
-                        ✅ Acheté
-                      </span>
-                    )}
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-gray-600">Prix : {cadeau.cadeau_prix} €</p>
