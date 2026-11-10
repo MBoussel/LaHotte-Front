@@ -18,7 +18,6 @@ const MesContributions = () => {
   const [editFormData, setEditFormData] = useState({
     montant: 0,
     message: '',
-    is_anonymous: false,
   });
 
   useEffect(() => {
@@ -64,7 +63,6 @@ const MesContributions = () => {
     setEditFormData({
       montant: contrib.montant,
       message: contrib.message || '',
-      is_anonymous: contrib.is_anonymous,
     });
   };
 
@@ -168,19 +166,7 @@ const MesContributions = () => {
                     />
                   </div>
 
-                  <div>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={editFormData.is_anonymous}
-                        onChange={(e) => setEditFormData({ ...editFormData, is_anonymous: e.target.checked })}
-                        className="rounded"
-                      />
-                      <span className="text-sm">Contribution anonyme 🎭</span>
-                    </label>
-                  </div>
 
-                  <div className="flex gap-2 pt-2">
                     <button
                       onClick={() => setEditingId(null)}
                       className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition"
@@ -217,11 +203,6 @@ const MesContributions = () => {
                       </p>
                     )}
                     <div className="flex flex-wrap gap-2 text-xs">
-                      {contrib.is_anonymous && (
-                        <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
-                          🎭 Anonyme
-                        </span>
-                      )}
                       <span className="text-gray-500">
                         {new Date(contrib.created_at).toLocaleDateString('fr-FR')}
                       </span>
