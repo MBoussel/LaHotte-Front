@@ -24,15 +24,13 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
       const contribsData: Record<number, ContributionWithUser[]> = {};
       await Promise.all(
         response.data.map(async (cadeau: Cadeau) => {
-          if (cadeau.owner_id !== userId) {
+          {
             try {
               const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
               contribsData[cadeau.id] = contribRes.data;
             } catch (error) {
               contribsData[cadeau.id] = [];
             }
-          } else {
-            contribsData[cadeau.id] = [];
           }
         })
       );
