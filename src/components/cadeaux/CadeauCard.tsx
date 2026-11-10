@@ -7,8 +7,6 @@ interface CadeauCardProps {
   currentUserId?: number;
   canSeeContributions?: boolean;
   onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
-  onMarkPurchased: (cadeauId: number) => void;
-  onUnmarkPurchased: (cadeauId: number) => void;
 }
 
 const CadeauCard = ({
@@ -18,29 +16,17 @@ const CadeauCard = ({
   currentUserId,
   canSeeContributions = false,
   onContribute,
-  onMarkPurchased,
-  onUnmarkPurchased,
 }: CadeauCardProps) => {
   const totalContribue = contributions.reduce((sum, c) => sum + c.montant, 0);
   const reste = cadeau.prix - totalContribue;
   const pourcentage = Math.min((totalContribue / cadeau.prix) * 100, 100);
   const isOwner = currentUserId === cadeau.owner_id;
-  const isPurchasedByMe = cadeau.purchased_by_id === currentUserId;
 
   return (
     <div
-      className={`card hover:shadow-xl transition ${
-        cadeau.is_purchased ? 'border-4 border-christmas-green' : ''
-      }`}
+      className="card hover:shadow-xl transition"
     >
-      {/* Badge Acheté */}
-      {cadeau.is_purchased && (
-        <div className="bg-christmas-green text-white px-4 py-2 rounded-lg mb-3 font-bold text-center">
-          ✅ Cadeau acheté !
-        </div>
-      )}
 
-      {/* Image */}
       {cadeau.photo_url && (
         <img
           src={cadeau.photo_url}
@@ -115,7 +101,7 @@ const CadeauCard = ({
           <div className="flex flex-wrap gap-1">
             {contributions.slice(0, 3).map((contrib, idx) => (
               <span key={idx} className="text-xs bg-white px-2 py-0.5 rounded-full border">
-                {contrib.is_anonymous ? '🎭' : contrib.contributeur}
+                {contrib.contributeur}
               </span>
             ))}
             {contributions.length > 3 && (
@@ -143,36 +129,13 @@ const CadeauCard = ({
         {/* Boutons pour les NON propriétaires */}
         {!isOwner && (
           <>
-            {!cadeau.is_purchased && (
-              <button
-                onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
-                className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
-              >
-                💝 Contribuer à ce cadeau
-              </button>
-            )}
+            <button
+              onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
+              className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
+            >
+              💝 Contribuer à ce cadeau
+            </button>
 
-            {/* Bouton Marquer comme acheté */}
-            {!cadeau.is_purchased && (
-              <button
-                onClick={() => onMarkPurchased(cadeau.id)}
-                className="w-full bg-christmas-gold hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg transition font-semibold"
-              >
-                ✅ J'ai acheté ce cadeau
-              </button>
-            )}
-
-            {/* Bouton Annuler l'achat */}
-            {cadeau.is_purchased && isPurchasedByMe && (
-              <button
-                onClick={() => onUnmarkPurchased(cadeau.id)}
-                className="w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition"
-              >
-                ❌ Annuler "acheté"
-              </button>
-            )}
-          </>
-        )}
       </div>
     </div>
   );
