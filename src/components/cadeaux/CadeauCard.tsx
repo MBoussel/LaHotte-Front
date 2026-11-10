@@ -143,29 +143,12 @@ const CadeauCard = ({
         {/* Boutons pour les NON propriétaires */}
         {!isOwner && (
           <>
-            {/* Bouton Contribuer */}
-            {!cadeau.is_purchased && reste > 0 && (
-              <button
-                onClick={() =>
-                  onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })
-                }
-                className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
-              >
-                💝 Contribuer à ce cadeau
-              </button>
-            )}
-
-            {/* Bouton Voir les contributions */}
-            {!cadeau.is_purchased && reste <= 0 && (
-              <button
-                onClick={() =>
-                  onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix })
-                }
-                className="w-full bg-gray-400 text-white px-4 py-2 rounded-lg cursor-pointer"
-              >
-                👀 Voir les contributions
-              </button>
-            )}
+            <button
+              onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
+              className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
+            >
+              💝 Contribuer à ce cadeau
+            </button>
 
             {/* Bouton Marquer comme acheté */}
             {!cadeau.is_purchased && (
