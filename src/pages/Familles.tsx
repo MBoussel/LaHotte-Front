@@ -2,6 +2,7 @@ import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
 import { famillesAPI } from '../services/api';
 import type { Famille } from '../types';
+import RechercherFamilles from './RechercherFamilles';
 
 const Familles = () => {
   const navigate = useNavigate();  // ✅ Hook appelé DANS le composant
@@ -74,17 +75,7 @@ const Familles = () => {
 
       {/* Liste des familles */}
       {familles.length === 0 ? (
-        <div className="card text-center py-12">
-          <p className="text-lg md:text-xl text-gray-600 mb-4">
-            Vous n'avez pas encore de famille
-          </p>
-          <button
-            onClick={() => setShowModal(true)}
-            className="btn-secondary"
-          >
-            Créer ma première famille
-          </button>
-        </div>
+        <RechercherFamilles />
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {familles.map((famille) => (
