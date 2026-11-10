@@ -15,7 +15,6 @@ interface Contribution {
 interface ContributionParMembre {
   user_id: number;
   username: string;
-  email: string;
   total_contribue: number;
   nb_contributions: number;
   contributions: Contribution[];
@@ -169,7 +168,6 @@ const RecapContributions = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
                   <div>
                     <h3 className="text-lg md:text-xl font-bold">{membre.username}</h3>
-                    <p className="text-sm text-gray-600">{membre.email}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-christmas-green">
