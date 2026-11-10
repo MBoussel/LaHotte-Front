@@ -6,7 +6,7 @@ interface CadeauCardProps {
   membres?: Membre[];
   currentUserId?: number;
   canSeeContributions?: boolean;
-  onContribute: (cadeau: { id: number; titre: string; prix: number }) => void;
+  onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
   onMarkPurchased: (cadeauId: number) => void;
   onUnmarkPurchased: (cadeauId: number) => void;
 }
@@ -147,7 +147,7 @@ const CadeauCard = ({
             {!cadeau.is_purchased && reste > 0 && (
               <button
                 onClick={() =>
-                  onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix })
+                  onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })
                 }
                 className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
               >
