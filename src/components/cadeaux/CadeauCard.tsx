@@ -143,12 +143,14 @@ const CadeauCard = ({
         {/* Boutons pour les NON propriétaires */}
         {!isOwner && (
           <>
-            <button
-              onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
-              className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
-            >
-              💝 Contribuer à ce cadeau
-            </button>
+            {!cadeau.is_purchased && (
+              <button
+                onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
+                className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
+              >
+                💝 Contribuer à ce cadeau
+              </button>
+            )}
 
             {/* Bouton Marquer comme acheté */}
             {!cadeau.is_purchased && (
