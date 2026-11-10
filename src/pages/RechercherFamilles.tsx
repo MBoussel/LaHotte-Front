@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { famillesAPI } from '../services/api';
 import type { Famille } from '../types';
 
@@ -9,6 +9,24 @@ const RechercherFamilles = () => {
   const [searched, setSearched] = useState(false);
   const [selectedFamille, setSelectedFamille] = useState<number | null>(null);
   const [message, setMessage] = useState('');
+
+  // Afficher automatiquement toutes les familles publiques dès l'arrivée sur la page.
+  useEffect(() => {
+    const loadPublicFamilies = async () => {
+      setLoading(true);
+      setSearched(true);
+      try {
+        const response = await famillesAPI.searchPublic('');
+        setFamilles(response.data);
+      } catch (error) {
+        console.error('Erreur chargement des familles publiques:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPublicFamilies();
+  }, []);
 
   const handleSearch = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
