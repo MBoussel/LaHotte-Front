@@ -16,7 +16,6 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   const [formData, setFormData] = useState({
     montant: '',
     message: '',
-    is_anonymous: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,9 +42,8 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
       await contributionsAPI.contribute(cadeauId, {
         montant: parseFloat(formData.montant),
         message: formData.message,
-        is_anonymous: formData.is_anonymous,
       });
-      setFormData({ montant: '', message: '', is_anonymous: false });
+      setFormData({ montant: '', message: '' });
       if (showDetails) loadContributions();
       onSuccess();
       alert('Merci pour votre contribution ! 🎁');
@@ -56,12 +54,8 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      setFormData({ ...formData, [name]: (e.target as HTMLInputElement).checked });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   return (
@@ -116,22 +110,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="is_anonymous"
-              id="is_anonymous"
-              checked={formData.is_anonymous}
-              onChange={handleChange}
-              className="w-4 h-4"
-            />
-            <label htmlFor="is_anonymous" className="text-sm">
-              Contribution anonyme (votre nom ne sera pas affiché)
-            </label>
-          </div>
 
-          <button
-            type="submit"
             className="btn-primary w-full"
             disabled={loading}
           >
@@ -150,7 +129,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
                 <div key={contrib.id} className="bg-gray-50 p-3 rounded-lg">
                   <div className="flex justify-between items-start mb-1">
                     <span className="font-semibold">
-                      {contrib.is_anonymous ? '🎭 Anonyme' : `👤 ${contrib.contributeur}`}
+                      {`👤 ${contrib.contributeur}`}
                     </span>
                     <span className="text-christmas-green font-bold">
                       {contrib.montant.toFixed(2)} €
