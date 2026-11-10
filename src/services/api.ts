@@ -125,13 +125,11 @@ export const cadeauxAPI = {
   create: (data: Partial<Cadeau>) => api.post<Cadeau>('/cadeaux/', data),
   update: (id: number, data: Partial<Cadeau>) => api.put<Cadeau>(`/cadeaux/${id}`, data),
   delete: (id: number) => api.delete(`/cadeaux/${id}`),
-  markPurchased: (id: number) => api.post<Cadeau>(`/cadeaux/${id}/mark-purchased`),
-  unmarkPurchased: (id: number) => api.post<Cadeau>(`/cadeaux/${id}/unmark-purchased`),
 };
 
 // Contributions
 export const contributionsAPI = {
-  contribute: (cadeauId: number, data: { montant: number; message?: string; is_anonymous?: boolean }) => 
+  contribute: (cadeauId: number, data: { montant: number; message?: string }) => 
     api.post<Contribution>(`/contributions/cadeaux/${cadeauId}`, data),
   getForCadeau: (cadeauId: number) => 
     api.get<ContributionWithUser[]>(`/contributions/cadeaux/${cadeauId}`),
