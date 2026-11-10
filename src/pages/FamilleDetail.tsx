@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { useFamille } from '../hooks/useFamille';
@@ -28,6 +28,11 @@ const FamilleDetail = () => {
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
+  const [noelType, setNoelType] = useState<"pere_noel" | "mere_noel">("pere_noel");
+
+  useEffect(() => {
+    if (famille?.noel_type) setNoelType(famille.noel_type);
+  }, [famille?.noel_type]);
   const [selectedCadeau, setSelectedCadeau] = useState<{
     id: number;
     titre: string;
@@ -92,15 +97,28 @@ const FamilleDetail = () => {
   const canSeeRecap = isPereNoel || (isCreator && famille.pere_noel_id != null);
   const canManagePereNoel = isCreator;
 
+  const handleSetNoelType = async (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedType = event.target.value as "pere_noel" | "mere_noel";
+    setNoelType(selectedType);
+    if (!famille?.pere_noel_id) return;
+    try {
+      await famillesAPI.setPereNoel(famille.id, famille.pere_noel_id, selectedType);
+      await reloadFamille();
+      alert(selectedType === "mere_noel" ? "Mère Noël désignée !" : "Père Noël désigné !");
+    } catch (error: any) {
+      alert(error.response?.data?.detail || "Impossible de modifier le rôle Noël");
+    }
+  };
+
   const handleSetPereNoel = async (event: ChangeEvent<HTMLSelectElement>) => {
     const userId = Number(event.target.value);
     if (!famille || !userId) return;
     try {
-      await famillesAPI.setPereNoel(famille.id, userId);
+      await famillesAPI.setPereNoel(famille.id, userId, noelType);
       await reloadFamille();
-      alert('Père Noël désigné !');
+      alert(noelType === "mere_noel" ? "Mère Noël désignée !" : "Père Noël désigné !");
     } catch (error: any) {
-      alert(error.response?.data?.detail || 'Impossible de désigner le Père Noël');
+      alert(error.response?.data?.detail || 'Impossible de désigner le rôle Noël');
     }
   };
 
@@ -192,15 +210,16 @@ const FamilleDetail = () => {
 
       {canManagePereNoel && (
         <div className="card mb-6">
-          <h2 className="font-bold mb-2">Désigner le Père Noël</h2>
-          <p className="text-sm text-gray-600 mb-3">Choisissez un membre différent du créateur. Seul le créateur peut modifier ce choix.</p>
+          <h2 className="font-bold mb-2">Désigner le Père Noël ou la Mère Noël</h2>
+          <p className="text-sm text-gray-600 mb-3">Choisissez l’appellation puis le membre qui l’incarnera. Seul le créateur peut modifier ce choix.</p>
+          <select className="input mb-2" value={noelType} onChange={handleSetNoelType}><option value="pere_noel">Père Noël</option><option value="mere_noel">Mère Noël</option></select>
           <select className="input" value={famille.pere_noel_id ?? ''} onChange={handleSetPereNoel}>
-            <option value="">Choisir le Père Noël</option>
+            <option value="">Choisir la personne</option>
             {famille.membres?.filter(m => m.id !== famille.creator_id).map(membre => (
               <option key={membre.id} value={membre.id}>{membre.username}</option>
             ))}
           </select>
-          {!famille.pere_noel_id && <p className="text-xs text-amber-700 mt-2">Le Père Noël doit être désigné pour activer les récapitulatifs.</p>}
+          {!famille.pere_noel_id && <p className="text-xs text-amber-700 mt-2">Le Père Noël ou la Mère Noël doit être désigné pour activer les récapitulatifs.</p>}
         </div>
       )}
 
@@ -212,6 +231,7 @@ const FamilleDetail = () => {
       <MembresSection
         membres={famille.membres}
         pereNoelId={famille.pere_noel_id}
+        noelType={famille.noel_type}
         currentUserId={user?.id}
       />
 

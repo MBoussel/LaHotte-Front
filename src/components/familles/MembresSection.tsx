@@ -4,10 +4,12 @@ import type { Membre } from '../../types';
 interface MembresSectionProps {
   membres?: Membre[];
   pereNoelId?: number | null;
+  noelType?: 'pere_noel' | 'mere_noel';
   currentUserId?: number;
 }
 
-const MembresSection = ({ membres = [], pereNoelId, currentUserId }: MembresSectionProps) => {
+const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', currentUserId }: MembresSectionProps) => {
+  const noelLabel = noelType === 'mere_noel' ? 'Mère Noël' : 'Père Noël';
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -35,7 +37,7 @@ const MembresSection = ({ membres = [], pereNoelId, currentUserId }: MembresSect
     <div className="mb-6">
       {currentUserId != null && pereNoelId === currentUserId && (
         <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900">
-          <p className="font-bold">🎅 Tu es le Père Noël de cette famille !</p>
+          <p className="font-bold">{noelType === 'mere_noel' ? '🎄 Tu es la Mère Noël de cette famille !' : '🎅 Tu es le Père Noël de cette famille !'}</p>
           <p className="text-sm mt-1">Tu peux suivre les contributions aux cadeaux des autres membres.</p>
         </div>
       )}
@@ -73,7 +75,7 @@ const MembresSection = ({ membres = [], pereNoelId, currentUserId }: MembresSect
                 <div className="flex flex-wrap items-center gap-1">
                   <p className="font-semibold text-sm truncate">{membre.username}</p>
                   {pereNoelId != null && membre.id === pereNoelId && (
-                    <span className="text-[10px] font-bold rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">Père Noël</span>
+                    <span className="text-[10px] font-bold rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">{noelLabel}</span>
                   )}
                 </div>
                 <p className="text-xs text-gray-600 truncate">{membre.email}</p>
