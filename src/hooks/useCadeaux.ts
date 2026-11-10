@@ -48,22 +48,10 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
     await loadCadeaux();
   };
 
-  const markPurchased = async (cadeauId: number) => {
-    await cadeauxAPI.markPurchased(cadeauId);
-    await loadCadeaux();
-  };
 
-  const unmarkPurchased = async (cadeauId: number) => {
-    await cadeauxAPI.unmarkPurchased(cadeauId);
-    await loadCadeaux();
-  };
-
-  return {
     cadeaux,
     contributions,
     createCadeau,
-    markPurchased,
-    unmarkPurchased,
     reload: loadCadeaux,
   };
 };
