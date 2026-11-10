@@ -8,9 +8,10 @@ interface ContributionModalProps {
   prixTotal: number;
   onClose: () => void;
   onSuccess: () => void;
+  canSeeDetails: boolean;
 }
 
-const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSuccess }: ContributionModalProps) => {
+const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSuccess, canSeeDetails }: ContributionModalProps) => {
   const [contributions, setContributions] = useState<ContributionWithUser[]>([]);
   const [formData, setFormData] = useState({
     montant: '',
@@ -20,8 +21,8 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadContributions();
-  }, [cadeauId]);
+    if (canSeeDetails) loadContributions();
+  }, [cadeauId, canSeeDetails]);
 
   const loadContributions = async () => {
     try {
@@ -33,7 +34,6 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   };
 
   const totalContribue = contributions.reduce((sum, c) => sum + c.montant, 0);
-  const reste = prixTotal - totalContribue;
   const pourcentage = Math.min((totalContribue / prixTotal) * 100, 100);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -78,28 +78,16 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
           </button>
         </div>
 
-        {/* Barre de progression */}
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="font-semibold">{totalContribue.toFixed(2)} € collectés</span>
-            <span className="text-gray-600">{prixTotal.toFixed(2)} € total</span>
+        {canSeeDetails && (
+          <div className="mb-6">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="font-semibold">{totalContribue.toFixed(2)} € collectés</span>
+              <span className="text-gray-600">{prixTotal.toFixed(2)} € total</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-4"><div className="bg-christmas-green h-4 rounded-full" style={{ width: `${pourcentage}%` }} /></div>
+            {totalContribue > prixTotal && <p className="text-sm mt-2">Le montant collecté dépasse le prix du cadeau.</p>}
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-4">
-            <div
-              className="bg-christmas-green h-4 rounded-full transition-all duration-500"
-              style={{ width: `${pourcentage}%` }}
-            />
-          </div>
-          {reste > 0 ? (
-            <p className="text-sm text-gray-600 mt-2">
-              Reste à collecter : <span className="font-bold text-christmas-red">{reste.toFixed(2)} €</span>
-            </p>
-          ) : (
-            <p className="text-sm text-christmas-green font-bold mt-2">
-              ✅ Objectif atteint !
-            </p>
-          )}
-        </div>
+        )}
 
         {/* Formulaire de contribution */}
         <form onSubmit={handleSubmit} className="space-y-4 mb-6">
@@ -111,17 +99,11 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
               step="0.01"
               min="0.01"
               className="input"
-              placeholder={reste > 0 ? `Max: ${reste.toFixed(2)} €` : "0.00"}
+              placeholder="Montant libre"
               value={formData.montant}
               onChange={handleChange}
               required
-              disabled={reste <= 0}
             />
-            {reste <= 0 && (
-              <p className="text-xs text-gray-500 mt-1">
-                L'objectif est atteint, vous ne pouvez plus contribuer.
-              </p>
-            )}
           </div>
 
           <div>
@@ -153,14 +135,14 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
           <button
             type="submit"
             className="btn-primary w-full"
-            disabled={loading || reste <= 0}
+            disabled={loading}
           >
             {loading ? 'Contribution...' : 'Contribuer'}
           </button>
         </form>
 
         {/* Liste des contributions */}
-        {contributions.length > 0 && (
+        {canSeeDetails && contributions.length > 0 && (
           <div>
             <h3 className="text-lg font-bold mb-3">
               Contributions ({contributions.length})
