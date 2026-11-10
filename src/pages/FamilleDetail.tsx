@@ -209,7 +209,11 @@ const FamilleDetail = () => {
 {/* Demandes d'adhésion (si créateur) */}
 <DemandesAdhesion familleId={familleId} isCreator={isCreator} />
       {/* Membres */}
-      <MembresSection membres={famille.membres} />
+      <MembresSection
+        membres={famille.membres}
+        pereNoelId={famille.pere_noel_id}
+        currentUserId={user?.id}
+      />
 
 {/* Liste des cadeaux */}
 <div>
