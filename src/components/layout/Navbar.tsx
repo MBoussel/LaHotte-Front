@@ -25,12 +25,12 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
   };
 
   return (
-    <nav className="bg-christmas-red text-white shadow-lg">
+    <nav className="holiday-navbar text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="text-xl md:text-2xl font-bold flex items-center gap-2" onClick={closeMenu}>
-            🎄 Liste de Noël
+            <span className="brand-mark">✦</span> LaHotte
           </Link>
 
           {/* Bouton Burger (Mobile) */}
