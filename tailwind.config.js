@@ -8,11 +8,12 @@ export default {
     extend: {
       colors: {
         christmas: {
-          red: '#c41e3a',
-          green: '#165b33',
-          gold: '#ffd700',
+          red: '#b9273b',
+          green: '#174b36',
+          gold: '#e4b957',
+          cream: '#fffaf1',
         }
-      }
+      },
     },
   },
   plugins: [],
