@@ -18,14 +18,29 @@ import Profil from './pages/Profil';
 type Theme = 'light' | 'dark';
 
 function App() {
-  const [theme, setTheme] = useState<Theme>(() => {\n    const saved = window.localStorage.getItem('lahotte-theme');\n    if (saved === 'dark' || saved === 'light') return saved;\n    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n  });
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = window.localStorage.getItem('lahotte-theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem('lahotte-theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => setTheme((current) => current === 'light' ? 'dark' : 'light');
+  useEffect(() => {
+    if (window.localStorage.getItem('lahotte-theme')) return;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const syncWithSystem = (event: MediaQueryListEvent) => setTheme(event.matches ? 'dark' : 'light');
+    media.addEventListener('change', syncWithSystem);
+    return () => media.removeEventListener('change', syncWithSystem);
+  }, []);
+
+  const toggleTheme = () => setTheme((current) => {
+    const next = current === 'light' ? 'dark' : 'light';
+    window.localStorage.setItem('lahotte-theme', next);
+    return next;
+  });
 
   return (
     <AuthProvider>
