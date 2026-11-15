@@ -194,33 +194,45 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
 }
 
 
-/* Global Christmas sparkle: a few spaced, four-point stars across every route */
+/* Remove the dense animated hero texture; keep only distinct, luminous stars */
+.hero-stars { display: none !important; }
 #root {
   position: relative;
   z-index: 1;
 }
+#root::before,
 #root::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 9999;
   pointer-events: none;
-  opacity: .38;
-  background-image:
-    conic-gradient(from 0deg at 50% 50%, transparent 0deg 42deg, rgba(255,221,145,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,221,145,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,221,145,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,221,145,.95) 315deg 318deg, transparent 321deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0deg 42deg, rgba(255,255,255,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,255,255,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,255,255,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,255,255,.95) 315deg 318deg, transparent 321deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0deg 42deg, rgba(255,199,91,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,199,91,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,199,91,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,199,91,.95) 315deg 318deg, transparent 321deg);
-  background-size: 13px 13px, 10px 10px, 12px 12px;
-  background-position: 9% 19%, 76% 13%, 88% 71%;
+  z-index: 9999;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 0 5px rgba(255,218,139,.75));
-  animation: ambient-twinkle 3.1s ease-in-out infinite alternate;
+  background-image:
+    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,241,190,.98) 45deg 48deg, transparent 51deg 132deg, rgba(255,241,190,.98) 135deg 138deg, transparent 141deg 222deg, rgba(255,241,190,.98) 225deg 228deg, transparent 231deg 312deg, rgba(255,241,190,.98) 315deg 318deg, transparent 321deg),
+    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,255,255,.98) 45deg 48deg, transparent 51deg 132deg, rgba(255,255,255,.98) 135deg 138deg, transparent 141deg 222deg, rgba(255,255,255,.98) 225deg 228deg, transparent 231deg 312deg, rgba(255,255,255,.98) 315deg 318deg, transparent 321deg),
+    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,205,112,.98) 45deg 48deg, transparent 51deg 132deg, rgba(255,205,112,.98) 135deg 138deg, transparent 141deg 222deg, rgba(255,205,112,.98) 225deg 228deg, transparent 231deg 312deg, rgba(255,205,112,.98) 315deg 318deg, transparent 321deg),
+    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,255,255,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,255,255,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,255,255,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,255,255,.95) 315deg 318deg, transparent 321deg);
+  background-size: 15px 15px, 11px 11px, 14px 14px, 9px 9px;
+  filter: drop-shadow(0 0 5px rgba(255,220,145,.95)) drop-shadow(0 0 11px rgba(255,205,112,.55));
 }
-@keyframes ambient-twinkle {
-  0% { opacity: .16; filter: brightness(.85) drop-shadow(0 0 2px rgba(255,218,139,.45)); }
-  45% { opacity: .52; filter: brightness(1.2) drop-shadow(0 0 6px rgba(255,218,139,.8)); }
-  72% { opacity: .25; }
-  100% { opacity: .62; filter: brightness(1.35) drop-shadow(0 0 8px rgba(255,218,139,.9)); }
+#root::before {
+  opacity: .9;
+  background-position: 9% 19%, 76% 13%, 88% 71%, 28% 83%;
+  animation: sparkle-pulse-one 2.8s ease-in-out infinite;
+}
+#root::after {
+  opacity: .85;
+  background-position: 54% 9%, 18% 57%, 67% 88%, 94% 39%;
+  animation: sparkle-pulse-two 3.7s ease-in-out -1.4s infinite;
+}
+@keyframes sparkle-pulse-one {
+  0%, 100% { opacity: .42; filter: brightness(.9) drop-shadow(0 0 3px rgba(255,220,145,.55)); }
+  48% { opacity: 1; filter: brightness(1.65) drop-shadow(0 0 8px rgba(255,245,205,1)) drop-shadow(0 0 17px rgba(255,205,112,.9)); }
+}
+@keyframes sparkle-pulse-two {
+  0%, 100% { opacity: .35; filter: brightness(.85) drop-shadow(0 0 3px rgba(255,220,145,.5)); }
+  58% { opacity: .98; filter: brightness(1.7) drop-shadow(0 0 9px rgba(255,245,205,1)) drop-shadow(0 0 19px rgba(255,205,112,.95)); }
 }
 .btn-primary, .btn-secondary, .hero-primary {
   position: relative;
@@ -270,7 +282,7 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
   92%, 100% { left: 130%; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #root::after, .btn-primary::before, .btn-secondary::before,
+  #root::before, #root::after, .btn-primary::before, .btn-secondary::before,
   .hero-primary::before, .btn-primary::after, .btn-secondary::after,
   .hero-primary::after { animation: none !important; }
 }
