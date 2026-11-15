@@ -5,8 +5,8 @@ const Home = () => {
   const { user } = useAuth();
 
   return (
-    <main className="overflow-hidden bg-[#fffaf1]">
-      <section className="relative isolate overflow-hidden bg-[#b51f35] text-white">
+    <main className="overflow-hidden bg-[#fff8ef]">
+      <section className="relative isolate overflow-hidden santa-hero text-white">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 gold-sparkle">
           <div className="absolute -right-28 -top-32 h-[28rem] w-[28rem] rounded-full border border-white/10" />
           <div className="absolute -right-16 -top-20 h-[24rem] w-[24rem] rounded-full border border-white/10" />
@@ -33,11 +33,11 @@ const Home = () => {
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               {user ? (
-                <Link to="/familles" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ffe29a] px-6 py-3.5 text-sm font-extrabold text-[#174b36] shadow-[0_5px_0_#c49b4e] transition hover:-translate-y-0.5 hover:bg-[#fff0c6]">
+                <Link to="/familles" className="inline-flex items-center justify-center gap-2 rounded-xl gold-cta px-6 py-3.5 text-sm font-extrabold text-[#50320d] transition hover:-translate-y-0.5 hover:bg-[#fff0c6]">
                   Voir mes familles <span aria-hidden="true">→</span>
                 </Link>
               ) : (
-                <Link to="/register" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#f5d58a] px-6 py-3.5 text-sm font-extrabold text-[#174b36] shadow-[0_5px_0_#c49b4e] transition hover:-translate-y-0.5 hover:bg-[#ffe5a6]">
+                <Link to="/register" className="inline-flex items-center justify-center gap-2 rounded-xl gold-cta px-6 py-3.5 text-sm font-extrabold text-[#50320d] transition hover:-translate-y-0.5 hover:bg-[#ffe5a6]">
                   Créer mon espace <span aria-hidden="true">→</span>
                 </Link>
               )}
@@ -50,7 +50,7 @@ const Home = () => {
 
           <div className="relative mx-auto w-full max-w-[440px] pb-5 pt-3">
             <div className="absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-[#f2d58c]/10 blur-3xl" />
-            <div className="relative rounded-[2rem] border border-white/20 bg-[#fdf4df] p-5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] sm:p-7">
+            <div className="relative gift-preview rounded-[2rem] p-5 sm:p-7 sm:p-7">
               <div className="flex items-center justify-between border-b border-[#e8d9bb] pb-4">
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#987642]">La liste de famille</p>
@@ -60,7 +60,7 @@ const Home = () => {
               </div>
 
               <div className="space-y-3 py-5">
-                <div className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
+                <div className="gift-row flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f8e5df] text-2xl">🧸</div>
                   <div className="min-w-0 flex-1">
                     <p className="font-bold text-[#294536]">Une jolie surprise</p>
@@ -90,7 +90,7 @@ const Home = () => {
                 ✨ Le bonheur d’offrir, tous ensemble ✨
               </div>
             </div>
-            <div aria-hidden="true" className="absolute -bottom-1 -left-3 -rotate-12 rounded-xl bg-[#b9273b] px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg sm:-left-8">
+            <div aria-hidden="true" className="absolute -bottom-1 -left-3 -rotate-12 rounded-xl bg-[#d32640] px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg sm:-left-8">
               Ho ho ho !
             </div>
             <div aria-hidden="true" className="absolute -right-2 top-8 rotate-12 rounded-full border-2 border-[#f3d48c] bg-[#b9273b] px-3 py-3 text-xl shadow-lg sm:-right-5">
@@ -155,7 +155,7 @@ const Home = () => {
               <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">On prépare Noël ensemble ?</h2>
               <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-white/85 sm:text-base">Créez votre compte gratuitement et commencez à réunir les envies de toute la famille.</p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <Link to="/register" className="rounded-xl bg-[#f5d58a] px-6 py-3.5 text-sm font-extrabold text-[#174b36] shadow-sm transition hover:bg-[#ffe5a6]">Créer mon compte</Link>
+                <Link to="/register" className="rounded-xl gold-cta px-6 py-3.5 text-sm font-extrabold text-[#50320d] shadow-sm transition hover:bg-[#ffe5a6]">Créer mon compte</Link>
                 <Link to="/login" className="rounded-xl border border-white/50 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/10">J’ai déjà un compte</Link>
               </div>
             </div>
