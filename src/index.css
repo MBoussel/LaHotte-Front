@@ -194,30 +194,33 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
 }
 
 
-/* Subtle Christmas sparkle: twinkling stars in the atmosphere and on key buttons */
-body::before {
+/* Global Christmas sparkle: a few spaced, four-point stars across every route */
+#root {
+  position: relative;
+  z-index: 1;
+}
+#root::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 9999;
   pointer-events: none;
-  opacity: .42;
+  opacity: .38;
   background-image:
-    conic-gradient(from 0deg at 50% 50%, transparent 0 40deg, rgba(255,221,145,.95) 44deg 48deg, transparent 52deg 130deg, rgba(255,221,145,.95) 134deg 138deg, transparent 142deg 220deg, rgba(255,221,145,.95) 224deg 228deg, transparent 232deg 310deg, rgba(255,221,145,.95) 314deg 318deg, transparent 322deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0 40deg, rgba(255,255,255,.9) 44deg 48deg, transparent 52deg 130deg, rgba(255,255,255,.9) 134deg 138deg, transparent 142deg 220deg, rgba(255,255,255,.9) 224deg 228deg, transparent 232deg 310deg, rgba(255,255,255,.9) 314deg 318deg, transparent 322deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0 40deg, rgba(255,199,91,.9) 44deg 48deg, transparent 52deg 130deg, rgba(255,199,91,.9) 134deg 138deg, transparent 142deg 220deg, rgba(255,199,91,.9) 224deg 228deg, transparent 232deg 310deg, rgba(255,199,91,.9) 314deg 318deg, transparent 322deg);
-  background-size: 13px 13px, 9px 9px, 11px 11px;
-  background-position: 8% 24%, 76% 16%, 42% 72%;
+    conic-gradient(from 0deg at 50% 50%, transparent 0deg 42deg, rgba(255,221,145,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,221,145,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,221,145,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,221,145,.95) 315deg 318deg, transparent 321deg),
+    conic-gradient(from 0deg at 50% 50%, transparent 0deg 42deg, rgba(255,255,255,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,255,255,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,255,255,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,255,255,.95) 315deg 318deg, transparent 321deg),
+    conic-gradient(from 0deg at 50% 50%, transparent 0deg 42deg, rgba(255,199,91,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,199,91,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,199,91,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,199,91,.95) 315deg 318deg, transparent 321deg);
+  background-size: 13px 13px, 10px 10px, 12px 12px;
+  background-position: 9% 19%, 76% 13%, 88% 71%;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 0 4px rgba(255,218,139,.75));
-  animation: ambient-twinkle 3.2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 5px rgba(255,218,139,.75));
+  animation: ambient-twinkle 3.1s ease-in-out infinite alternate;
 }
-#root { position: relative; z-index: 1; }
 @keyframes ambient-twinkle {
-  0% { opacity: .22; filter: brightness(.9); }
-  45% { opacity: .58; filter: brightness(1.2); }
-  70% { opacity: .34; }
-  100% { opacity: .72; filter: brightness(1.4); }
+  0% { opacity: .16; filter: brightness(.85) drop-shadow(0 0 2px rgba(255,218,139,.45)); }
+  45% { opacity: .52; filter: brightness(1.2) drop-shadow(0 0 6px rgba(255,218,139,.8)); }
+  72% { opacity: .25; }
+  100% { opacity: .62; filter: brightness(1.35) drop-shadow(0 0 8px rgba(255,218,139,.9)); }
 }
 .btn-primary, .btn-secondary, .hero-primary {
   position: relative;
@@ -267,7 +270,7 @@ body::before {
   92%, 100% { left: 130%; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body::before, .btn-primary::before, .btn-secondary::before,
+  #root::after, .btn-primary::before, .btn-secondary::before,
   .hero-primary::before, .btn-primary::after, .btn-secondary::after,
   .hero-primary::after { animation: none !important; }
 }
