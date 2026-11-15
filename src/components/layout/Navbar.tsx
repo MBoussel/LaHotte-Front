@@ -25,7 +25,7 @@ const Navbar = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-[70px] items-center justify-between gap-4">
             <Link to="/" onClick={closeMenu} className="group flex items-center gap-3">
-              <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#b9273b] text-xl shadow-inner ring-1 ring-white/20">
+              <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#c3263b] text-xl shadow-inner ring-1 ring-white/20">
                 <span aria-hidden="true">✦</span>
               </span>
               <span>
@@ -59,14 +59,14 @@ const Navbar = () => {
                   <PendingInvitations />
                   <div className="h-6 w-px bg-white/20" />
                   <Link to="/profil" className={navLink}>Bonjour, {user.username}</Link>
-                  <button onClick={handleLogout} className="rounded-xl bg-[#fff4df] px-4 py-2 text-sm font-bold text-[#174b36] hover:bg-white transition">
+                  <button onClick={handleLogout} className="rounded-xl bg-[#c3263b] px-4 py-2 text-sm font-bold text-white hover:bg-[#a91b30] transition">
                     Déconnexion
                   </button>
                 </>
               ) : (
                 <>
                   <Link to="/login" className={navLink}>Connexion</Link>
-                  <Link to="/register" className="rounded-xl bg-[#fff4df] px-4 py-2.5 text-sm font-bold text-[#174b36] shadow-sm hover:bg-white">
+                  <Link to="/register" className="rounded-xl bg-[#fff4df] px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-[#a91b30]">
                     Rejoindre LaHotte
                   </Link>
                 </>
