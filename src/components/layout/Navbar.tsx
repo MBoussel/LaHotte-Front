@@ -19,9 +19,9 @@ const Navbar = () => {
   const navLink = 'text-sm font-semibold text-white/90 hover:text-[#f7d98c] transition-colors';
 
   return (
-    <header className="sticky top-0 z-40 text-white shadow-[0_3px_16px_rgba(20,48,34,0.2)]">
-      <div className="h-[5px] bg-[#e4b957]" />
-      <nav className="bg-[#174b36]">
+    <header className="sticky top-0 z-40 text-white shadow-[0_7px_24px_rgba(8,37,25,0.32)]">
+      <div className="h-[5px] bg-gradient-to-r from-[#a66d24] via-[#fff0b5] to-[#a66d24] shadow-[0_1px_7px_rgba(255,225,153,.7)]" />
+      <nav className="holiday-nav">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex h-[70px] items-center justify-between gap-4">
             <Link to="/" onClick={closeMenu} className="group flex items-center gap-3">
@@ -66,7 +66,7 @@ const Navbar = () => {
               ) : (
                 <>
                   <Link to="/login" className={navLink}>Connexion</Link>
-                  <Link to="/register" className="rounded-xl bg-[#fff4df] px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-[#a91b30]">
+                  <Link to="/register" className="rounded-xl bg-[#c3263b] px-4 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,.2)] hover:bg-[#e02c45]">
                     Rejoindre LaHotte
                   </Link>
                 </>
@@ -98,7 +98,7 @@ const Navbar = () => {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Link to="/login" onClick={closeMenu} className="rounded-xl px-4 py-3 text-sm hover:bg-white/10">Connexion</Link>
-                  <Link to="/register" onClick={closeMenu} className="rounded-xl bg-[#fff4df] px-4 py-3 text-center text-sm font-bold text-[#174b36]">Rejoindre LaHotte</Link>
+                  <Link to="/register" onClick={closeMenu} className="rounded-xl bg-[#c3263b] px-4 py-3 text-center text-sm font-bold text-white">Rejoindre LaHotte</Link>
                 </div>
               )}
             </div>
