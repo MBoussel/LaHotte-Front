@@ -13,7 +13,7 @@
   * { box-sizing: border-box; }
 
   body {
-    @apply bg-[#fffaf1] text-[#26362e] antialiased;
+    @apply bg-[#fff8ef] text-[#26362e] antialiased;
     margin: 0;
     min-width: 320px;
   }
@@ -26,6 +26,15 @@
 }
 
 @layer components {
+  .gold-sparkle {
+    background-image: radial-gradient(circle at 12% 28%, rgba(255,226,153,.95) 0 1px, transparent 1.8px), radial-gradient(circle at 78% 18%, rgba(255,226,153,.8) 0 1px, transparent 1.8px), radial-gradient(circle at 62% 72%, rgba(255,226,153,.75) 0 1px, transparent 1.8px);
+    background-size: 170px 130px, 210px 160px, 240px 180px;
+  }
+
+  .gold-rule {
+    background: linear-gradient(90deg, transparent, #e7c36e 18%, #fff0bf 50%, #e7c36e 82%, transparent);
+  }
+
   .btn-primary {
     @apply inline-flex items-center justify-center bg-christmas-red hover:bg-[#a91e32] text-white font-semibold py-2.5 px-5 rounded-xl transition duration-200 shadow-sm;
   }
