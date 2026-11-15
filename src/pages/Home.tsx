@@ -26,7 +26,7 @@ const Home = () => {
             </div>
             <h1 className="font-serif text-[2.75rem] font-bold leading-[1.04] tracking-tight sm:text-6xl lg:text-[4.25rem]">
               Cette année,<br />
-              <span className="text-[#ffe29a]">la magie</span> se partage.
+              <span className="gold-foil">la magie</span> se partage.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
               Les envies de chacun, les cadeaux tous ensemble et de belles surprises à préparer. LaHotte réunit toute la famille autour du plaisir d’offrir.
@@ -50,7 +50,7 @@ const Home = () => {
 
           <div className="relative mx-auto w-full max-w-[440px] pb-5 pt-3">
             <div className="absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-[#f2d58c]/10 blur-3xl" />
-            <div className="relative gift-preview rounded-[2rem] p-5 sm:p-7 sm:p-7">
+            <div className="relative gift-preview rounded-[2rem] p-5 sm:p-7">
               <div className="flex items-center justify-between border-b border-[#e8d9bb] pb-4">
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#987642]">La liste de famille</p>
