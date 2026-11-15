@@ -6,8 +6,8 @@ const Home = () => {
 
   return (
     <main className="overflow-hidden bg-[#fffaf1]">
-      <section className="relative isolate overflow-hidden bg-[#174b36] text-white">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      <section className="relative isolate overflow-hidden bg-[#b51f35] text-white">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 gold-sparkle">
           <div className="absolute -right-28 -top-32 h-[28rem] w-[28rem] rounded-full border border-white/10" />
           <div className="absolute -right-16 -top-20 h-[24rem] w-[24rem] rounded-full border border-white/10" />
           <div className="absolute left-[8%] top-16 text-2xl text-[#f4d78e]/70">✦</div>
@@ -15,8 +15,8 @@ const Home = () => {
           <div className="absolute right-[12%] top-24 text-xl text-[#f4d78e]/70">✦</div>
           <div className="absolute bottom-24 left-[16%] text-lg text-white/40">❄</div>
           <div className="absolute bottom-16 right-[42%] text-sm text-[#f4d78e]/60">✧</div>
-          <div className="absolute inset-x-0 bottom-0 h-2 bg-[#b9273b]" />
-          <div className="absolute inset-x-0 bottom-2 h-px bg-[#f2d58d]/70" />
+          <div className="absolute inset-x-0 bottom-0 h-2 bg-[#c3263b]" />
+          <div className="absolute inset-x-0 bottom-2 h-px gold-rule" />
         </div>
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 pt-16 sm:px-8 md:grid-cols-[1.05fr_0.95fr] md:pb-28 md:pt-24">
@@ -26,14 +26,14 @@ const Home = () => {
             </div>
             <h1 className="font-serif text-[2.75rem] font-bold leading-[1.04] tracking-tight sm:text-6xl lg:text-[4.25rem]">
               Cette année,<br />
-              <span className="text-[#f5d58a]">la magie</span> se partage.
+              <span className="text-[#ffe29a]">la magie</span> se partage.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
               Les envies de chacun, les cadeaux tous ensemble et de belles surprises à préparer. LaHotte réunit toute la famille autour du plaisir d’offrir.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               {user ? (
-                <Link to="/familles" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#f5d58a] px-6 py-3.5 text-sm font-extrabold text-[#174b36] shadow-[0_5px_0_#c49b4e] transition hover:-translate-y-0.5 hover:bg-[#ffe5a6]">
+                <Link to="/familles" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ffe29a] px-6 py-3.5 text-sm font-extrabold text-[#174b36] shadow-[0_5px_0_#c49b4e] transition hover:-translate-y-0.5 hover:bg-[#fff0c6]">
                   Voir mes familles <span aria-hidden="true">→</span>
                 </Link>
               ) : (
@@ -125,7 +125,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#f3ead9]">
+      <section className="relative overflow-hidden bg-[#f4eadb]">
         <div aria-hidden="true" className="absolute -right-10 -top-16 text-[12rem] leading-none text-[#e6d7bd]/50">✳</div>
         <div className="relative mx-auto grid max-w-7xl gap-8 px-5 py-14 sm:px-8 md:grid-cols-[0.8fr_1.2fr] md:items-center md:py-20">
           <div>
