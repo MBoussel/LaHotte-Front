@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './utils/AuthContext';
 import Navbar from './components/layout/Navbar';
@@ -14,12 +15,23 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import RecapContributions from './pages/RecapContributions';
 import Profil from './pages/Profil';
 
+type Theme = 'light' | 'dark';
+
 function App() {
+  const [theme, setTheme] = useState<Theme>(() => window.localStorage.getItem('lahotte-theme') === 'dark' ? 'dark' : 'light');
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem('lahotte-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((current) => current === 'light' ? 'dark' : 'light');
+
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
+        <div className="app-shell min-h-screen bg-gray-50">
+          <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<Home />} />
