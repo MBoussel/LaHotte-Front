@@ -18,7 +18,7 @@ import Profil from './pages/Profil';
 type Theme = 'light' | 'dark';
 
 function App() {
-  const [theme, setTheme] = useState<Theme>(() => window.localStorage.getItem('lahotte-theme') === 'dark' ? 'dark' : 'light');
+  const [theme, setTheme] = useState<Theme>(() => {\n    const saved = window.localStorage.getItem('lahotte-theme');\n    if (saved === 'dark' || saved === 'light') return saved;\n    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n  });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
