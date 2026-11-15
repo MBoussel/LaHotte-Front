@@ -2,26 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-gray-50 text-gray-900;
-  }
+:root {
+  color-scheme: light;
+  --page-bg: #fff9f2;
+  --page-text: #24372d;
+  --surface: rgba(255,255,255,.88);
+  --surface-border: rgba(193,154,91,.22);
+  --ambient-red: rgba(225,42,65,.13);
+  --ambient-gold: rgba(246,190,74,.18);
+  --ambient-green: rgba(24,104,67,.12);
 }
-
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --page-bg: #090d12;
+  --page-text: #f4f0e8;
+  --surface: rgba(21,27,34,.9);
+  --surface-border: rgba(231,190,103,.22);
+  --ambient-red: rgba(242,42,75,.23);
+  --ambient-gold: rgba(255,174,55,.15);
+  --ambient-green: rgba(19,151,97,.18);
+}
+@layer base {
+  * { box-sizing: border-box; }
+  html { min-height: 100%; background: var(--page-bg); }
+  body {
+    margin: 0; min-width: 320px; min-height: 100vh; color: var(--page-text);
+    background:
+      radial-gradient(ellipse at 12% 8%, var(--ambient-red), transparent 34rem),
+      radial-gradient(ellipse at 88% 18%, var(--ambient-green), transparent 36rem),
+      radial-gradient(ellipse at 55% 92%, var(--ambient-gold), transparent 42rem),
+      var(--page-bg);
+    background-attachment: fixed;
+    transition: background-color .35s ease, color .35s ease;
+    @apply antialiased;
+  }
+  button, input, textarea, select { font: inherit; }
+  ::selection { background: rgba(244,190,83,.45); color: #173b2c; }
+}
+#root { min-height: 100vh; }
+.app-shell { background: transparent !important; }
 @layer components {
   .btn-primary {
-    @apply bg-christmas-red hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200;
+    @apply text-white font-semibold py-2 px-4 rounded-xl transition duration-200;
+    background: linear-gradient(120deg,#ed344d,#b71937 58%,#851a35);
+    box-shadow: 0 7px 20px rgba(188,25,55,.24), inset 0 1px 0 rgba(255,255,255,.28);
   }
-  
+  .btn-primary:hover { box-shadow: 0 10px 28px rgba(188,25,55,.36),0 0 22px rgba(255,91,106,.2); transform: translateY(-1px); }
   .btn-secondary {
-    @apply bg-christmas-green hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-lg transition duration-200;
+    @apply text-white font-semibold py-2 px-4 rounded-xl transition duration-200;
+    background: linear-gradient(120deg,#1b7049,#10442f);
+    box-shadow: 0 7px 20px rgba(16,68,47,.22), inset 0 1px 0 rgba(255,255,255,.2);
   }
-  
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    background: var(--surface); border: 1px solid var(--surface-border); border-radius: 1rem;
+    box-shadow: 0 12px 36px rgba(32,24,18,.08),0 0 24px var(--ambient-gold);
+    backdrop-filter: blur(14px);
+    @apply p-6 transition duration-300;
   }
-  
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-christmas-red focus:border-transparent;
+    background: var(--surface); color: var(--page-text); border: 1px solid var(--surface-border);
+    @apply w-full px-4 py-2 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent;
   }
+}
+.theme-switch {
+  background: linear-gradient(120deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18),0 0 18px rgba(246,190,74,.12);
+}
+html[data-theme='dark'] body { color: #f4f0e8; }
+html[data-theme='dark'] .bg-white,
+html[data-theme='dark'] .bg-gray-50,
+html[data-theme='dark'] .bg-gray-100 { background-color: #151c24 !important; }
+html[data-theme='dark'] .bg-gray-800 { background-color: #080d12 !important; }
+html[data-theme='dark'] .text-gray-900,
+html[data-theme='dark'] .text-gray-800,
+html[data-theme='dark'] .text-gray-700 { color: #f3eee4 !important; }
+html[data-theme='dark'] .text-gray-600,
+html[data-theme='dark'] .text-gray-500 { color: #b8c0c5 !important; }
+html[data-theme='dark'] .border-gray-100,
+html[data-theme='dark'] .border-gray-200,
+html[data-theme='dark'] .border-gray-300 { border-color: rgba(220,190,130,.18) !important; }
+html[data-theme='dark'] input,
+html[data-theme='dark'] textarea,
+html[data-theme='dark'] select {
+  background-color: #101820 !important; color: #f4f0e8 !important;
+  border-color: rgba(231,190,103,.25) !important;
+}
+html[data-theme='dark'] .shadow,
+html[data-theme='dark'] .shadow-md,
+html[data-theme='dark'] .shadow-lg,
+html[data-theme='dark'] .shadow-xl {
+  box-shadow: 0 12px 32px rgba(0,0,0,.28),0 0 22px rgba(31,125,88,.08) !important;
+}
+html[data-theme='dark'] .card { background: var(--surface) !important; }
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
