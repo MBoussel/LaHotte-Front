@@ -114,7 +114,7 @@ const Home = () => {
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#9b7545]">La surprise avant tout</p>
             <h2 className="mt-3 max-w-2xl font-serif text-3xl font-medium leading-tight text-[#244536] sm:text-4xl">Les préparatifs restent secrets. La joie, elle, se partage.</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#667066]">Les personnes qui organisent les cadeaux disposent des informations nécessaires. Les bénéficiaires ne voient ni qui participe ni les montants réunis pour leurs cadeaux.</p>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#667066]">Le Père ou la Mère Noël dispose de la vue nécessaire pour organiser les cadeaux. Pour les bénéficiaires, les contributions restent masquées : chacun garde le plaisir de découvrir sa surprise.</p>
           </div>
           <div className="hidden h-28 w-28 items-center justify-center rounded-full border border-[#b7c5ad] bg-[#f8f7ef] text-5xl text-[#a33f43] md:flex" aria-hidden="true">✧</div>
         </div>
