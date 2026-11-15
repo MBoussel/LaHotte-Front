@@ -165,3 +165,30 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
 @keyframes soft-float {0%,100%{transform:translateY(0) rotate(-8deg);}50%{transform:translateY(-10px) rotate(2deg);}}
 @media(max-width:767px){.home-hero{min-height:0;}.gift-orbit-one{width:350px;height:250px;}.gift-orbit-two{width:390px;height:290px;}.floating-gift-top{right:0;}.floating-gift-bottom{left:0;}}
 @media(prefers-reduced-motion:reduce){.hero-stars,.gold-shimmer,.floating-gift-bottom{animation:none!important;}.hero-primary,.feature-card{transition:none!important;}}
+
+.holiday-navbar {
+  position: relative;
+  z-index: 30;
+  background:
+    radial-gradient(ellipse at 15% -80%, rgba(236,55,78,.55), transparent 55%),
+    linear-gradient(105deg,#092e23 0%,#15583b 52%,#0a3025 100%);
+  box-shadow: 0 9px 28px rgba(7,35,25,.28),inset 0 -1px 0 rgba(255,224,155,.55);
+}
+.holiday-navbar::after {
+  content:"";
+  display:block;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#d99b3c 18%,#fff0bd 50%,#d99b3c 82%,transparent);
+  box-shadow:0 0 13px rgba(255,220,145,.65);
+}
+.brand-mark {
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  color:#50320d;
+  background:linear-gradient(145deg,#fff1bb,#dba646);
+  box-shadow:0 3px 12px rgba(255,210,116,.28),inset 0 1px 0 white;
+  font-size:17px;
+}
