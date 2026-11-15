@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
 import PendingInvitations from '../familles/PendingInvitations';
 
-const Navbar = () => {
+type NavbarProps = { theme: 'light' | 'dark'; onToggleTheme: () => void };
+
+const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,6 +65,10 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-6">
+            <button type="button" onClick={onToggleTheme} aria-label={theme === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'} className="theme-switch inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
+              <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
+              <span>{theme === 'light' ? 'Sombre' : 'Clair'}</span>
+            </button>
             {user ? (
               <>
                 <Link to="/familles" className="hover:text-christmas-gold transition">
@@ -110,6 +116,10 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden border-t border-red-700 py-4">
+            <button type="button" onClick={onToggleTheme} className="theme-switch mx-2 mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white">
+              <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
+              {theme === 'light' ? 'Passer en mode sombre' : 'Passer en mode clair'}
+            </button>
             {user ? (
               <div className="flex flex-col space-y-3">
                 <div className="px-4 py-2 bg-red-700 rounded">
