@@ -194,12 +194,12 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
 }
 
 
-/* Remove the dense animated hero texture; keep only distinct, luminous stars */
+/* Retire la texture dense de la page d'accueil : étoiles isolées à six branches */
 .hero-stars { display: none !important; }
-#root {
-  position: relative;
-  z-index: 1;
-}
+#root { position: relative; z-index: 1; }
+
+/* Trois groupes indépendants : chaque groupe s'efface puis réapparaît ailleurs. */
+body::before,
 #root::before,
 #root::after {
   content: "";
@@ -209,12 +209,41 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
   z-index: 9999;
   background-repeat: no-repeat;
   background-image:
-    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,241,190,.98) 45deg 48deg, transparent 51deg 132deg, rgba(255,241,190,.98) 135deg 138deg, transparent 141deg 222deg, rgba(255,241,190,.98) 225deg 228deg, transparent 231deg 312deg, rgba(255,241,190,.98) 315deg 318deg, transparent 321deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,255,255,.98) 45deg 48deg, transparent 51deg 132deg, rgba(255,255,255,.98) 135deg 138deg, transparent 141deg 222deg, rgba(255,255,255,.98) 225deg 228deg, transparent 231deg 312deg, rgba(255,255,255,.98) 315deg 318deg, transparent 321deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,205,112,.98) 45deg 48deg, transparent 51deg 132deg, rgba(255,205,112,.98) 135deg 138deg, transparent 141deg 222deg, rgba(255,205,112,.98) 225deg 228deg, transparent 231deg 312deg, rgba(255,205,112,.98) 315deg 318deg, transparent 321deg),
-    conic-gradient(from 0deg at 50% 50%, transparent 0 42deg, rgba(255,255,255,.95) 45deg 48deg, transparent 51deg 132deg, rgba(255,255,255,.95) 135deg 138deg, transparent 141deg 222deg, rgba(255,255,255,.95) 225deg 228deg, transparent 231deg 312deg, rgba(255,255,255,.95) 315deg 318deg, transparent 321deg);
-  background-size: 15px 15px, 11px 11px, 14px 14px, 9px 9px;
+    conic-gradient(from 0deg at 50% 50%,
+      transparent 0 27deg, rgba(255,241,190,.98) 29deg 31deg, transparent 33deg 87deg,
+      rgba(255,241,190,.98) 89deg 91deg, transparent 93deg 147deg,
+      rgba(255,241,190,.98) 149deg 151deg, transparent 153deg 207deg,
+      rgba(255,241,190,.98) 209deg 211deg, transparent 213deg 267deg,
+      rgba(255,241,190,.98) 269deg 271deg, transparent 273deg 327deg,
+      rgba(255,241,190,.98) 329deg 331deg, transparent 333deg 360deg),
+    conic-gradient(from 0deg at 50% 50%,
+      transparent 0 27deg, rgba(255,255,255,.98) 29deg 31deg, transparent 33deg 87deg,
+      rgba(255,255,255,.98) 89deg 91deg, transparent 93deg 147deg,
+      rgba(255,255,255,.98) 149deg 151deg, transparent 153deg 207deg,
+      rgba(255,255,255,.98) 209deg 211deg, transparent 213deg 267deg,
+      rgba(255,255,255,.98) 269deg 271deg, transparent 273deg 327deg,
+      rgba(255,255,255,.98) 329deg 331deg, transparent 333deg 360deg),
+    conic-gradient(from 0deg at 50% 50%,
+      transparent 0 27deg, rgba(255,205,112,.98) 29deg 31deg, transparent 33deg 87deg,
+      rgba(255,205,112,.98) 89deg 91deg, transparent 93deg 147deg,
+      rgba(255,205,112,.98) 149deg 151deg, transparent 153deg 207deg,
+      rgba(255,205,112,.98) 209deg 211deg, transparent 213deg 267deg,
+      rgba(255,205,112,.98) 269deg 271deg, transparent 273deg 327deg,
+      rgba(255,205,112,.98) 329deg 331deg, transparent 333deg 360deg),
+    conic-gradient(from 0deg at 50% 50%,
+      transparent 0 27deg, rgba(255,255,255,.98) 29deg 31deg, transparent 33deg 87deg,
+      rgba(255,255,255,.98) 89deg 91deg, transparent 93deg 147deg,
+      rgba(255,255,255,.98) 149deg 151deg, transparent 153deg 207deg,
+      rgba(255,255,255,.98) 209deg 211deg, transparent 213deg 267deg,
+      rgba(255,255,255,.98) 269deg 271deg, transparent 273deg 327deg,
+      rgba(255,255,255,.98) 329deg 331deg, transparent 333deg 360deg);
+  background-size: 16px 16px, 12px 12px, 14px 14px, 10px 10px;
   filter: drop-shadow(0 0 5px rgba(255,220,145,.95)) drop-shadow(0 0 11px rgba(255,205,112,.55));
+}
+body::before {
+  opacity: .9;
+  background-position: 14% 32%, 42% 12%, 79% 68%, 91% 25%;
+  animation: sparkle-wander-three 13s ease-in-out -5s infinite;
 }
 #root::before {
   opacity: .9;
@@ -226,7 +255,6 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
   background-position: 54% 9%, 18% 57%, 67% 88%, 94% 39%;
   animation: sparkle-wander-two 11s ease-in-out -3s infinite;
 }
-/* Les étoiles s'éteignent, changent de place pendant leur absence, puis brillent à nouveau. */
 @keyframes sparkle-wander-one {
   0%, 5% { opacity: 0; }
   12%, 39% {
@@ -234,10 +262,7 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
     background-position: 9% 19%, 76% 13%, 88% 71%, 28% 83%;
     filter: brightness(1.15) drop-shadow(0 0 6px rgba(255,235,180,.95)) drop-shadow(0 0 15px rgba(255,205,112,.8));
   }
-  46%, 56% {
-    opacity: 0;
-    background-position: 9% 19%, 76% 13%, 88% 71%, 28% 83%;
-  }
+  46%, 56% { opacity: 0; }
   64%, 92% {
     opacity: .95;
     background-position: 32% 28%, 61% 42%, 14% 76%, 83% 58%;
@@ -252,16 +277,28 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
     background-position: 54% 9%, 18% 57%, 67% 88%, 94% 39%;
     filter: brightness(1.1) drop-shadow(0 0 6px rgba(255,235,180,.9)) drop-shadow(0 0 14px rgba(255,205,112,.75));
   }
-  47%, 57% {
-    opacity: 0;
-    background-position: 54% 9%, 18% 57%, 67% 88%, 94% 39%;
-  }
+  47%, 57% { opacity: 0; }
   65%, 93% {
     opacity: .95;
     background-position: 72% 26%, 42% 79%, 8% 43%, 59% 11%;
     filter: brightness(1.7) drop-shadow(0 0 9px rgba(255,245,205,1)) drop-shadow(0 0 19px rgba(255,205,112,.95));
   }
   99%, 100% { opacity: 0; }
+}
+@keyframes sparkle-wander-three {
+  0%, 9% { opacity: 0; }
+  16%, 42% {
+    opacity: .92;
+    background-position: 14% 32%, 42% 12%, 79% 68%, 91% 25%;
+    filter: brightness(1.2) drop-shadow(0 0 6px rgba(255,235,180,.95)) drop-shadow(0 0 15px rgba(255,205,112,.82));
+  }
+  49%, 60% { opacity: 0; }
+  68%, 95% {
+    opacity: .98;
+    background-position: 24% 72%, 57% 21%, 93% 52%, 38% 91%;
+    filter: brightness(1.7) drop-shadow(0 0 9px rgba(255,245,205,1)) drop-shadow(0 0 20px rgba(255,205,112,.95));
+  }
+  100% { opacity: 0; }
 }
 .btn-primary, .btn-secondary, .hero-primary {
   position: relative;
@@ -311,7 +348,9 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
   92%, 100% { left: 130%; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #root::before, #root::after, .btn-primary::before, .btn-secondary::before,
-  .hero-primary::before, .btn-primary::after, .btn-secondary::after,
-  .hero-primary::after { animation: none !important; }
+  body::before, #root::before, #root::after,
+  .btn-primary::before, .btn-secondary::before, .hero-primary::before,
+  .btn-primary::after, .btn-secondary::after, .hero-primary::after {
+    animation: none !important;
+  }
 }
