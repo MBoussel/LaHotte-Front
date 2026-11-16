@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import GingerbreadGame from '../components/GingerbreadGame';
 import { useAuth } from '../utils/AuthContext';
 
 const Home = () => {
   const { user } = useAuth();
-  const [gameOpen, setGameOpen] = useState(false);
+  const [biscuitPoints, setBiscuitPoints] = useState(() => {
+    try { return Number(localStorage.getItem('lahotte-biscuit-clicker-score')) || 0; } catch { return 0; }
+  });
+  const [biscuitMove, setBiscuitMove] = useState(0);
+  useEffect(() => {
+    try { localStorage.setItem('lahotte-biscuit-clicker-score', String(biscuitPoints)); } catch { /* stockage local indisponible */ }
+  }, [biscuitPoints]);
+  const biscuitOffsets = [{x:-24,y:-12},{x:24,y:-18},{x:34,y:18},{x:-30,y:24},{x:8,y:-28},{x:-8,y:30}];
+  const currentBiscuitOffset = biscuitOffsets[biscuitMove % biscuitOffsets.length];
+  const clickBiscuit = () => { setBiscuitPoints(points => points + 1); setBiscuitMove(move => move + 1); };
 
   return (
     <main className="home-page overflow-hidden">
@@ -67,7 +75,10 @@ const Home = () => {
               </div>
             </div>
             <div className="floating-gift floating-gift-top"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="Père Noël" loading="lazy" /></div>
-            <button type="button" className="floating-gift floating-gift-bottom gingerbread-launcher" onClick={() => setGameOpen(true)} aria-label="Jouer au Biscuit Clicker" title="Jouer au Biscuit Clicker"><img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" loading="lazy" /></button>
+            <div className="gingerbread-clicker" style={{ marginLeft: currentBiscuitOffset.x, marginTop: currentBiscuitOffset.y }}>
+              <span className="gingerbread-score" aria-live="polite">{biscuitPoints} <span>pts</span></span>
+              <button type="button" className="floating-gift floating-gift-bottom gingerbread-launcher" onClick={clickBiscuit} aria-label={`Cliquer sur le biscuit : ${biscuitPoints} points`} title="Attrape le biscuit !"><img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" loading="lazy" /></button>
+            </div>
           </div>
         </div>
         <div className="hero-bottom-line" />
@@ -101,8 +112,6 @@ const Home = () => {
       </section>
 
       {!user && <section className="home-cta-wrap px-5 py-20 sm:px-8"><div className="home-cta mx-auto max-w-5xl rounded-[2rem] px-6 py-12 text-center sm:px-12"><img src="https://cdn-icons-png.flaticon.com/512/3912/3912870.png" alt="Boule à neige" loading="lazy" className="mx-auto h-14 w-14 object-contain drop-shadow-lg" /><h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">Et si cette année, on préparait Noël ensemble ?</h2><p className="mx-auto mt-4 max-w-2xl leading-7">Créez votre espace gratuitement et partagez la magie avec ceux qui comptent.</p><Link to="/register" className="hero-primary mt-8 inline-flex rounded-2xl px-7 py-4 font-extrabold">Créer mon compte <span className="ml-2">→</span></Link></div></section>}
-
-      {gameOpen && <GingerbreadGame onClose={() => setGameOpen(false)} />}
 
       <footer className="home-footer px-5 py-10 text-center"><p className="inline-flex items-center justify-center gap-2 font-serif text-2xl font-bold"><img src="https://cdn-icons-png.flaticon.com/512/2276/2276457.png" alt="" aria-hidden="true" className="h-7 w-7 object-contain" />LaHotte</p><p className="mt-2 text-sm">La magie de Noël se partage.</p><p className="mt-5 text-xs opacity-50">© 2026 LaHotte · Tous droits réservés</p></footer>
     </main>
