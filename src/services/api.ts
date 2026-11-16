@@ -121,7 +121,7 @@ export const famillesAPI = {
 // Cadeaux
 export const cadeauxAPI = {
   getAll: () => api.get<Cadeau[]>('/cadeaux/'),
-  getByFamille: (familleId: number) => api.get<Cadeau[]>(`/cadeaux/famille/${familleId}`), // 🔥 AJOUTÉ
+  getByFamille: (familleId: number) => api.get<Cadeau[]>(`/cadeaux/famille/${familleId}`), // AJOUTÉ
   getMine: () => api.get<Cadeau[]>('/cadeaux/me'),
   getOne: (id: number) => api.get<Cadeau>(`/cadeaux/${id}`),
   create: (data: Partial<Cadeau>) => api.post<Cadeau>('/cadeaux/', data),
