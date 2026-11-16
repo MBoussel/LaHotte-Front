@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
 
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="text-4xl mb-4">🎄</div>
+          <div className="mb-4 flex justify-center"><AppIcon name="tree" size={40} /></div>
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
