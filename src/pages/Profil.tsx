@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../utils/AuthContext';
 import { authAPI } from '../services/api';
@@ -62,7 +63,7 @@ const Profil = () => {
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-christmas-red mb-2">
-          👤 Mon Profil
+          <AppIcon name="user" size={26} /> Mon Profil
         </h1>
         <p className="text-sm md:text-base text-gray-600">
           Gérez vos informations personnelles
@@ -152,7 +153,7 @@ const Profil = () => {
                       onClick={handleRemoveAvatar}
                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
                     >
-                      🗑️ Supprimer
+                      <AppIcon name="trash" size={17} /> Supprimer
                     </button>
                   )}
                 </div>
@@ -190,7 +191,7 @@ const Profil = () => {
           {user.is_admin && (
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
-                👑 <strong>Administrateur</strong> - Vous avez accès aux fonctionnalités d'administration
+                <AppIcon name="crown" size={18} /> <strong>Administrateur</strong> - Vous avez accès aux fonctionnalités d'administration
               </p>
             </div>
           )}
