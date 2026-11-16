@@ -67,7 +67,7 @@ const Register = () => {
   };
 
   return (
-    <div className="login-page min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red to-christmas-green px-4 py-8">
+    <div className="login-page register-page min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red to-christmas-green px-4 py-8">
       <div className="login-floating-decor" aria-label="Personnages de Noël interactifs">
         <div className="login-character login-santa">
           <span key={santaClickId} className="gingerbread-score-pop santa-score-pop" aria-live="polite">{santaClickId > 0 ? '+1' : ''}</span>
