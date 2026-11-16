@@ -137,7 +137,7 @@ html[data-theme='dark'] .card { background: var(--surface) !important; }
 .section-copy {color:var(--page-text);opacity:.7;line-height:1.8;}
 .feature-card {position:relative;overflow:hidden;min-height:260px;padding:30px;border:1px solid var(--surface-border);border-radius:25px;background:var(--surface);box-shadow:0 18px 45px rgba(35,25,18,.08),0 0 32px var(--ambient-gold),inset 0 1px 0 rgba(255,255,255,.7);backdrop-filter:blur(15px);transition:transform .25s,box-shadow .25s;}
 .feature-card:hover {transform:translateY(-7px);box-shadow:0 27px 55px rgba(35,25,18,.14),0 0 38px var(--ambient-gold);}
-.feature-card h3 {margin-top:22px;padding-bottom:3px;line-height:1.35;font-family:Georgia,serif;font-size:23px;font-weight:800;color:var(--page-text);}
+.feature-card h3 {display:block;overflow:visible;margin-top:22px;margin-bottom:0;padding:0 0 .22em;line-height:1.55;font-family:Georgia,serif;font-size:23px;font-weight:800;color:var(--page-text);}
 .feature-card p {margin-top:10px;line-height:1.8;color:var(--page-text);opacity:.7;}
 .feature-icon {display:grid;place-items:center;width:58px;height:58px;border-radius:19px;font-size:27px;box-shadow:0 9px 22px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.55);}
 .feature-icon-red {background:linear-gradient(145deg,#f45a68,#a91536);color:white;}
@@ -210,34 +210,10 @@ body::before,
   z-index: 9999;
   background-repeat: no-repeat;
   background-image:
-    conic-gradient(from 0deg at 50% 50%,
-      transparent 0 27deg, rgba(255,241,190,.98) 29deg 31deg, transparent 33deg 87deg,
-      rgba(255,241,190,.98) 89deg 91deg, transparent 93deg 147deg,
-      rgba(255,241,190,.98) 149deg 151deg, transparent 153deg 207deg,
-      rgba(255,241,190,.98) 209deg 211deg, transparent 213deg 267deg,
-      rgba(255,241,190,.98) 269deg 271deg, transparent 273deg 327deg,
-      rgba(255,241,190,.98) 329deg 331deg, transparent 333deg 360deg),
-    conic-gradient(from 0deg at 50% 50%,
-      transparent 0 27deg, rgba(255,255,255,.98) 29deg 31deg, transparent 33deg 87deg,
-      rgba(255,255,255,.98) 89deg 91deg, transparent 93deg 147deg,
-      rgba(255,255,255,.98) 149deg 151deg, transparent 153deg 207deg,
-      rgba(255,255,255,.98) 209deg 211deg, transparent 213deg 267deg,
-      rgba(255,255,255,.98) 269deg 271deg, transparent 273deg 327deg,
-      rgba(255,255,255,.98) 329deg 331deg, transparent 333deg 360deg),
-    conic-gradient(from 0deg at 50% 50%,
-      transparent 0 27deg, rgba(255,205,112,.98) 29deg 31deg, transparent 33deg 87deg,
-      rgba(255,205,112,.98) 89deg 91deg, transparent 93deg 147deg,
-      rgba(255,205,112,.98) 149deg 151deg, transparent 153deg 207deg,
-      rgba(255,205,112,.98) 209deg 211deg, transparent 213deg 267deg,
-      rgba(255,205,112,.98) 269deg 271deg, transparent 273deg 327deg,
-      rgba(255,205,112,.98) 329deg 331deg, transparent 333deg 360deg),
-    conic-gradient(from 0deg at 50% 50%,
-      transparent 0 27deg, rgba(255,255,255,.98) 29deg 31deg, transparent 33deg 87deg,
-      rgba(255,255,255,.98) 89deg 91deg, transparent 93deg 147deg,
-      rgba(255,255,255,.98) 149deg 151deg, transparent 153deg 207deg,
-      rgba(255,255,255,.98) 209deg 211deg, transparent 213deg 267deg,
-      rgba(255,255,255,.98) 269deg 271deg, transparent 273deg 327deg,
-      rgba(255,255,255,.98) 329deg 331deg, transparent 333deg 360deg);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23fff1be' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffcd70' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E");
   background-size: 16px 16px, 12px 12px, 14px 14px, 10px 10px;
   filter: drop-shadow(0 0 5px rgba(255,220,145,.95)) drop-shadow(0 0 11px rgba(255,205,112,.55));
 }
