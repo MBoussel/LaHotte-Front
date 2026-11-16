@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
 import { famillesAPI } from '../services/api';
@@ -48,7 +49,7 @@ const Familles = () => {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Chargement... 🎄</div>
+        <div className="text-center inline-flex items-center gap-2"><AppIcon name="tree" size={22} /> Chargement...</div>
       </div>
     );
   }
@@ -59,7 +60,7 @@ const Familles = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-christmas-red mb-2">
-            👨‍👩‍👧‍👦 Mes Familles
+            <AppIcon name="family" size={30} /> Mes Familles
           </h1>
           <p className="text-sm md:text-base text-gray-600">
             Gérez vos groupes familiaux
@@ -90,7 +91,7 @@ const Familles = () => {
                 </h3>
                 {famille.is_public && (
                   <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full ml-2 whitespace-nowrap">
-                    🌍 Publique
+                    <AppIcon name="globe" size={16} /> Publique
                   </span>
                 )}
               </div>
@@ -98,7 +99,7 @@ const Familles = () => {
                 {famille.description}
               </p>
               <p className="text-xs md:text-sm text-gray-500">
-                👥 {famille.membres?.length || 0} membres
+                <AppIcon name="members" size={16} /> {famille.membres?.length || 0} membres
               </p>
             </div>
           ))}
