@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
@@ -12,7 +13,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl">Chargement... 🎄</div>
+        <div className="text-2xl inline-flex items-center gap-2"><AppIcon name="tree" size={24} /> Chargement...</div>
       </div>
     );
   }
