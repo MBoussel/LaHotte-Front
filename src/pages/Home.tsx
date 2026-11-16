@@ -49,7 +49,7 @@ const Home = () => {
                 <span className="gift-price">650 €</span>
               </div>
               <div className="gift-item gift-item-product">
-                <div className="gift-product-image"><img src="https://cdn.globber.com/content/2023/11/870-206_two-wheel-scooter-for-kids.jpg" alt="Trottinette Globber vert menthe" loading="lazy" /></div>
+                <div className="gift-product-image"><img src="https://media.idkids.fr/media/productstorage/images/oxybuleveiletjeux/0710194/thumbs/0602739_800.jpg" alt="Trottinette Globber Primo à trois roues vert menthe" loading="lazy" /></div>
                 <div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Trottinette Globber</p><p className="text-xs text-[#65746a]">Pour partir à l’aventure</p></div>
                 <span className="gift-price">90 €</span>
               </div>
