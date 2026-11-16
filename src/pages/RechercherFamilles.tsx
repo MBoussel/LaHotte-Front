@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { famillesAPI } from '../services/api';
 import type { Famille } from '../types';
@@ -45,7 +46,7 @@ const RechercherFamilles = () => {
   const handleDemande = async (familleId: number) => {
     try {
       await famillesAPI.requestToJoin(familleId, message);
-      alert('Demande envoyée au créateur ! 🎉');
+      alert('Demande envoyée au créateur !');
       setSelectedFamille(null);
       setMessage('');
     } catch (error: any) {
@@ -59,7 +60,7 @@ const RechercherFamilles = () => {
         {/* Header */}
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl md:text-3xl font-bold text-christmas-red mb-2">
-            🔍 Rechercher une famille
+            <AppIcon name="search" size={26} /> Rechercher une famille
           </h1>
           <p className="text-sm md:text-base text-gray-600">
             Trouvez et rejoignez des familles publiques
@@ -87,7 +88,7 @@ const RechercherFamilles = () => {
           <>
             {loading ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">Recherche en cours... 🔍</p>
+                <p className="text-gray-600 inline-flex items-center gap-2"><AppIcon name="search" size={17} /> Recherche en cours...</p>
               </div>
             ) : familles.length === 0 ? (
               <div className="card text-center py-12">
@@ -113,7 +114,7 @@ const RechercherFamilles = () => {
                           {famille.description}
                         </p>
                         <p className="text-xs md:text-sm text-gray-500">
-                          👥 {famille.membres?.length || 0} membres
+                          <AppIcon name="members" size={16} /> {famille.membres?.length || 0} membres
                         </p>
                       </div>
                       <button
