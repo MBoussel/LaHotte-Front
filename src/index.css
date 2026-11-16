@@ -1028,3 +1028,11 @@ body::after {
     top: max(42px, calc(env(safe-area-inset-top) + 30px));
   }
 }
+
+
+/* Inscription sur téléphone : remonter légèrement la fenêtre */
+@media (max-width: 767px) {
+  .login-page:has(form) > .card {
+    transform: translateY(-14px);
+  }
+}
