@@ -488,16 +488,18 @@ body::after {
   filter: drop-shadow(0 5px 7px rgba(0,0,0,.2));
   opacity: .96;
 }
-@media (min-width: 1320px) {
+/* Le container Tailwind atteint 1536px sur les très grands écrans.
+   On n'affiche les personnages que si une vraie marge extérieure existe. */
+@media (min-width: 1668px) {
   .family-floating-decor { display: block; }
   .family-floating-santa {
     top: 118px;
-    right: calc((100vw - 1180px) / 2 - 62px);
+    right: calc((100vw - 1536px) / 2 - 66px);
     animation: family-santa-float 4.4s ease-in-out infinite;
   }
   .family-floating-gingerbread {
     bottom: 22px;
-    left: calc((100vw - 1180px) / 2 - 62px);
+    left: calc((100vw - 1536px) / 2 - 66px);
     animation: family-biscuit-float 3.8s ease-in-out infinite;
   }
 }
