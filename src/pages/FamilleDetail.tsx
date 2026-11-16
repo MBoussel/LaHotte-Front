@@ -29,6 +29,11 @@ const FamilleDetail = () => {
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
   const [noelType, setNoelType] = useState<"pere_noel" | "mere_noel">("pere_noel");
+  const [santaMove, setSantaMove] = useState(0);
+  const [santaClickId, setSantaClickId] = useState(0);
+  const santaOffsets = [{x:0,y:0},{x:20,y:12},{x:-16,y:20},{x:-22,y:-10},{x:12,y:-22},{x:26,y:-6}];
+  const currentSantaOffset = santaOffsets[santaMove % santaOffsets.length];
+  const clickSanta = () => { setSantaClickId(id => id + 1); setSantaMove(move => move + 1); };
 
   useEffect(() => {
     if (famille?.noel_type) setNoelType(famille.noel_type);
@@ -125,7 +130,7 @@ const FamilleDetail = () => {
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
       <div className="family-floating-decor" aria-hidden="true">
-        <img className="family-floating-santa" src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="" />
+        <div className="family-santa-clicker" style={{ transform: `translate(${currentSantaOffset.x}px, ${currentSantaOffset.y}px)` }}><span key={santaClickId} className="gingerbread-score-pop santa-score-pop" aria-live="polite">{santaClickId > 0 ? '+1' : ''}</span><button type="button" className="family-floating-santa santa-launcher" onClick={clickSanta} aria-label="Cliquer sur le Père Noël pour gagner un point" title="Attrape le Père Noël !"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="" /></button></div>
         <img className="family-floating-gingerbread" src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" />
       </div>
       {/* Header */}
