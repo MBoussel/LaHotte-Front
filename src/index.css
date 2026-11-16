@@ -1032,7 +1032,15 @@ body::after {
 
 /* Inscription sur téléphone : remonter légèrement la fenêtre */
 @media (max-width: 767px) {
-  .login-page:has(form) > .card {
-    transform: translateY(-14px);
+  .register-page > .card {
+    transform: translateY(-24px);
+  }
+}
+
+
+/* Père Noël : le descendre davantage sur téléphone */
+@media (max-width: 767px) {
+  .login-santa {
+    top: max(68px, calc(env(safe-area-inset-top) + 56px));
   }
 }
