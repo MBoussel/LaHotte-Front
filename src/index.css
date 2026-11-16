@@ -801,3 +801,57 @@ body::after {
     padding: 5px;
   }
 }
+
+
+/* Personnages interactifs sur la page de connexion */
+.login-page { position: relative; isolation: isolate; }
+.login-floating-decor {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  overflow: hidden;
+}
+.login-character {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  pointer-events: auto;
+}
+.login-santa { top: 13%; left: max(18px, calc((100vw - 1180px) / 2)); }
+.login-biscuit { right: max(18px, calc((100vw - 1180px) / 2)); bottom: 12%; }
+.login-character-button {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding: 7px;
+  border: 1px solid rgba(255,255,255,.62);
+  border-radius: 19px;
+  background: linear-gradient(145deg, rgba(255,255,255,.42), rgba(255,255,255,.13));
+  box-shadow: 0 14px 32px rgba(35,18,12,.22), inset 0 1px 0 rgba(255,255,255,.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: soft-float 4.2s ease-in-out infinite;
+}
+.login-biscuit .login-character-button { animation-duration: 3.8s; }
+.login-character-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,.2));
+}
+.login-character-button:focus-visible { outline: 3px solid #ffe5a0; outline-offset: 5px; }
+.login-character-button:active { filter: brightness(1.12); }
+@media (max-width: 767px) {
+  .login-santa { top: 12px; left: 12px; }
+  .login-biscuit { right: 12px; bottom: 12px; }
+  .login-character-button { width: 46px; height: 46px; padding: 5px; border-radius: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-character-button { animation: none !important; }
+}
