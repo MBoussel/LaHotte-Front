@@ -740,3 +740,41 @@ body::after {
     padding: 5px;
   }
 }
+
+
+/* Envolée festive après cinq clics : les personnages reviennent ensuite */
+.holiday-character-flying {
+  position: relative;
+  z-index: 60;
+  pointer-events: none !important;
+  animation: holiday-character-takeoff 2.35s cubic-bezier(.18,.72,.25,1) forwards !important;
+  will-change: transform, opacity, filter;
+}
+.holiday-character-flying::after {
+  content: "✦  ✧  ✦";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: #ffe7a0;
+  font-size: 18px;
+  letter-spacing: 5px;
+  white-space: nowrap;
+  text-shadow: 0 0 7px #fff, 0 0 16px rgba(255,196,76,.95);
+  pointer-events: none;
+  animation: holiday-character-sparkles 1.65s ease-out forwards;
+}
+@keyframes holiday-character-takeoff {
+  0% { opacity: 1; transform: translateY(0) rotate(0) scale(1); filter: drop-shadow(0 0 0 rgba(255,221,125,0)); }
+  12% { transform: translateY(5px) rotate(-8deg) scale(1.08); }
+  28% { opacity: 1; transform: translateY(-18px) rotate(12deg) scale(1.12); filter: drop-shadow(0 0 15px rgba(255,221,125,.95)); }
+  100% { opacity: 0; transform: translate(22px,-115vh) rotate(38deg) scale(.45); filter: drop-shadow(0 0 22px rgba(255,221,125,0)); }
+}
+@keyframes holiday-character-sparkles {
+  0% { opacity: 0; transform: translate(-50%,-20%) scale(.35); }
+  22% { opacity: 1; transform: translate(-50%,-95%) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%,-230%) scale(.5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .holiday-character-flying { animation-duration: .01ms !important; }
+  .holiday-character-flying::after { animation-duration: .01ms !important; }
+}
