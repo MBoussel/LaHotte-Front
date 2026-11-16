@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { famillesAPI } from '../../services/api';
 import type { Invitation } from '../../types';
@@ -53,7 +54,7 @@ const Invitations = ({ familleId, isCreator }: InvitationsProps) => {
       <div className="card mb-6 md:mb-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <div>
-            <h2 className="text-lg md:text-xl font-bold">📧 Invitations</h2>
+            <h2 className="text-lg md:text-xl font-bold inline-flex items-center gap-2"><AppIcon name="mail" size={20} /> Invitations</h2>
             {invitations.length > 0 && (
               <p className="text-xs md:text-sm text-gray-600 mt-1">
                 {invitations.length} invitation{invitations.length > 1 ? 's' : ''} en attente
