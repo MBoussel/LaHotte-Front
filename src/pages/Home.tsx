@@ -6,6 +6,7 @@ const Home = () => {
 
   return (
     <main className="home-page overflow-hidden">
+      <div className="desktop-sparkles" aria-hidden="true" />
       <section className="home-hero relative isolate overflow-hidden text-white">
         <div className="hero-glow hero-glow-red" />
         <div className="hero-glow hero-glow-gold" />
@@ -77,7 +78,7 @@ const Home = () => {
             <p className="section-copy mt-4">Tout ce qu’il faut pour organiser les cadeaux de famille, sans perdre la surprise.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            <article className="feature-card"><span className="feature-icon feature-icon-red">👨‍👩‍👧‍👦</span><h3>Réunissez vos proches</h3><p>Créez votre famille et invitez chacun à rejoindre l’aventure de Noël.</p><span className="feature-number">01</span></article>
+            <article className="feature-card"><span className="feature-icon feature-icon-red family-icon" aria-hidden="true"><svg viewBox="0 0 64 64" role="img"><circle cx="32" cy="17" r="8" fill="currentColor"/><circle cx="13" cy="25" r="6.5" fill="currentColor" opacity=".82"/><circle cx="51" cy="25" r="6.5" fill="currentColor" opacity=".82"/><path d="M18 52c0-10 5.5-17 14-17s14 7 14 17v3H18z" fill="currentColor"/><path d="M2 53c0-8 4-14 11-14 4 0 7 2 9 5-3 4-4 8-4 13H2zm60 0c0-8-4-14-11-14-4 0-7 2-9 5 3 4 4 8 4 13h16z" fill="currentColor" opacity=".82"/></svg></span><h3>Réunissez vos proches</h3><p>Créez votre famille et invitez chacun à rejoindre l’aventure de Noël.</p><span className="feature-number">01</span></article>
             <article className="feature-card"><span className="feature-icon feature-icon-green">🎁</span><h3>Partagez vos envies</h3><p>Ajoutez vos idées cadeaux avec photos, prix et liens pour guider vos proches.</p><span className="feature-number">02</span></article>
             <article className="feature-card"><span className="feature-icon feature-icon-gold">💝</span><h3>Participez ensemble</h3><p>Chacun peut contribuer aux cadeaux. Les détails restent confidentiels.</p><span className="feature-number">03</span></article>
           </div>
