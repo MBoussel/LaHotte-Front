@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import type { Cadeau, ContributionWithUser, Membre } from '../../types';
 
 interface CadeauCardProps {
@@ -39,7 +40,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       {cadeau.beneficiaires && cadeau.beneficiaires.length > 0 && (
         <div className="mb-3">
           <div className="inline-flex items-center gap-1 text-xs bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
-            <span>👥 Pour:</span>
+            <span className="inline-flex items-center gap-1"><AppIcon name="members" size={16} /> Pour:</span>
             <span className="font-semibold">{cadeau.beneficiaires.map(b => b.username).join(', ')}</span>
           </div>
         </div>
@@ -83,7 +84,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       <div className="space-y-2">
         {cadeau.lien_achat && (
           <a href={cadeau.lien_achat} target="_blank" rel="noopener noreferrer" className="block text-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
-            🛒 Voir le produit
+            <AppIcon name="cart" size={17} /> Voir le produit
           </a>
         )}
         {!isOwner && (
@@ -91,7 +92,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
             onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
             className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
           >
-            💝 Contribuer à ce cadeau
+            <AppIcon name="contribution" size={17} /> Contribuer à ce cadeau
           </button>
         )}
       </div>
