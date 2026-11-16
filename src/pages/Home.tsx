@@ -77,9 +77,9 @@ const Home = () => {
             <p className="section-copy mt-4">Tout ce qu’il faut pour organiser les cadeaux de famille, sans perdre la surprise.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            <article className="feature-card"><span className="feature-icon feature-icon-red">♧</span><h3>Réunissez vos proches</h3><p>Créez votre famille et invitez chacun à rejoindre l’aventure de Noël.</p><span className="feature-number">01</span></article>
+            <article className="feature-card"><span className="feature-icon feature-icon-red">👨‍👩‍👧‍👦</span><h3>Réunissez vos proches</h3><p>Créez votre famille et invitez chacun à rejoindre l’aventure de Noël.</p><span className="feature-number">01</span></article>
             <article className="feature-card"><span className="feature-icon feature-icon-green">🎁</span><h3>Partagez vos envies</h3><p>Ajoutez vos idées cadeaux avec photos, prix et liens pour guider vos proches.</p><span className="feature-number">02</span></article>
-            <article className="feature-card"><span className="feature-icon feature-icon-gold">✧</span><h3>Participez ensemble</h3><p>Chacun peut contribuer aux cadeaux. Les détails restent confidentiels.</p><span className="feature-number">03</span></article>
+            <article className="feature-card"><span className="feature-icon feature-icon-gold">💝</span><h3>Participez ensemble</h3><p>Chacun peut contribuer aux cadeaux. Les détails restent confidentiels.</p><span className="feature-number">03</span></article>
           </div>
         </div>
       </section>
