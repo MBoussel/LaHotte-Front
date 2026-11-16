@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { useState, useEffect } from 'react';
 import { famillesAPI } from '../../services/api';
 
@@ -59,7 +60,7 @@ const DemandesAdhesion = ({ familleId, isCreator }: DemandesAdhesionProps) => {
   return (
     <div className="card mb-6 md:mb-8 border-2 border-christmas-gold">
       <h2 className="text-lg md:text-xl font-bold mb-4">
-        📬 Demandes d'adhésion ({demandes.length})
+        <AppIcon name="mail" size={18} /> Demandes d'adhésion ({demandes.length})
       </h2>
 
       <div className="space-y-3">
