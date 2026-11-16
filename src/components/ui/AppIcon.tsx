@@ -38,7 +38,7 @@ const paths: Record<SvgIconName, ReactNode> = {
 };
 
 export default function AppIcon({ name, size = 20, className = '' }: AppIconProps) {
-  const style: CSSProperties = { width: size, height: size, flex: '0 0 auto' };
+  const style: CSSProperties = { width: size, height: size, flex: '0 0 auto', display: 'inline-block', verticalAlign: 'middle' };
   const image = imageIcons[name];
   if (image) {
     return <img src={image} alt="" aria-hidden="true" className={className} style={{ ...style, objectFit: 'contain' }} loading="lazy" />;
