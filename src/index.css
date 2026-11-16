@@ -777,3 +777,27 @@ body::after {
   .holiday-character-flying { animation-duration: .01ms !important; }
   .holiday-character-flying::after { animation-duration: .01ms !important; }
 }
+
+
+/* Sur tablette : afficher les personnages dans les coins sans masquer les cartes */
+@media (min-width: 768px) and (max-width: 1667px) {
+  .family-floating-decor { display: block; }
+  .family-santa-clicker {
+    top: 112px;
+    left: 8px;
+    right: auto;
+  }
+  .family-biscuit-clicker {
+    bottom: 18px;
+    right: 8px;
+    left: auto;
+  }
+  .family-floating-decor .family-floating-santa,
+  .family-floating-decor .family-floating-gingerbread {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 5px;
+  }
+}
