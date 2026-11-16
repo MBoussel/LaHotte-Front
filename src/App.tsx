@@ -17,6 +17,60 @@ import Profil from './pages/Profil';
 
 type Theme = 'light' | 'dark';
 
+
+function CursorStarTrail() {
+  useEffect(() => {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!finePointer.matches || reducedMotion.matches) return;
+
+    const layer = document.createElement('div');
+    layer.className = 'cursor-star-trail';
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+
+    let lastX = 0;
+    let lastY = 0;
+    let hasMoved = false;
+
+    const createStar = (x: number, y: number) => {
+      const star = document.createElement('span');
+      const symbols = ['✦', '✧', '✶'];
+      star.className = 'cursor-trail-star';
+      star.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      star.style.left = `${x + (Math.random() - 0.5) * 16}px`;
+      star.style.top = `${y + (Math.random() - 0.5) * 16}px`;
+      star.style.fontSize = `${7 + Math.random() * 10}px`;
+      star.style.setProperty('--star-rotate', `${Math.random() * 100 - 50}deg`);
+      star.style.setProperty('--star-life', `${650 + Math.random() * 450}ms`);
+      layer.appendChild(star);
+      star.addEventListener('animationend', () => star.remove(), { once: true });
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return;
+      const dx = event.clientX - lastX;
+      const dy = event.clientY - lastY;
+      if (hasMoved && dx * dx + dy * dy < 100) return;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      hasMoved = true;
+      createStar(event.clientX, event.clientY);
+      if (Math.random() > 0.68) {
+        createStar(event.clientX + (Math.random() - 0.5) * 22, event.clientY + (Math.random() - 0.5) * 22);
+      }
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      layer.remove();
+    };
+  }, []);
+
+  return null;
+}
+
 function App() {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = window.localStorage.getItem('lahotte-theme');
@@ -45,7 +99,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="app-shell min-h-screen bg-gray-50">
+        <div className="app-shell min-h-screen bg-gray-50">\n          <CursorStarTrail />
           <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <Routes>
             {/* Routes publiques */}
