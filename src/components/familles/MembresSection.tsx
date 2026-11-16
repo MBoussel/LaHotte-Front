@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { useState, useEffect } from 'react';
 import type { Membre } from '../../types';
 
@@ -37,11 +38,11 @@ const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', curr
     <div className="mb-6">
       {currentUserId != null && pereNoelId === currentUserId && (
         <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900">
-          <p className="font-bold">{noelType === 'mere_noel' ? '🎄 Tu es la Mère Noël de cette famille !' : '🎅 Tu es le Père Noël de cette famille !'}</p>
+          <p className="font-bold"><><AppIcon name={noelType === 'mere_noel' ? 'tree' : 'santa'} size={20} /> {noelType === 'mere_noel' ? 'Tu es la Mère Noël de cette famille !' : 'Tu es le Père Noël de cette famille !'}</></p>
           <p className="text-sm mt-1">Tu peux suivre les contributions aux cadeaux des autres membres.</p>
         </div>
       )}
-      <h2 className="text-xl md:text-2xl font-bold mb-4">👥 Membres ({membres.length})</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-4 inline-flex items-center gap-2"><AppIcon name="members" size={24} /> Membres ({membres.length})</h2>
       
       <div className="card">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
