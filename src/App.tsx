@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './utils/AuthContext';
 import Navbar from './components/layout/Navbar';
@@ -14,12 +15,38 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import RecapContributions from './pages/RecapContributions';
 import Profil from './pages/Profil';
 
+type Theme = 'light' | 'dark';
+
 function App() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = window.localStorage.getItem('lahotte-theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
+
+  useEffect(() => {
+    if (window.localStorage.getItem('lahotte-theme')) return;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const syncWithSystem = (event: MediaQueryListEvent) => setTheme(event.matches ? 'dark' : 'light');
+    media.addEventListener('change', syncWithSystem);
+    return () => media.removeEventListener('change', syncWithSystem);
+  }, []);
+
+  const toggleTheme = () => setTheme((current) => {
+    const next = current === 'light' ? 'dark' : 'light';
+    window.localStorage.setItem('lahotte-theme', next);
+    return next;
+  });
+
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
+        <div className="app-shell min-h-screen bg-gray-50">
+          <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<Home />} />
