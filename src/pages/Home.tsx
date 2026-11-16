@@ -43,9 +43,21 @@ const Home = () => {
                 <div><p className="text-xs font-bold uppercase tracking-[.18em] text-emerald-900/55">LaHotte familiale</p><h2 className="mt-1 font-serif text-2xl font-bold text-[#173c2d]">La liste des envies</h2></div>
                 <span className="gift-stage-icon">🎄</span>
               </div>
-              <div className="gift-item"><span className="gift-emoji">🎧</span><div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Casque audio</p><p className="text-xs text-[#65746a]">Un cadeau à plusieurs</p></div><span className="gift-price">85 €</span></div>
-              <div className="gift-item"><span className="gift-emoji">📚</span><div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Un beau livre</p><p className="text-xs text-[#65746a]">Une envie à réaliser</p></div><span className="gift-price">32 €</span></div>
-              <div className="gift-item"><span className="gift-emoji">🎮</span><div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Jeu vidéo</p><p className="text-xs text-[#65746a]">Le plaisir de partager</p></div><span className="gift-price">59 €</span></div>
+              <div className="gift-item gift-item-product">
+                <div className="gift-product-image"><img src="https://store.sony.co.nz/dw/image/v2/ABBC_PRD/on/demandware.static/-/Sites-sony-master-catalog/default/dw1b537bbb/images/PLAYSTATION5W/PLAYSTATION5W.png" alt="Console PlayStation 5 et manette" loading="lazy" /></div>
+                <div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Console PlayStation 5</p><p className="text-xs text-[#65746a]">Le cadeau qui fait rêver</p></div>
+                <span className="gift-price">650 €</span>
+              </div>
+              <div className="gift-item gift-item-product">
+                <div className="gift-product-image"><img src="https://cdn.globber.com/content/2023/11/870-206_two-wheel-scooter-for-kids.jpg" alt="Trottinette Globber vert menthe" loading="lazy" /></div>
+                <div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Trottinette Globber</p><p className="text-xs text-[#65746a]">Pour partir à l’aventure</p></div>
+                <span className="gift-price">90 €</span>
+              </div>
+              <div className="gift-item gift-item-product">
+                <div className="gift-product-image"><img src="https://www.nike.com.kw/dw/image/v2/BDVB_PRD/on/demandware.static/-/Sites-akeneo-master-catalog/default/dw6ffcb2b0/nk/03a/e/1/f/a/1/03ae1fa1_b497_4d21_92ac_ccdf7cb8cbe9.jpg" alt="Baskets Nike noires et blanches" loading="lazy" /></div>
+                <div className="min-w-0 flex-1"><p className="font-bold text-[#20392d]">Baskets Nike</p><p className="text-xs text-[#65746a]">Un classique à offrir</p></div>
+                <span className="gift-price">110 €</span>
+              </div>
               <div className="mt-5 flex items-center justify-between rounded-2xl bg-[#174b36] px-4 py-3 text-white shadow-lg">
                 <div><p className="text-xs text-white/70">Ensemble, c’est plus simple</p><p className="font-bold">Un Noël bien préparé</p></div><span className="text-2xl">✨</span>
               </div>
