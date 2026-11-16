@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
+import AppIcon from '../components/ui/AppIcon';
 
 const Home = () => {
   const { user } = useAuth();
@@ -53,7 +54,7 @@ const Home = () => {
               <span className="text-lg">✦</span> La magie de Noël se partage
             </div>
             <h1 className="home-hero-title font-serif text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-              Les plus beaux cadeaux sont <span className="gold-shimmer">ceux qu’on partage</span> <span className="hero-santa" role="img" aria-label="Père Noël">🎅</span>
+              Les plus beaux cadeaux sont <span className="gold-shimmer">ceux qu’on partage</span> <AppIcon name="santa" size={34} className="hero-santa" />
             </h1>
             <p className="mt-6 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
               Réunissez les envies de toute la famille, préparez les surprises ensemble et participez aux cadeaux de ceux que vous aimez.
@@ -118,7 +119,7 @@ const Home = () => {
           <div className="grid gap-6 md:grid-cols-3">
             <article className="feature-card"><span className="feature-icon feature-icon-red family-icon"><img src="https://cdn-icons-png.flaticon.com/512/2061/2061474.png" alt="Icône famille" loading="lazy" /></span><h3>Réunissez vos proches</h3><p>Créez votre famille et invitez chacun à rejoindre l’aventure de Noël.</p><span className="feature-number">01</span></article>
             <article className="feature-card"><span className="feature-icon feature-icon-green gift-feature-icon"><img src="https://cdn-icons-png.flaticon.com/512/3656/3656962.png" alt="Cadeau surprise" loading="lazy" /></span><h3>Partagez vos envies</h3><p>Ajoutez vos idées cadeaux avec photos, prix et liens pour guider vos proches.</p><span className="feature-number">02</span></article>
-            <article className="feature-card"><span className="feature-icon feature-icon-gold">💝</span><h3>Participez ensemble</h3><p>Chacun peut contribuer aux cadeaux. Les détails restent confidentiels.</p><span className="feature-number">03</span></article>
+            <article className="feature-card"><span className="feature-icon feature-icon-gold"><AppIcon name="contribution" size={34} /></span><h3>Participez ensemble</h3><p>Chacun peut contribuer aux cadeaux. Les détails restent confidentiels.</p><span className="feature-number">03</span></article>
           </div>
         </div>
       </section>
