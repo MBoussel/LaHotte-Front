@@ -155,7 +155,7 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
                   className="px-4 py-2 hover:bg-red-700 rounded transition"
                   onClick={closeMenu}
                 >
-                  🔍 Rechercher
+                  <AppIcon name="search" size={18} /> Rechercher
                 </Link>
                 <Link
   to="/profil"
