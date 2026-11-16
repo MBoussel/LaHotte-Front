@@ -99,7 +99,8 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="app-shell min-h-screen bg-gray-50">\n          <CursorStarTrail />
+        <div className="app-shell min-h-screen bg-gray-50">
+          <CursorStarTrail />
           <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <Routes>
             {/* Routes publiques */}
