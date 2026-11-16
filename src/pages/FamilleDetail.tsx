@@ -30,6 +30,11 @@ const FamilleDetail = () => {
   const [showCadeauModal, setShowCadeauModal] = useState(false);
   const [noelType, setNoelType] = useState<"pere_noel" | "mere_noel">("pere_noel");
   const [santaMove, setSantaMove] = useState(0);
+  const [biscuitMove, setBiscuitMove] = useState(0);
+  const [biscuitClickId, setBiscuitClickId] = useState(0);
+  const biscuitOffsets = [{x:0,y:0},{x:18,y:-12},{x:-16,y:-18},{x:24,y:16},{x:-22,y:12},{x:8,y:24}];
+  const currentBiscuitOffset = biscuitOffsets[biscuitMove % biscuitOffsets.length];
+  const clickBiscuit = () => { setBiscuitClickId(id => id + 1); setBiscuitMove(move => move + 1); };
   const [santaClickId, setSantaClickId] = useState(0);
   const santaOffsets = [{x:0,y:0},{x:20,y:12},{x:-16,y:20},{x:-22,y:-10},{x:12,y:-22},{x:26,y:-6}];
   const currentSantaOffset = santaOffsets[santaMove % santaOffsets.length];
@@ -129,9 +134,9 @@ const FamilleDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
-      <div className="family-floating-decor" aria-hidden="true">
+      <div className="family-floating-decor">
         <div className="family-santa-clicker" style={{ transform: `translate(${currentSantaOffset.x}px, ${currentSantaOffset.y}px)` }}><span key={santaClickId} className="gingerbread-score-pop santa-score-pop" aria-live="polite">{santaClickId > 0 ? '+1' : ''}</span><button type="button" className="family-floating-santa santa-launcher" onClick={clickSanta} aria-label="Cliquer sur le Père Noël pour gagner un point" title="Attrape le Père Noël !"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="" /></button></div>
-        <img className="family-floating-gingerbread" src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" />
+        <div className="family-biscuit-clicker" style={{ transform: `translate(${currentBiscuitOffset.x}px, ${currentBiscuitOffset.y}px)` }}><span key={biscuitClickId} className="gingerbread-score-pop" aria-live="polite">{biscuitClickId > 0 ? '+1' : ''}</span><button type="button" className="family-floating-gingerbread santa-launcher" onClick={clickBiscuit} aria-label="Cliquer sur le biscuit pour gagner un point" title="Attrape le biscuit !"><img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" /></button></div>
       </div>
       {/* Header */}
       <div className="mb-6 md:mb-8">
