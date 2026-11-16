@@ -13,6 +13,36 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [santaClickId, setSantaClickId] = useState(0);
+  const [santaClicks, setSantaClicks] = useState(0);
+  const [santaFlying, setSantaFlying] = useState(false);
+  const [biscuitClickId, setBiscuitClickId] = useState(0);
+  const [biscuitClicks, setBiscuitClicks] = useState(0);
+  const [biscuitFlying, setBiscuitFlying] = useState(false);
+
+  const clickLoginCharacter = (character: 'santa' | 'biscuit') => {
+    const flying = character === 'santa' ? santaFlying : biscuitFlying;
+    if (flying) return;
+
+    if (character === 'santa') {
+      const next = santaClicks + 1;
+      setSantaClickId(id => id + 1);
+      setSantaClicks(next);
+      if (next >= 5) {
+        setSantaFlying(true);
+        window.setTimeout(() => { setSantaFlying(false); setSantaClicks(0); }, 2700);
+      }
+    } else {
+      const next = biscuitClicks + 1;
+      setBiscuitClickId(id => id + 1);
+      setBiscuitClicks(next);
+      if (next >= 5) {
+        setBiscuitFlying(true);
+        window.setTimeout(() => { setBiscuitFlying(false); setBiscuitClicks(0); }, 2700);
+      }
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
