@@ -1044,3 +1044,15 @@ body::after {
     top: max(68px, calc(env(safe-area-inset-top) + 56px));
   }
 }
+
+
+/* Dernier ajustement mobile : descendre le Père Noël et remonter l'inscription */
+@media (max-width: 767px) {
+  .login-santa {
+    top: max(92px, calc(env(safe-area-inset-top) + 80px));
+  }
+
+  .register-page > .card {
+    transform: translateY(-34px);
+  }
+}
