@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
@@ -82,7 +83,7 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
    Mes Contributions
 </Link>
                 <Link to="/rechercher" className="hover:text-christmas-gold transition">
-                  🔍 Rechercher
+                  <AppIcon name="search" size={18} /> Rechercher
                 </Link>
                 <PendingInvitations />
                 <div className="flex items-center gap-3">
@@ -132,7 +133,7 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
                   className="px-4 py-2 hover:bg-red-700 rounded transition"
                   onClick={closeMenu}
                 >
-                  👨‍👩‍👧‍👦 Mes Familles
+                  <AppIcon name="family" size={19} /> Mes Familles
                 </Link>
                 
                 <Link
@@ -140,14 +141,14 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
                   className="px-4 py-2 hover:bg-red-700 rounded transition"
                   onClick={closeMenu}
                 >
-                  🎁 Mes Cadeaux
+                  <AppIcon name="gift" size={19} /> Mes Cadeaux
                 </Link>
                  <Link
           to="/contributions"
           className="px-4 py-2 hover:bg-red-700 rounded transition"
           onClick={closeMenu}
         >
-          💝 Mes Contributions
+          <AppIcon name="contribution" size={18} /> Mes Contributions
         </Link>
                 <Link
                   to="/rechercher"
@@ -161,7 +162,7 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
   className="px-4 py-2 hover:bg-red-700 rounded transition"
   onClick={closeMenu}
 >
-  👤 Mon profil
+  <AppIcon name="user" size={18} /> Mon profil
 </Link>
                 <div className="px-4">
                   <PendingInvitations />
