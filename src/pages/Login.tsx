@@ -69,7 +69,22 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red to-christmas-green px-4">
+    <div className="login-page min-h-screen flex items-center justify-center bg-gradient-to-br from-christmas-red to-christmas-green px-4">
+      <div className="login-floating-decor" aria-label="Personnages de Noël interactifs">
+        <div className="login-character login-santa">
+          <span key={santaClickId} className="gingerbread-score-pop santa-score-pop" aria-live="polite">{santaClickId > 0 ? '+1' : ''}</span>
+          <button type="button" className={`login-character-button${santaFlying ? ' holiday-character-flying' : ''}`} onClick={() => clickCharacter('santa')} aria-label="Cliquer sur le Père Noël" title="Attrape le Père Noël !">
+            <img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="" />
+          </button>
+        </div>
+        <div className="login-character login-biscuit">
+          <span key={biscuitClickId} className="gingerbread-score-pop" aria-live="polite">{biscuitClickId > 0 ? '+1' : ''}</span>
+          <button type="button" className={`login-character-button${biscuitFlying ? ' holiday-character-flying' : ''}`} onClick={() => clickCharacter('biscuit')} aria-label="Cliquer sur le biscuit" title="Attrape le biscuit !">
+            <img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" />
+          </button>
+        </div>
+      </div>
+
       <div className="card max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-christmas-red mb-2">
