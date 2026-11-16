@@ -17,7 +17,7 @@ const Home = () => {
               <span className="text-lg">✦</span> La magie de Noël se partage
             </div>
             <h1 className="home-hero-title font-serif text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-              Les plus beaux cadeaux sont <span className="gold-shimmer">ceux qu’on partage.</span> <span className="hero-santa" role="img" aria-label="Père Noël">🎅</span>
+              Les plus beaux cadeaux sont <span className="gold-shimmer">ceux qu’on partage</span> <span className="hero-santa" role="img" aria-label="Père Noël">🎅</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
               Réunissez les envies de toute la famille, préparez les surprises ensemble et participez aux cadeaux de ceux que vous aimez.
