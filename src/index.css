@@ -120,9 +120,16 @@ html[data-theme='dark'] .card { background: var(--surface) !important; }
 .hero-secondary:hover { background:rgba(255,255,255,.16); }
 .gift-stage { background:linear-gradient(145deg,#fffef9,#f3e5c9 65%,#e8d3ad);border:1px solid rgba(255,255,255,.85);box-shadow:0 35px 80px rgba(0,0,0,.4),0 8px 0 rgba(61,13,31,.35),inset 0 2px 0 white;transform:rotate(1.5deg); }
 .gift-stage-icon {display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#1c6847,#0d3828);box-shadow:0 7px 16px rgba(17,68,46,.25);font-size:23px;}
-.gift-item {display:flex;align-items:center;gap:12px;margin-top:11px;padding:12px;border-radius:16px;background:rgba(255,255,255,.82);box-shadow:0 5px 15px rgba(71,47,18,.08),inset 0 1px 0 white;}
-.gift-emoji {display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#fff1d3,#f3d9a7);font-size:22px;}
-.gift-price {font-weight:800;color:#a52239;font-size:14px;}
+.gift-item {display:flex;align-items:center;gap:12px;margin-top:11px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.88);box-shadow:0 5px 15px rgba(71,47,18,.08),inset 0 1px 0 white;min-width:0;}
+.gift-product-image {display:grid;place-items:center;flex:0 0 58px;width:58px;height:58px;overflow:hidden;border-radius:13px;background:linear-gradient(145deg,#fff,#f5f1e8);border:1px solid rgba(193,154,91,.16);}
+.gift-product-image img {display:block;width:100%;height:100%;object-fit:contain;padding:3px;}
+.gift-price {font-weight:800;color:#a52239;font-size:13px;white-space:nowrap;}
+.floating-gift-top {right:8px;top:22px;width:56px;height:56px;font-size:27px;transform:none;}
+.floating-gift-bottom {left:8px;bottom:20px;width:44px;height:44px;font-size:21px;animation:soft-float 5s ease-in-out infinite;}
+@media(max-width:767px) {
+  .floating-gift-top {right:8px;top:8px;width:48px;height:48px;font-size:23px;}
+  .floating-gift-bottom {left:8px;bottom:8px;width:40px;height:40px;font-size:19px;}
+}
 .gift-orbit {position:absolute;left:50%;top:50%;border:1px solid rgba(255,223,154,.22);border-radius:50%;transform:translate(-50%,-50%) rotate(-25deg);pointer-events:none;}
 .gift-orbit-one {width:490px;height:310px;box-shadow:0 0 35px rgba(255,205,107,.08);}
 .gift-orbit-two {width:540px;height:380px;border-color:rgba(91,220,164,.18);transform:translate(-50%,-50%) rotate(25deg);}
