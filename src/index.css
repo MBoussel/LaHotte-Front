@@ -1020,3 +1020,11 @@ body::after {
     border-radius: 15px;
   }
 }
+
+
+/* Ajustement : descendre légèrement le Père Noël sur téléphone */
+@media (max-width: 767px) {
+  .login-santa {
+    top: max(42px, calc(env(safe-area-inset-top) + 30px));
+  }
+}
