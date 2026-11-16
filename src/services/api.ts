@@ -4,7 +4,9 @@ import type { User, Famille, Cadeau, Invitation, Contribution, ContributionWithU
 
 // Configuration Axios
 const api: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  baseURL: window.location.hostname === 'deploy-preview-11--lahotte.netlify.app'
+    ? 'https://api.lahotte.gazggul.ovh'
+    : (import.meta.env.VITE_API_URL || 'http://localhost:8000'),
   headers: {
     'Content-Type': 'application/json',
   },

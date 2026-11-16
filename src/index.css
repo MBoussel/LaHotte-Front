@@ -469,3 +469,65 @@ body::after {
 .gingerbread-score-pop { position:absolute; left:50%; top:-24px; z-index:35; color:#f8d778; font-family:Georgia,serif; font-size:25px; font-weight:900; line-height:1; letter-spacing:.02em; white-space:nowrap; pointer-events:none; text-shadow:0 1px 2px rgba(72,39,7,.9),0 0 8px rgba(255,218,112,.85),0 0 18px rgba(255,194,62,.65); transform:translateX(-50%); animation:gingerbread-plus-float 1.8s ease-out forwards; }
 @keyframes gingerbread-plus-float { 0% { opacity:0; transform:translate(-50%,10px) scale(.75); } 14% { opacity:1; transform:translate(-50%,0) scale(1.12); } 35% { opacity:1; transform:translate(-50%,-5px) scale(1); } 100% { opacity:0; transform:translate(-50%,-35px) scale(.92); } }
 @media(prefers-reduced-motion:reduce) { .gingerbread-score-pop { animation:none; opacity:1; } }
+
+
+/* Personnages de Noël dans les marges, jamais par-dessus les cartes */
+.family-floating-decor {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  overflow: hidden;
+}
+.family-floating-decor img {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 7px rgba(0,0,0,.2));
+  opacity: .96;
+}
+/* Le container Tailwind atteint 1536px sur les très grands écrans.
+   On n'affiche les personnages que si une vraie marge extérieure existe. */
+@media (min-width: 1668px) {
+  .family-floating-decor { display: block; }
+  .family-floating-santa {
+    top: 118px;
+    right: calc((100vw - 1536px) / 2 - 66px);
+    animation: family-santa-float 4.4s ease-in-out infinite;
+  }
+  .family-floating-gingerbread {
+    bottom: 22px;
+    left: calc((100vw - 1536px) / 2 - 66px);
+    animation: family-biscuit-float 3.8s ease-in-out infinite;
+  }
+}
+@keyframes family-santa-float {
+  0%,100% { transform: translateY(0) rotate(5deg); }
+  50% { transform: translateY(-9px) rotate(-3deg); }
+}
+@keyframes family-biscuit-float {
+  0%,100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .family-floating-decor img { animation: none !important; }
+}
+
+
+/* Sur téléphone : petites décorations dans les gouttières latérales */
+@media (max-width: 767px) {
+  .family-floating-decor { display: block; }
+  .family-floating-decor img { width: 20px; height: 20px; }
+  .family-floating-santa {
+    top: 88px;
+    right: 0;
+    animation: family-santa-float 4.4s ease-in-out infinite;
+  }
+  .family-floating-gingerbread {
+    bottom: 14px;
+    left: 0;
+    animation: family-biscuit-float 3.8s ease-in-out infinite;
+  }
+}

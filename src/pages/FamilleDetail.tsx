@@ -124,6 +124,10 @@ const FamilleDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
+      <div className="family-floating-decor" aria-hidden="true">
+        <img className="family-floating-santa" src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="" />
+        <img className="family-floating-gingerbread" src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" />
+      </div>
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <button
