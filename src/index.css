@@ -456,3 +456,13 @@ body::after {
 @keyframes ginger-game-pop { 0%{opacity:0;transform:translateY(10px) scale(.7);} 25%{opacity:1;} 100%{opacity:0;transform:translateY(-24px) scale(1.1);} }
 @media(max-width:480px) { .ginger-game-panel{padding:28px 17px 18px;border-radius:23px;} .ginger-game-biscuit{width:136px;height:136px;} .ginger-game-biscuit img{width:103px;height:103px;} }
 @media(prefers-reduced-motion:reduce) { .ginger-game-backdrop,.ginger-game-plus{animation:none!important;} .ginger-game-biscuit,.ginger-game-progress-track span{transition:none!important;} }
+
+/* Biscuit Clicker directement sur la page d'accueil */
+.gingerbread-clicker { position:absolute; left:-36px; bottom:26px; z-index:30; display:grid; justify-items:center; gap:2px; transition:transform .32s cubic-bezier(.2,.8,.2,1); }
+.gingerbread-clicker .floating-gift-bottom { position:relative; left:auto; right:auto; top:auto; bottom:auto; }
+.gingerbread-score { padding:3px 9px; border:1px solid rgba(255,231,174,.65); border-radius:999px; color:#fff8df; background:rgba(20,65,46,.9); box-shadow:0 3px 12px rgba(0,0,0,.22); font-size:11px; font-weight:900; line-height:1.2; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.gingerbread-score span { color:#f4d27d; font-size:9px; }
+.gingerbread-launcher { animation:soft-float 4s ease-in-out infinite; }
+.gingerbread-launcher:active { filter:brightness(1.15); }
+@media(max-width:767px) { .gingerbread-clicker { left:auto; right:-8px; bottom:-24px; } }
+@media(prefers-reduced-motion:reduce) { .gingerbread-clicker { transition:none; } }

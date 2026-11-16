@@ -75,7 +75,7 @@ const Home = () => {
               </div>
             </div>
             <div className="floating-gift floating-gift-top"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="Père Noël" loading="lazy" /></div>
-            <div className="gingerbread-clicker" style={{ marginLeft: currentBiscuitOffset.x, marginTop: currentBiscuitOffset.y }}>
+            <div className="gingerbread-clicker" style={{ transform: `translate(${currentBiscuitOffset.x}px, ${currentBiscuitOffset.y}px)` }}>
               <span className="gingerbread-score" aria-live="polite">{biscuitPoints} <span>pts</span></span>
               <button type="button" className="floating-gift floating-gift-bottom gingerbread-launcher" onClick={clickBiscuit} aria-label={`Cliquer sur le biscuit : ${biscuitPoints} points`} title="Attrape le biscuit !"><img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" loading="lazy" /></button>
             </div>
