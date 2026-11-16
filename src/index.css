@@ -1041,7 +1041,7 @@ body::after {
 /* Père Noël : le descendre davantage sur téléphone */
 @media (max-width: 767px) {
   .login-santa {
-    top: max(68px, calc(env(safe-area-inset-top) + 56px));
+    top: max(76px, calc(env(safe-area-inset-top) + 64px));
   }
 }
 
