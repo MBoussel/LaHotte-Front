@@ -42,7 +42,7 @@ const Home = () => {
             <div className="gift-stage relative mx-auto max-w-[390px] rounded-[2rem] p-5 sm:p-7">
               <div className="mb-6 flex items-center justify-between">
                 <div><p className="text-xs font-bold uppercase tracking-[.18em] text-emerald-900/55">LaHotte familiale</p><h2 className="mt-1 font-serif text-2xl font-bold text-[#173c2d]">La liste des envies</h2></div>
-                <span className="gift-stage-icon">🎄</span>
+                <span className="gift-stage-icon"><img src="https://cdn-icons-png.flaticon.com/512/9004/9004908.png" alt="Joyeux Noël" loading="lazy" /></span>
               </div>
               <div className="gift-item gift-item-product">
                 <div className="gift-product-image"><img src="https://store.sony.co.nz/dw/image/v2/ABBC_PRD/on/demandware.static/-/Sites-sony-master-catalog/default/dw1b537bbb/images/PLAYSTATION5W/PLAYSTATION5W.png" alt="Console PlayStation 5 et manette" loading="lazy" /></div>
@@ -60,11 +60,11 @@ const Home = () => {
                 <span className="gift-price">110 €</span>
               </div>
               <div className="mt-5 flex items-center justify-between rounded-2xl bg-[#174b36] px-4 py-3 text-white shadow-lg">
-                <div><p className="text-xs text-white/70">Ensemble, c’est plus simple</p><p className="font-bold">Un Noël bien préparé</p></div><span className="text-2xl">✨</span>
+                <div><p className="text-xs text-white/70">Ensemble, c’est plus simple</p><p className="font-bold">Un Noël bien préparé</p></div><img className="prepared-christmas-icon" src="https://cdn-icons-png.flaticon.com/512/13368/13368731.png" alt="Père Noël" loading="lazy" />
               </div>
             </div>
-            <div className="floating-gift floating-gift-top">🎁</div>
-            <div className="floating-gift floating-gift-bottom">✦</div>
+            <div className="floating-gift floating-gift-top"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="Père Noël" loading="lazy" /></div>
+            <div className="floating-gift floating-gift-bottom"><img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="Bonhomme en pain d’épices" loading="lazy" /></div>
           </div>
         </div>
         <div className="hero-bottom-line" />
@@ -79,7 +79,7 @@ const Home = () => {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             <article className="feature-card"><span className="feature-icon feature-icon-red family-icon"><img src="https://cdn-icons-png.flaticon.com/512/2061/2061474.png" alt="Icône famille" loading="lazy" /></span><h3>Réunissez vos proches</h3><p>Créez votre famille et invitez chacun à rejoindre l’aventure de Noël.</p><span className="feature-number">01</span></article>
-            <article className="feature-card"><span className="feature-icon feature-icon-green">🎁</span><h3>Partagez vos envies</h3><p>Ajoutez vos idées cadeaux avec photos, prix et liens pour guider vos proches.</p><span className="feature-number">02</span></article>
+            <article className="feature-card"><span className="feature-icon feature-icon-green gift-feature-icon"><img src="https://cdn-icons-png.flaticon.com/512/3656/3656962.png" alt="Cadeau surprise" loading="lazy" /></span><h3>Partagez vos envies</h3><p>Ajoutez vos idées cadeaux avec photos, prix et liens pour guider vos proches.</p><span className="feature-number">02</span></article>
             <article className="feature-card"><span className="feature-icon feature-icon-gold">💝</span><h3>Participez ensemble</h3><p>Chacun peut contribuer aux cadeaux. Les détails restent confidentiels.</p><span className="feature-number">03</span></article>
           </div>
         </div>
