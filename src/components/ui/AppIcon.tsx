@@ -1,10 +1,12 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 type AppIconName =
   | 'family' | 'gift' | 'tree' | 'santa'
   | 'search' | 'members' | 'contribution' | 'cart' | 'user'
   | 'globe' | 'chart' | 'trash' | 'mail' | 'lightbulb'
   | 'celebration' | 'message';
+
+type SvgIconName = Exclude<AppIconName, 'family' | 'gift' | 'tree' | 'santa'>;
 
 type AppIconProps = {
   name: AppIconName;
@@ -19,7 +21,7 @@ const imageIcons: Partial<Record<AppIconName, string>> = {
   santa: 'https://cdn-icons-png.flaticon.com/512/9204/9204869.png',
 };
 
-const paths: Record<Exclude<AppIconName, keyof typeof imageIcons>, React.ReactNode> = {
+const paths: Record<SvgIconName, ReactNode> = {
   search: <><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></>,
   members: <><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
   contribution: <><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" /></>,
@@ -52,7 +54,7 @@ export default function AppIcon({ name, size = 20, className = '' }: AppIconProp
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {paths[name as keyof typeof paths]}
+      {paths[name as SvgIconName]}
     </svg>
   );
 }
