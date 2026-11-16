@@ -30,7 +30,7 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="text-xl md:text-2xl font-bold flex items-center gap-2" onClick={closeMenu}>
-            <span className="brand-mark">✦</span> LaHotte
+            🎄 Liste de Noël
           </Link>
 
           {/* Bouton Burger (Mobile) */}
