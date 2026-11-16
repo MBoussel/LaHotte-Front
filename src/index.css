@@ -366,3 +366,46 @@ body::after {
     animation: none !important;
   }
 }
+
+
+/* Cinquième groupe : étoiles plus grandes, uniquement tablette et ordinateur */
+.desktop-sparkles {
+  display: none;
+}
+@media (min-width: 768px) {
+  .desktop-sparkles {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23fff0b8' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffcf78' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E");
+    background-size: 25px 25px, 21px 21px, 18px 18px;
+    background-position: 24% 22%, 68% 47%, 88% 16%;
+    filter: drop-shadow(0 0 8px rgba(255,235,180,1)) drop-shadow(0 0 19px rgba(255,205,112,.9));
+    animation: sparkle-wander-five 17s ease-in-out infinite;
+  }
+}
+.family-icon svg {
+  display: block;
+  width: 1.55em;
+  height: 1.55em;
+}
+@keyframes sparkle-wander-five {
+  0%, 8% { opacity: 0; }
+  16%, 42% { opacity: .95; background-position: 24% 22%, 68% 47%, 88% 16%; }
+  50%, 61% { opacity: 0; }
+  69%, 94% {
+    opacity: 1;
+    background-position: 8% 68%, 48% 13%, 91% 76%;
+    filter: brightness(1.55) drop-shadow(0 0 10px rgba(255,245,205,1)) drop-shadow(0 0 23px rgba(255,205,112,1));
+  }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .desktop-sparkles { animation: none !important; }
+}
