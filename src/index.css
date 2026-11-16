@@ -471,8 +471,9 @@ body::after {
 @media(prefers-reduced-motion:reduce) { .gingerbread-score-pop { animation:none; opacity:1; } }
 
 
-/* Petits personnages de Noël qui accompagnent le défilement de la page famille */
+/* Personnages de Noël dans les marges, jamais par-dessus les cartes */
 .family-floating-decor {
+  display: none;
   position: fixed;
   inset: 0;
   z-index: 25;
@@ -487,15 +488,18 @@ body::after {
   filter: drop-shadow(0 5px 7px rgba(0,0,0,.2));
   opacity: .96;
 }
-.family-floating-santa {
-  top: 118px;
-  right: max(14px, calc((100vw - 1180px) / 2 - 62px));
-  animation: family-santa-float 4.4s ease-in-out infinite;
-}
-.family-floating-gingerbread {
-  bottom: 22px;
-  left: max(14px, calc((100vw - 1180px) / 2 - 62px));
-  animation: family-biscuit-float 3.8s ease-in-out infinite;
+@media (min-width: 1320px) {
+  .family-floating-decor { display: block; }
+  .family-floating-santa {
+    top: 118px;
+    right: calc((100vw - 1180px) / 2 - 62px);
+    animation: family-santa-float 4.4s ease-in-out infinite;
+  }
+  .family-floating-gingerbread {
+    bottom: 22px;
+    left: calc((100vw - 1180px) / 2 - 62px);
+    animation: family-biscuit-float 3.8s ease-in-out infinite;
+  }
 }
 @keyframes family-santa-float {
   0%,100% { transform: translateY(0) rotate(5deg); }
@@ -504,11 +508,6 @@ body::after {
 @keyframes family-biscuit-float {
   0%,100% { transform: translateY(0) rotate(-6deg); }
   50% { transform: translateY(-8px) rotate(4deg); }
-}
-@media (max-width: 767px) {
-  .family-floating-decor img { width: 42px; height: 42px; opacity: .88; }
-  .family-floating-santa { top: 104px; right: 7px; }
-  .family-floating-gingerbread { bottom: 12px; left: 7px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .family-floating-decor img { animation: none !important; }
