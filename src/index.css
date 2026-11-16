@@ -662,3 +662,41 @@ body::after {
   .santa-clicker, .family-santa-clicker { transition: none; }
   .santa-launcher { animation: none !important; }
 }
+
+
+/* Décorations interactives de la page famille : mêmes bulles vitrées que l'accueil */
+.family-floating-decor { pointer-events: none; }
+.family-santa-clicker, .family-biscuit-clicker {
+  position: absolute; z-index: 35; display: grid; justify-items: center;
+  pointer-events: auto; transition: transform .32s cubic-bezier(.2,.8,.2,1);
+}
+.family-santa-clicker { top: 118px; right: calc((100vw - 1536px) / 2 - 66px); }
+.family-biscuit-clicker { bottom: 22px; left: calc((100vw - 1536px) / 2 - 66px); }
+.family-floating-decor .family-floating-santa,
+.family-floating-decor .family-floating-gingerbread {
+  position: relative; inset: auto; display: grid; place-items: center;
+  width: 54px; height: 54px; padding: 7px;
+  border: 1px solid rgba(255,255,255,.58); border-radius: 18px;
+  background: linear-gradient(145deg, rgba(255,255,255,.34), rgba(255,255,255,.09));
+  box-shadow: 0 15px 35px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.38);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  cursor: pointer; pointer-events: auto; animation: soft-float 4.2s ease-in-out infinite;
+}
+.family-floating-decor .family-floating-santa img,
+.family-floating-decor .family-floating-gingerbread img {
+  display: block; width: 100%; height: 100%; padding: 0;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  object-fit: contain; pointer-events: none; filter: drop-shadow(0 3px 5px rgba(0,0,0,.2));
+}
+.family-floating-decor .family-floating-gingerbread { animation-duration: 3.8s; }
+@media (max-width: 767px) {
+  .family-santa-clicker { top: 100px; right: auto; left: -8px; }
+  .family-biscuit-clicker { bottom: 24px; left: auto; right: -8px; }
+  .family-floating-decor .family-floating-santa,
+  .family-floating-decor .family-floating-gingerbread { width: 52px; height: 52px; padding: 7px; border-radius: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .family-santa-clicker, .family-biscuit-clicker { transition: none; }
+  .family-floating-decor .family-floating-santa,
+  .family-floating-decor .family-floating-gingerbread { animation: none !important; }
+}
