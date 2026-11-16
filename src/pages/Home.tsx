@@ -4,6 +4,8 @@ import { useAuth } from '../utils/AuthContext';
 
 const Home = () => {
   const { user } = useAuth();
+  const [biscuitMove, setBiscuitMove] = useState(0);
+  const [biscuitClickId, setBiscuitClickId] = useState(0);
   const biscuitOffsets = [{x:-24,y:-12},{x:24,y:-18},{x:34,y:18},{x:-30,y:24},{x:8,y:-28},{x:-8,y:30}];
   const currentBiscuitOffset = biscuitOffsets[biscuitMove % biscuitOffsets.length];
   const clickBiscuit = () => { setBiscuitClickId(id => id + 1); setBiscuitMove(move => move + 1); };
