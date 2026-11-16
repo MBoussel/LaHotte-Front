@@ -531,3 +531,34 @@ body::after {
     animation: family-biscuit-float 3.8s ease-in-out infinite;
   }
 }
+
+
+/* Sur mobile, reprendre les bulles vitrées des décorations de la page d'accueil */
+@media (max-width: 767px) {
+  .family-floating-decor img {
+    display: block;
+    width: 52px;
+    height: 52px;
+    padding: 7px;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(255,255,255,.32), rgba(255,255,255,.08));
+    box-shadow: 0 15px 35px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    object-fit: contain;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.2));
+  }
+  .family-floating-santa {
+    top: 100px;
+    left: -8px;
+    right: auto;
+    animation: family-santa-float 4.4s ease-in-out infinite;
+  }
+  .family-floating-gingerbread {
+    bottom: 24px;
+    left: auto;
+    right: -8px;
+    animation: family-biscuit-float 3.8s ease-in-out infinite;
+  }
+}
