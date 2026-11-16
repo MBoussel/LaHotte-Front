@@ -744,7 +744,6 @@ body::after {
 
 /* Envolée festive après cinq clics : les personnages reviennent ensuite */
 .holiday-character-flying {
-  position: relative;
   z-index: 60;
   pointer-events: none !important;
   animation: holiday-character-takeoff 2.35s cubic-bezier(.18,.72,.25,1) forwards !important;
