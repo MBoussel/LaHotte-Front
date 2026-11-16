@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import AppIcon from '../components/ui/AppIcon';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -86,7 +87,7 @@ const Register = () => {
       <div className="card max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-christmas-red mb-2">
-            🎄 Liste de Noël
+            <AppIcon name="tree" size={30} /> Liste de Noël
           </h1>
           <p className="text-gray-600">Créez votre compte</p>
         </div>
