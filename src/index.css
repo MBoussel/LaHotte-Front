@@ -514,3 +514,20 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .family-floating-decor img { animation: none !important; }
 }
+
+
+/* Sur téléphone : petites décorations dans les gouttières latérales */
+@media (max-width: 767px) {
+  .family-floating-decor { display: block; }
+  .family-floating-decor img { width: 20px; height: 20px; }
+  .family-floating-santa {
+    top: 88px;
+    right: 0;
+    animation: family-santa-float 4.4s ease-in-out infinite;
+  }
+  .family-floating-gingerbread {
+    bottom: 14px;
+    left: 0;
+    animation: family-biscuit-float 3.8s ease-in-out infinite;
+  }
+}
