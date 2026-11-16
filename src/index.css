@@ -855,3 +855,114 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .login-character-button { animation: none !important; }
 }
+
+
+/* Connexion et inscription : centrage et placement dédiés aux écrans tactiles */
+@media (max-width: 1024px) {
+  .login-page {
+    min-height: 100vh;
+    min-height: 100svh;
+    align-items: center;
+    justify-content: center;
+    padding: 94px 18px 30px;
+    overflow-x: hidden;
+  }
+
+  .login-page > .card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 440px);
+    max-width: 440px;
+    margin: auto;
+    padding: clamp(20px, 4vw, 28px);
+    border-radius: 22px;
+  }
+
+  .login-page > .card > div:first-child {
+    margin-bottom: 24px;
+  }
+
+  .login-page > .card h1 {
+    font-size: clamp(1.65rem, 5vw, 2.1rem);
+    line-height: 1.2;
+  }
+
+  .login-floating-decor {
+    position: fixed;
+    z-index: 3;
+    overflow: visible;
+  }
+
+  .login-character {
+    top: max(12px, env(safe-area-inset-top));
+    bottom: auto;
+  }
+
+  .login-santa {
+    left: max(12px, env(safe-area-inset-left));
+    right: auto;
+  }
+
+  .login-biscuit {
+    right: max(12px, env(safe-area-inset-right));
+    left: auto;
+  }
+
+  .login-character-button {
+    width: 50px;
+    height: 50px;
+    padding: 6px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .login-page {
+    padding: 82px 14px 24px;
+  }
+
+  .login-page > .card {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px 18px;
+    border-radius: 20px;
+  }
+
+  .login-page > .card > div:first-child {
+    margin-bottom: 21px;
+  }
+
+  .login-page > .card form {
+    gap: 14px;
+  }
+
+  .login-character {
+    top: max(10px, env(safe-area-inset-top));
+  }
+
+  .login-character-button {
+    width: 44px;
+    height: 44px;
+    padding: 5px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .login-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .login-page > .card {
+    padding: 18px 15px;
+  }
+
+  .login-page > .card .grid.grid-cols-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .login-page > .card h1 {
+    font-size: 1.55rem;
+  }
+}
