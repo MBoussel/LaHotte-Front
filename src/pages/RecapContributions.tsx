@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { famillesAPI } from '../services/api';
@@ -74,7 +75,7 @@ const RecapContributions = () => {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Chargement... 🎄</div>
+        <div className="text-center inline-flex items-center gap-2"><AppIcon name="tree" size={22} /> Chargement...</div>
       </div>
     );
   }
@@ -99,7 +100,7 @@ const RecapContributions = () => {
         </button>
 
         <h1 className="text-2xl md:text-3xl font-bold text-christmas-red mb-2">
-          📊 Récapitulatif des Contributions
+          <AppIcon name="chart" size={26} /> Récapitulatif des Contributions
         </h1>
         <p className="text-sm md:text-base text-gray-600">{data.famille_nom}</p>
       </div>
@@ -142,7 +143,7 @@ const RecapContributions = () => {
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          👥 Par Membre ({data.contributions_par_membre.length})
+          <AppIcon name="members" size={17} /> Par Membre ({data.contributions_par_membre.length})
         </button>
         <button
           onClick={() => setActiveTab('cadeaux')}
@@ -152,7 +153,7 @@ const RecapContributions = () => {
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          🎁 Par Cadeau ({data.contributions_par_cadeau.length})
+          <AppIcon name="gift" size={17} /> Par Cadeau ({data.contributions_par_cadeau.length})
         </button>
       </div>
 
@@ -187,7 +188,7 @@ const RecapContributions = () => {
                       <div className="flex-1">
                         <p className="font-semibold">{contrib.cadeau_titre}</p>
                         {contrib.message && (
-                          <p className="text-gray-600 text-xs italic">💬 {contrib.message}</p>
+                          <p className="text-gray-600 text-xs italic"><AppIcon name="message" size={16} /> {contrib.message}</p>
                         )}
                         <p className="text-xs text-gray-500 mt-1">
                           {new Date(contrib.created_at).toLocaleDateString('fr-FR')}
