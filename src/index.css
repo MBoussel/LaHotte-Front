@@ -390,10 +390,12 @@ body::after {
     animation: sparkle-wander-five 17s ease-in-out infinite;
   }
 }
-.family-icon svg {
+.family-icon img {
   display: block;
-  width: 1.55em;
-  height: 1.55em;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  object-fit: contain;
 }
 @keyframes sparkle-wander-five {
   0%, 8% { opacity: 0; }
