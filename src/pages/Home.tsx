@@ -5,6 +5,11 @@ import { useAuth } from '../utils/AuthContext';
 const Home = () => {
   const { user } = useAuth();
   const [biscuitMove, setBiscuitMove] = useState(0);
+  const [santaMove, setSantaMove] = useState(0);
+  const [santaClickId, setSantaClickId] = useState(0);
+  const santaOffsets = [{x:0,y:0},{x:22,y:14},{x:-18,y:22},{x:-26,y:-12},{x:12,y:-24},{x:28,y:-8}];
+  const currentSantaOffset = santaOffsets[santaMove % santaOffsets.length];
+  const clickSanta = () => { setSantaClickId(id => id + 1); setSantaMove(move => move + 1); };
   const [biscuitClickId, setBiscuitClickId] = useState(0);
   const biscuitOffsets = [{x:-24,y:-12},{x:24,y:-18},{x:34,y:18},{x:-30,y:24},{x:8,y:-28},{x:-8,y:30}];
   const currentBiscuitOffset = biscuitOffsets[biscuitMove % biscuitOffsets.length];
@@ -69,7 +74,7 @@ const Home = () => {
                 <div><p className="text-xs text-white/70">Ensemble, c’est plus simple</p><p className="font-bold">Un Noël bien préparé</p></div><img className="prepared-christmas-icon" src="https://cdn-icons-png.flaticon.com/512/13368/13368731.png" alt="Père Noël" loading="lazy" />
               </div>
             </div>
-            <div className="floating-gift floating-gift-top"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="Père Noël" loading="lazy" /></div>
+            <div className="santa-clicker" style={{ transform: `translate(${currentSantaOffset.x}px, ${currentSantaOffset.y}px)` }}><span key={santaClickId} className="gingerbread-score-pop santa-score-pop" aria-live="polite">{santaClickId > 0 ? '+1' : ''}</span><button type="button" className="floating-gift floating-gift-top santa-launcher" onClick={clickSanta} aria-label="Cliquer sur le Père Noël pour gagner un point" title="Attrape le Père Noël !"><img src="https://cdn-icons-png.flaticon.com/512/9204/9204869.png" alt="" loading="lazy" /></button></div>
             <div className="gingerbread-clicker" style={{ transform: `translate(${currentBiscuitOffset.x}px, ${currentBiscuitOffset.y}px)` }}>
               <span key={biscuitClickId} className="gingerbread-score-pop" aria-live="polite">{biscuitClickId > 0 ? '+1' : ''}</span>
               <button type="button" className="floating-gift floating-gift-bottom gingerbread-launcher" onClick={clickBiscuit} aria-label="Cliquer sur le biscuit pour gagner un point" title="Attrape le biscuit !"><img src="https://cdn-icons-png.flaticon.com/512/8732/8732463.png" alt="" loading="lazy" /></button>
