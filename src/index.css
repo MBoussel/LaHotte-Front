@@ -460,9 +460,12 @@ body::after {
 /* Biscuit Clicker directement sur la page d'accueil */
 .gingerbread-clicker { position:absolute; left:-36px; bottom:26px; z-index:30; display:grid; justify-items:center; gap:2px; transition:transform .32s cubic-bezier(.2,.8,.2,1); }
 .gingerbread-clicker .floating-gift-bottom { position:relative; left:auto; right:auto; top:auto; bottom:auto; }
-.gingerbread-score { padding:3px 9px; border:1px solid rgba(255,231,174,.65); border-radius:999px; color:#fff8df; background:rgba(20,65,46,.9); box-shadow:0 3px 12px rgba(0,0,0,.22); font-size:11px; font-weight:900; line-height:1.2; font-variant-numeric:tabular-nums; white-space:nowrap; }
-.gingerbread-score span { color:#f4d27d; font-size:9px; }
 .gingerbread-launcher { animation:soft-float 4s ease-in-out infinite; }
 .gingerbread-launcher:active { filter:brightness(1.15); }
 @media(max-width:767px) { .gingerbread-clicker { left:auto; right:-8px; bottom:-24px; } }
 @media(prefers-reduced-motion:reduce) { .gingerbread-clicker { transition:none; } }
+
+/* +1 doré qui apparaît au clic puis s'efface */
+.gingerbread-score-pop { position:absolute; left:50%; top:-24px; z-index:35; color:#f8d778; font-family:Georgia,serif; font-size:25px; font-weight:900; line-height:1; letter-spacing:.02em; white-space:nowrap; pointer-events:none; text-shadow:0 1px 2px rgba(72,39,7,.9),0 0 8px rgba(255,218,112,.85),0 0 18px rgba(255,194,62,.65); transform:translateX(-50%); animation:gingerbread-plus-float 1.8s ease-out forwards; }
+@keyframes gingerbread-plus-float { 0% { opacity:0; transform:translate(-50%,10px) scale(.75); } 14% { opacity:1; transform:translate(-50%,0) scale(1.12); } 35% { opacity:1; transform:translate(-50%,-5px) scale(1); } 100% { opacity:0; transform:translate(-50%,-35px) scale(.92); } }
+@media(prefers-reduced-motion:reduce) { .gingerbread-score-pop { animation:none; opacity:1; } }
