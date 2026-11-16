@@ -4,7 +4,7 @@ type AppIconName =
   | 'family' | 'gift' | 'tree' | 'santa'
   | 'search' | 'members' | 'contribution' | 'cart' | 'user'
   | 'globe' | 'chart' | 'trash' | 'mail' | 'lightbulb'
-  | 'celebration' | 'message';
+  | 'celebration' | 'message' | 'crown';
 
 type SvgIconName = Exclude<AppIconName, 'family' | 'gift' | 'tree' | 'santa'>;
 
@@ -34,6 +34,7 @@ const paths: Record<SvgIconName, ReactNode> = {
   lightbulb: <><path d="M9 18h6m-5 4h4m-2-20a7 7 0 0 0-4 12.7c.6.4 1 1.2 1 2.3h6c0-1.1.4-1.9 1-2.3A7 7 0 0 0 12 2Z" /></>,
   celebration: <><path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Z" /><path d="m19 16 1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2ZM5 2l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z" /></>,
   message: <><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z" /></>,
+  crown: <><path d="m2 7 5 4 5-7 5 7 5-4-2 13H4L2 7Z" /><path d="M4 20h16" /></>,
 };
 
 export default function AppIcon({ name, size = 20, className = '' }: AppIconProps) {
