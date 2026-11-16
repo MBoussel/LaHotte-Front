@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
@@ -112,7 +113,7 @@ const FamilleDetail = () => {
   if (familleLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Chargement... 🎄</div>
+        <div className="text-center inline-flex items-center gap-2"><AppIcon name="tree" size={22} /> Chargement...</div>
       </div>
     );
   }
@@ -221,7 +222,7 @@ const FamilleDetail = () => {
                   {famille.description}
                 </p>
                 <p className="text-xs md:text-sm text-gray-500">
-                  👥 {famille.membres?.length || 0} membres
+                  <AppIcon name="members" size={16} /> {famille.membres?.length || 0} membres
                 </p>
               </>
             )}
@@ -240,7 +241,7 @@ const FamilleDetail = () => {
     onClick={() => navigate(`/familles/${familleId}/contributions-recap`)}
     className="btn-secondary w-full md:w-auto whitespace-nowrap"
   >
-    📊 Voir les contributions
+    <AppIcon name="chart" size={17} /> Voir les contributions
   </button>
 )}
         </div>
@@ -275,7 +276,7 @@ const FamilleDetail = () => {
 
 {/* Liste des cadeaux */}
 <div>
-  <h2 className="text-xl md:text-2xl font-bold mb-4">🎁 Cadeaux de la famille</h2>
+  <h2 className="text-xl md:text-2xl font-bold mb-4 inline-flex items-center gap-2"><AppIcon name="gift" size={24} /> Cadeaux de la famille</h2>
 
   {cadeaux.length === 0 ? (
     <div className="card text-center py-12">
