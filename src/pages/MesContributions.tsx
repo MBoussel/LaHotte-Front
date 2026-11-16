@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect } from 'react';
 import { contributionsAPI, cadeauxAPI } from '../services/api';
 import type { Contribution } from '../types';
@@ -111,7 +112,7 @@ const MesContributions = () => {
                     <h3 className="text-lg font-bold mb-1">{contrib.cadeau?.titre || 'Cadeau supprimé'}</h3>
                     <p className="text-2xl font-bold text-christmas-green mb-2">{contrib.montant} €</p>
                     {contrib.cadeau && <p className="text-sm text-gray-600 mb-2">Prix total du cadeau : {contrib.cadeau.prix} €</p>}
-                    {contrib.message && <p className="text-sm text-gray-700 italic mb-2">💬 "{contrib.message}"</p>}
+                    {contrib.message && <p className="text-sm text-gray-700 italic mb-2"><AppIcon name="message" size={16} /> "{contrib.message}"</p>}
                     <span className="text-xs text-gray-500">{new Date(contrib.created_at).toLocaleDateString('fr-FR')}</span>
                   </div>
                   <div className="flex gap-2">
