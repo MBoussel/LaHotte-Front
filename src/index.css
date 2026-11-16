@@ -204,6 +204,7 @@ html[data-theme='dark'] .feature-card:hover {box-shadow:0 27px 55px rgba(0,0,0,.
 
 /* Trois groupes indépendants : chaque groupe s'efface puis réapparaît ailleurs. */
 body::before,
+body::after,
 #root::before,
 #root::after {
   content: "";
@@ -280,6 +281,37 @@ body::before {
   }
   100% { opacity: 0; }
 }
+/* Quatrième groupe indépendant d'étoiles scintillantes */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .9;
+  background-repeat: no-repeat;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23fff1be' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffcd70' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' d='M50 0 L58 35 L93.3 25 L65 50 L93.3 75 L58 65 L50 100 L42 65 L6.7 75 L35 50 L6.7 25 L42 35 Z'/%3E%3C/svg%3E");
+  background-size: 15px 15px, 11px 11px, 13px 13px, 10px 10px;
+  background-position: 5% 45%, 36% 70%, 73% 34%, 96% 82%;
+  filter: drop-shadow(0 0 6px rgba(255,235,180,.95)) drop-shadow(0 0 15px rgba(255,205,112,.8));
+  animation: sparkle-wander-four 15s ease-in-out -7s infinite;
+}
+@keyframes sparkle-wander-four {
+  0%, 6% { opacity: 0; }
+  13%, 40% { opacity: .95; background-position: 5% 45%, 36% 70%, 73% 34%, 96% 82%; }
+  47%, 58% { opacity: 0; }
+  66%, 93% {
+    opacity: .98;
+    background-position: 22% 14%, 58% 91%, 87% 61%, 41% 38%;
+    filter: brightness(1.7) drop-shadow(0 0 9px rgba(255,245,205,1)) drop-shadow(0 0 20px rgba(255,205,112,.95));
+  }
+  100% { opacity: 0; }
+}
+
 .btn-primary, .btn-secondary, .hero-primary {
   position: relative;
   isolation: isolate;
@@ -328,7 +360,7 @@ body::before {
   92%, 100% { left: 130%; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body::before, #root::before, #root::after,
+  body::before, body::after, #root::before, #root::after,
   .btn-primary::before, .btn-secondary::before, .hero-primary::before,
   .btn-primary::after, .btn-secondary::after, .hero-primary::after {
     animation: none !important;
