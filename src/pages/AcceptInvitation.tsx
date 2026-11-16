@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { famillesAPI } from '../services/api';
@@ -48,7 +49,7 @@ const AcceptInvitation = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="card max-w-md w-full text-center">
-          <div className="text-6xl mb-4">🎄</div>
+          <div className="mb-4 flex justify-center"><AppIcon name="tree" size={64} /></div>
           <h1 className="text-2xl font-bold text-christmas-red mb-4">
             Invitation à rejoindre une famille
           </h1>
@@ -100,7 +101,7 @@ const AcceptInvitation = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="card max-w-md w-full text-center">
-          <div className="text-6xl mb-4 animate-bounce">🎁</div>
+          <div className="mb-4 flex justify-center animate-bounce"><AppIcon name="gift" size={64} /></div>
           <h1 className="text-2xl font-bold text-christmas-red mb-4">
             Acceptation en cours...
           </h1>
@@ -114,7 +115,7 @@ const AcceptInvitation = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="card max-w-md w-full text-center">
-        <div className="text-6xl mb-4">🎉</div>
+        <div className="mb-4 flex justify-center"><AppIcon name="celebration" size={64} /></div>
         <h1 className="text-2xl font-bold text-christmas-green mb-4">
           Bienvenue dans {familleNom} !
         </h1>
