@@ -30,7 +30,7 @@ const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="text-xl md:text-2xl font-bold flex items-center gap-2" onClick={closeMenu}>
-            <img src="https://cdn-icons-png.flaticon.com/512/6454/6454563.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
+            <img src="https://cdn-icons-png.flaticon.com/512/2276/2276457.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
             <span>Liste de Noël</span>
           </Link>
 
