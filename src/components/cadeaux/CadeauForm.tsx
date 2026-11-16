@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { useState, type FormEvent } from 'react';
 import type { Famille } from '../../types';
 
@@ -131,7 +132,7 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
       {/* Sélection des bénéficiaires */}
       <div>
         <label className="block text-sm font-medium mb-2">
-          👥 Bénéficiaires (optionnel)
+          <AppIcon name="members" size={18} /> Bénéficiaires (optionnel)
         </label>
         <p className="text-xs text-gray-600 mb-2">
           Si ce cadeau est pour plusieurs personnes (ex: toi et ton/ta partenaire)
