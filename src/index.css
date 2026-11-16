@@ -562,3 +562,33 @@ body::after {
     animation: family-biscuit-float 3.8s ease-in-out infinite;
   }
 }
+
+
+/* Traînée d'étoiles dorées qui accompagne le curseur sur ordinateur */
+.cursor-star-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  pointer-events: none;
+}
+.cursor-trail-star {
+  position: absolute;
+  display: block;
+  color: #ffe7a0;
+  line-height: 1;
+  font-family: Georgia, serif;
+  text-shadow: 0 0 4px rgba(255,255,255,.95), 0 0 9px rgba(255,211,111,.95), 0 0 17px rgba(255,184,65,.65);
+  transform: translate(-50%, -50%) rotate(var(--star-rotate)) scale(.35);
+  opacity: 0;
+  animation: cursor-star-fade var(--star-life) ease-out forwards;
+  will-change: transform, opacity;
+}
+@keyframes cursor-star-fade {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--star-rotate)) scale(.25); }
+  18% { opacity: 1; transform: translate(-50%, -60%) rotate(calc(var(--star-rotate) + 20deg)) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -115%) rotate(calc(var(--star-rotate) + 75deg)) scale(.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-star-trail { display: none !important; }
+}
