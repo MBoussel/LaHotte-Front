@@ -966,3 +966,57 @@ body::after {
     font-size: 1.55rem;
   }
 }
+
+
+/* Téléphone : page plein écran, formulaire centré et personnages en diagonale */
+@media (max-width: 767px) {
+  .login-page {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(68px, calc(env(safe-area-inset-top) + 58px)) 14px
+      max(68px, calc(env(safe-area-inset-bottom) + 58px));
+    overflow-x: hidden;
+  }
+
+  .login-page > .card {
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
+  }
+
+  .login-floating-decor {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .login-character {
+    position: absolute;
+    top: auto;
+    bottom: auto;
+  }
+
+  .login-santa {
+    top: max(12px, env(safe-area-inset-top));
+    right: auto;
+    bottom: auto;
+    left: max(12px, env(safe-area-inset-left));
+  }
+
+  .login-biscuit {
+    top: auto;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: auto;
+  }
+
+  .login-character-button {
+    width: 46px;
+    height: 46px;
+    padding: 5px;
+    border-radius: 15px;
+  }
+}
