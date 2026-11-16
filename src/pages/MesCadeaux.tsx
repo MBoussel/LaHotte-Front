@@ -1,3 +1,4 @@
+import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { cadeauxAPI } from '../services/api';
 import type { Cadeau } from '../types';
@@ -74,7 +75,7 @@ const MesCadeaux = () => {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Chargement... 🎄</div>
+        <div className="text-center inline-flex items-center gap-2"><AppIcon name="tree" size={22} /> Chargement...</div>
       </div>
     );
   }
@@ -84,7 +85,7 @@ const MesCadeaux = () => {
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-christmas-red mb-2">
-          🎁 Mes Cadeaux
+          <AppIcon name="gift" size={28} /> Mes Cadeaux
         </h1>
         <p className="text-sm md:text-base text-gray-600">
           Gérez tous vos cadeaux
@@ -219,7 +220,7 @@ const MesCadeaux = () => {
                           rel="noopener noreferrer"
                           className="text-blue-500 hover:underline text-sm break-all"
                         >
-                          🛒 Voir le produit →
+                          <AppIcon name="cart" size={17} /> Voir le produit →
                         </a>
                       )}
                       <div className="text-xs md:text-sm text-gray-500 mt-2">
@@ -229,7 +230,7 @@ const MesCadeaux = () => {
                       {/* Info : Contributions cachées */}
                       <div className="mt-3 p-2 md:p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p className="text-xs md:text-sm text-blue-800">
-                          🎁 <strong>Les contributions sont cachées</strong> pour que ce soit une
+                          <AppIcon name="gift" size={17} /> <strong>Les contributions sont cachées</strong> pour que ce soit une
                           surprise ! Les membres de votre famille peuvent contribuer sans que vous le
                           sachiez.
                         </p>
@@ -248,7 +249,7 @@ const MesCadeaux = () => {
                         onClick={() => handleDelete(cadeau.id)}
                         className="flex-1 md:flex-initial bg-red-500 hover:bg-red-600 text-white px-3 md:px-4 py-2 rounded-lg transition text-sm md:text-base whitespace-nowrap"
                       >
-                        🗑️ Supprimer
+                        <AppIcon name="trash" size={17} /> Supprimer
                       </button>
                     </div>
                   </div>
