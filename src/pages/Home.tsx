@@ -97,7 +97,7 @@ const Home = () => {
         </div>
       </section>
 
-      {!user && <section className="home-cta-wrap px-5 py-20 sm:px-8"><div className="home-cta mx-auto max-w-5xl rounded-[2rem] px-6 py-12 text-center sm:px-12"><span className="text-4xl">✨</span><h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">Et si cette année, on préparait Noël ensemble ?</h2><p className="mx-auto mt-4 max-w-2xl leading-7">Créez votre espace gratuitement et partagez la magie avec ceux qui comptent.</p><Link to="/register" className="hero-primary mt-8 inline-flex rounded-2xl px-7 py-4 font-extrabold">Créer mon compte <span className="ml-2">→</span></Link></div></section>}
+      {!user && <section className="home-cta-wrap px-5 py-20 sm:px-8"><div className="home-cta mx-auto max-w-5xl rounded-[2rem] px-6 py-12 text-center sm:px-12"><img src="https://cdn-icons-png.flaticon.com/512/3912/3912870.png" alt="Boule à neige" loading="lazy" className="mx-auto h-14 w-14 object-contain drop-shadow-lg" /><h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">Et si cette année, on préparait Noël ensemble ?</h2><p className="mx-auto mt-4 max-w-2xl leading-7">Créez votre espace gratuitement et partagez la magie avec ceux qui comptent.</p><Link to="/register" className="hero-primary mt-8 inline-flex rounded-2xl px-7 py-4 font-extrabold">Créer mon compte <span className="ml-2">→</span></Link></div></section>}
 
       <footer className="home-footer px-5 py-10 text-center"><p className="font-serif text-2xl font-bold">🎄 LaHotte</p><p className="mt-2 text-sm">La magie de Noël se partage.</p><p className="mt-5 text-xs opacity-50">© 2026 LaHotte · Tous droits réservés</p></footer>
     </main>
