@@ -1,3 +1,4 @@
+import AppIcon from '../ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { contributionsAPI } from '../../services/api';
 import type { ContributionWithUser } from '../../types';
@@ -42,7 +43,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
       setFormData({ montant: '', message: '' });
       if (showDetails) loadContributions();
       onSuccess();
-      alert('Merci pour votre contribution ! 🎁');
+      alert('Merci pour votre contribution !');
       onClose();
     } catch (error: any) {
       alert(error.response?.data?.detail || 'Erreur lors de la contribution');
@@ -101,7 +102,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
               {contributions.map((contrib) => (
                 <div key={contrib.id} className="bg-gray-50 p-3 rounded-lg">
                   <div className="flex justify-between items-start mb-1">
-                    <span className="font-semibold">👤 {contrib.contributeur}</span>
+                    <span className="font-semibold inline-flex items-center gap-1"><AppIcon name="user" size={16} /> {contrib.contributeur}</span>
                     <span className="text-christmas-green font-bold">{contrib.montant.toFixed(2)} €</span>
                   </div>
                   {contrib.message && <p className="text-sm text-gray-600 italic">"{contrib.message}"</p>}
