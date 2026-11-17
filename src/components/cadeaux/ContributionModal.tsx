@@ -21,6 +21,15 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
     if (showDetails) loadContributions();
   }, [cadeauId, showDetails]);
 
+  // Fermer la fenêtre avec la touche Échap, sans effectuer de contribution.
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !loading) onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, loading]);
+
   const loadContributions = async () => {
     try {
       const response = await contributionsAPI.getForCadeau(cadeauId);
@@ -57,11 +66,14 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="card max-w-2xl w-full my-8">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto"
+      onMouseDown={(event) => { if (event.target === event.currentTarget && !loading) onClose(); }}
+    >
+      <div className="card max-w-2xl w-full my-8" onMouseDown={(event) => event.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Contribuer à : {cadeauTitre}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+          <button type="button" onClick={onClose} aria-label="Fermer sans contribuer" className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
         </div>
 
         {showDetails && (
