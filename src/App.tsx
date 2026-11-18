@@ -18,8 +18,10 @@ import Profil from './pages/Profil';
 type Theme = 'light' | 'dark';
 
 
-function CursorStarTrail() {
+function CursorStarTrail({ enabled }: { enabled: boolean }) {
   useEffect(() => {
+    if (!enabled) return;
+
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (!finePointer.matches || reducedMotion.matches) return;
@@ -66,7 +68,7 @@ function CursorStarTrail() {
       window.removeEventListener('pointermove', handlePointerMove);
       layer.remove();
     };
-  }, []);
+  }, [enabled]);
 
   return null;
 }
@@ -78,9 +80,17 @@ function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
+  const [effectsEnabled, setEffectsEnabled] = useState<boolean>(() =>
+    window.localStorage.getItem('lahotte-effects') !== 'off'
+  );
+
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.dataset.effects = effectsEnabled ? 'on' : 'off';
+  }, [effectsEnabled]);
 
   useEffect(() => {
     if (window.localStorage.getItem('lahotte-theme')) return;
@@ -89,6 +99,12 @@ function App() {
     media.addEventListener('change', syncWithSystem);
     return () => media.removeEventListener('change', syncWithSystem);
   }, []);
+
+  const toggleEffects = () => setEffectsEnabled((current) => {
+    const next = !current;
+    window.localStorage.setItem('lahotte-effects', next ? 'on' : 'off');
+    return next;
+  });
 
   const toggleTheme = () => setTheme((current) => {
     const next = current === 'light' ? 'dark' : 'light';
@@ -100,8 +116,8 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <div className="app-shell min-h-screen bg-gray-50">
-          <CursorStarTrail />
-          <Navbar theme={theme} onToggleTheme={toggleTheme} />
+          <CursorStarTrail enabled={effectsEnabled} />
+          <Navbar theme={theme} onToggleTheme={toggleTheme} effectsEnabled={effectsEnabled} onToggleEffects={toggleEffects} />
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<Home />} />
