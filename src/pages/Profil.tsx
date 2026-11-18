@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../utils/AuthContext';
 import { authAPI } from '../services/api';
 
-const Profil = () => {
+type ProfilProps = { effectsEnabled: boolean; onToggleEffects: () => void; };
+
+const Profil = ({ effectsEnabled, onToggleEffects }: ProfilProps) => {
   const { user, setUser } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -160,6 +162,31 @@ const Profil = () => {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+
+      {/* Carte Préférences */}
+      <div className="card mb-6">
+        <h2 className="text-xl font-bold mb-2">Préférences d'affichage</h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Personnalisez les animations et les petits effets visuels de LaHotte sur cet appareil.
+        </p>
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="font-semibold">Effets visuels</p>
+            <p className="text-sm text-gray-500">
+              {effectsEnabled ? 'Les effets sont activés' : 'Les effets sont désactivés'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onToggleEffects}
+            aria-pressed={effectsEnabled}
+            className="btn-primary shrink-0"
+          >
+            {effectsEnabled ? 'Désactiver' : 'Activer'}
+          </button>
         </div>
       </div>
 
