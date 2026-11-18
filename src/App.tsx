@@ -117,7 +117,7 @@ function App() {
       <BrowserRouter>
         <div className="app-shell min-h-screen bg-gray-50">
           <CursorStarTrail enabled={effectsEnabled} />
-          <Navbar theme={theme} onToggleTheme={toggleTheme} effectsEnabled={effectsEnabled} onToggleEffects={toggleEffects} />
+          <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <Routes>
             {/* Routes publiques */}
             <Route path="/" element={<Home />} />
@@ -162,7 +162,7 @@ function App() {
   path="/profil"
   element={
     <ProtectedRoute>
-      <Profil/>
+      <Profil effectsEnabled={effectsEnabled} onToggleEffects={toggleEffects} />
     </ProtectedRoute>
   }
 />
