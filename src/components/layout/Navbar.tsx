@@ -4,7 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext';
 import PendingInvitations from '../familles/PendingInvitations';
 
-type NavbarProps = { theme: 'light' | 'dark'; onToggleTheme: () => void };
+type NavbarProps = {
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
+};
 
 const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
   const { user, logout } = useAuth();
