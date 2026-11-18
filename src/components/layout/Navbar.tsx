@@ -80,10 +80,6 @@ const Navbar = ({ theme, onToggleTheme, effectsEnabled, onToggleEffects }: Navba
               <span aria-hidden="true">✨</span>
               <span>Effets {effectsEnabled ? 'activés' : 'désactivés'}</span>
             </button>
-            <button type="button" onClick={onToggleEffects} aria-pressed={effectsEnabled} className="theme-switch mx-2 mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white">
-              <span aria-hidden="true">✨</span>
-              {effectsEnabled ? 'Désactiver les effets' : 'Activer les effets'}
-            </button>
             {user ? (
               <>
                 <Link to="/familles" className="hover:text-christmas-gold transition">
@@ -134,6 +130,10 @@ const Navbar = ({ theme, onToggleTheme, effectsEnabled, onToggleEffects }: Navba
             <button type="button" onClick={onToggleTheme} className="theme-switch mx-2 mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white">
               <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
               {theme === 'light' ? 'Passer en mode sombre' : 'Passer en mode clair'}
+            </button>
+            <button type="button" onClick={onToggleEffects} aria-pressed={effectsEnabled} className="theme-switch mx-2 mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white">
+              <span aria-hidden="true">✨</span>
+              {effectsEnabled ? 'Désactiver les effets' : 'Activer les effets'}
             </button>
             {user ? (
               <div className="flex flex-col space-y-3">
