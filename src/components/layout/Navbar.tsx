@@ -7,11 +7,9 @@ import PendingInvitations from '../familles/PendingInvitations';
 type NavbarProps = {
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
-  effectsEnabled: boolean;
-  onToggleEffects: () => void;
 };
 
-const Navbar = ({ theme, onToggleTheme, effectsEnabled, onToggleEffects }: NavbarProps) => {
+const Navbar = ({ theme, onToggleTheme }: NavbarProps) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,10 +74,6 @@ const Navbar = ({ theme, onToggleTheme, effectsEnabled, onToggleEffects }: Navba
               <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
               <span>{theme === 'light' ? 'Sombre' : 'Clair'}</span>
             </button>
-            <button type="button" onClick={onToggleEffects} aria-pressed={effectsEnabled} aria-label={effectsEnabled ? 'Désactiver les effets visuels' : 'Activer les effets visuels'} className="theme-switch inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
-              <span aria-hidden="true">✨</span>
-              <span>Effets {effectsEnabled ? 'activés' : 'désactivés'}</span>
-            </button>
             {user ? (
               <>
                 <Link to="/familles" className="hover:text-christmas-gold transition">
@@ -130,10 +124,6 @@ const Navbar = ({ theme, onToggleTheme, effectsEnabled, onToggleEffects }: Navba
             <button type="button" onClick={onToggleTheme} className="theme-switch mx-2 mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white">
               <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
               {theme === 'light' ? 'Passer en mode sombre' : 'Passer en mode clair'}
-            </button>
-            <button type="button" onClick={onToggleEffects} aria-pressed={effectsEnabled} className="theme-switch mx-2 mb-3 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-2 text-sm font-semibold text-white">
-              <span aria-hidden="true">✨</span>
-              {effectsEnabled ? 'Désactiver les effets' : 'Activer les effets'}
             </button>
             {user ? (
               <div className="flex flex-col space-y-3">
