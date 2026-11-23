@@ -170,7 +170,8 @@ const FamilleDetail = () => {
     ...(famille.membres || [])
       .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id && !cadeau.beneficiaire_profil_id) }))
       .filter((groupe) => groupe.cadeaux.length > 0),
-    ...beneficiaires.map((profil) => ({ id: 'beneficiaire-' + profil.id, nom: profil.nom, ownerId: null as number | null, beneficiaireId: profil.id, cadeaux: cadeaux.filter((cadeau) => cadeau.beneficiaire_profil_id === profil.id) })),
+    ...beneficiaires.map((profil) => ({ id: 'beneficiaire-' + profil.id, nom: profil.nom, ownerId: null as number | null, beneficiaireId: profil.id, cadeaux: cadeaux.filter((cadeau) => cadeau.beneficiaire_profil_id === profil.id) }))
+      .filter((groupe) => groupe.cadeaux.length > 0),
   ];
 
   const handleSetNoelType = async (event: ChangeEvent<HTMLSelectElement>) => {
@@ -263,7 +264,7 @@ const FamilleDetail = () => {
                   {famille.description}
                 </p>
                 <p className="text-xs md:text-sm text-gray-500">
-                  <AppIcon name="members" size={16} /> {famille.membres?.length || 0} membres
+                  <AppIcon name="members" size={16} /> {(famille.membres?.length || 0) + beneficiaires.length} membres
                 </p>
               </>
             )}
@@ -312,6 +313,7 @@ const FamilleDetail = () => {
       {/* Membres */}
       <MembresSection
         membres={famille.membres}
+        beneficiaires={beneficiaires}
         pereNoelId={famille.pere_noel_id}
         noelType={famille.noel_type}
         currentUserId={user?.id}
@@ -341,7 +343,7 @@ const FamilleDetail = () => {
     </div>
   </div>
 
-  {(cadeaux.length === 0 && (viewMode === 'tous' || beneficiaires.length === 0)) ? (
+  {cadeaux.length === 0 ? (
     <div className="card text-center py-12">
       <p className="text-lg md:text-xl text-gray-600 mb-4">
         Aucun cadeau pour l'instant

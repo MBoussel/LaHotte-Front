@@ -1,15 +1,16 @@
 import AppIcon from '../ui/AppIcon';
 import { useState, useEffect } from 'react';
-import type { Membre } from '../../types';
+import type { BeneficiaireProfil, Membre } from '../../types';
 
 interface MembresSectionProps {
   membres?: Membre[];
+  beneficiaires?: BeneficiaireProfil[];
   pereNoelId?: number | null;
   noelType?: 'pere_noel' | 'mere_noel';
   currentUserId?: number;
 }
 
-const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', currentUserId }: MembresSectionProps) => {
+const MembresSection = ({ membres = [], beneficiaires = [], pereNoelId, noelType = 'pere_noel', currentUserId }: MembresSectionProps) => {
   const noelLabel = noelType === 'mere_noel' ? 'Mère Noël' : 'Père Noël';
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -26,13 +27,18 @@ const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', curr
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
   
-  if (!membres || membres.length === 0) {
+  const personnes = [
+    ...membres.map((membre) => ({ key: `membre-${membre.id}`, nom: membre.username, email: membre.email, avatar_url: membre.avatar_url, membreId: membre.id, sansCompte: false })),
+    ...beneficiaires.map((profil) => ({ key: `beneficiaire-${profil.id}`, nom: profil.nom, email: '', avatar_url: undefined, membreId: null, sansCompte: true })),
+  ];
+
+  if (personnes.length === 0) {
     return null;
   }
 
   const defaultCount = isMobile ? 2 : 3;
-  const displayedMembres = isExpanded ? membres : membres.slice(0, defaultCount);
-  const hasMore = membres.length > defaultCount;
+  const displayedMembres = isExpanded ? personnes : personnes.slice(0, defaultCount);
+  const hasMore = personnes.length > defaultCount;
 
   return (
     <div className="mb-6">
@@ -42,19 +48,19 @@ const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', curr
           <p className="text-sm mt-1">Tu peux suivre les contributions aux cadeaux des autres membres.</p>
         </div>
       )}
-      <h2 className="text-xl md:text-2xl font-bold mb-4 inline-flex items-center gap-2"><AppIcon name="members" size={24} /> Membres ({membres.length})</h2>
+      <h2 className="text-xl md:text-2xl font-bold mb-4 inline-flex items-center gap-2"><AppIcon name="members" size={24} /> Membres ({personnes.length})</h2>
       
       <div className="card">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {displayedMembres.map((membre) => (
             <div
-              key={membre.id}
+              key={membre.key}
               className="flex items-center gap-2 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition"
             >
               {membre.avatar_url ? (
                 <img
                   src={membre.avatar_url}
-                  alt={membre.username}
+                  alt={membre.nom}
                   className="w-10 h-10 rounded-full object-cover flex-shrink-0 border-2 border-christmas-red"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -69,17 +75,18 @@ const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', curr
                   membre.avatar_url ? 'hidden' : ''
                 }`}
               >
-                {membre.username.charAt(0).toUpperCase()}
+                {membre.nom.charAt(0).toUpperCase()}
               </div>
               
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-1">
-                  <p className="font-semibold text-sm truncate">{membre.username}</p>
-                  {pereNoelId != null && membre.id === pereNoelId && (
+                  <p className="font-semibold text-sm truncate">{membre.nom}</p>
+                  {membre.sansCompte && <span className="text-[10px] font-semibold rounded-full bg-gray-200 text-gray-600 px-2 py-0.5">Sans compte</span>}
+                  {pereNoelId != null && membre.membreId === pereNoelId && (
                     <span className="text-[10px] font-bold rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">{noelLabel}</span>
                   )}
                 </div>
-                <p className="text-xs text-gray-600 truncate">{membre.email}</p>
+                <p className="text-xs text-gray-600 truncate">{membre.email || (membre.sansCompte ? 'Profil bénéficiaire' : '')}</p>
               </div>
             </div>
           ))}
@@ -93,7 +100,7 @@ const MembresSection = ({ membres = [], pereNoelId, noelType = 'pere_noel', curr
             {isExpanded ? (
               <>↑ Voir moins</>
             ) : (
-              <>↓ Voir tous les membres ({membres.length - defaultCount} de plus)</>
+              <>↓ Voir tous les membres ({personnes.length - defaultCount} de plus)</>
             )}
           </button>
         )}
