@@ -329,7 +329,7 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <div className={detailCadeau ? "grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] gap-4 lg:gap-6 items-start" : "grid grid-cols-1 gap-4"}>
-      <div className="space-y-4">
+      <div className={`grid ${detailCadeau ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'} gap-4 content-start`}>
         {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }) => (
           <section key={membre.id} className="card">
             <div className="flex items-center justify-between gap-3 mb-3">
