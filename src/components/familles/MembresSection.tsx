@@ -8,9 +8,11 @@ interface MembresSectionProps {
   pereNoelId?: number | null;
   noelType?: 'pere_noel' | 'mere_noel';
   currentUserId?: number;
+  onUploadBeneficiaire?: (beneficiaireId: number, file: File) => Promise<void>;
+  uploadingBeneficiaireId?: number | null;
 }
 
-const MembresSection = ({ membres = [], beneficiaires = [], pereNoelId, noelType = 'pere_noel', currentUserId }: MembresSectionProps) => {
+const MembresSection = ({ membres = [], beneficiaires = [], pereNoelId, noelType = 'pere_noel', currentUserId, onUploadBeneficiaire, uploadingBeneficiaireId }: MembresSectionProps) => {
   const noelLabel = noelType === 'mere_noel' ? 'Mère Noël' : 'Père Noël';
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -28,8 +30,8 @@ const MembresSection = ({ membres = [], beneficiaires = [], pereNoelId, noelType
   }, []);
   
   const personnes = [
-    ...membres.map((membre) => ({ key: `membre-${membre.id}`, nom: membre.username, email: membre.email, avatar_url: membre.avatar_url, membreId: membre.id, sansCompte: false })),
-    ...beneficiaires.map((profil) => ({ key: `beneficiaire-${profil.id}`, nom: profil.nom, email: '', avatar_url: undefined, membreId: null, sansCompte: true })),
+    ...membres.map((membre) => ({ key: `membre-${membre.id}`, nom: membre.username, email: membre.email, avatar_url: membre.avatar_url, membreId: membre.id, beneficiaireId: null, canManagePhoto: false, sansCompte: false })),
+    ...beneficiaires.map((profil) => ({ key: `beneficiaire-${profil.id}`, nom: profil.nom, email: '', avatar_url: profil.avatar_url || undefined, membreId: null, beneficiaireId: profil.id, canManagePhoto: profil.responsables.some((responsable) => responsable.id === currentUserId), sansCompte: true })),
   ];
 
   if (personnes.length === 0) {
@@ -87,6 +89,22 @@ const MembresSection = ({ membres = [], beneficiaires = [], pereNoelId, noelType
                   )}
                 </div>
                 <p className="text-xs text-gray-600 truncate">{membre.email || (membre.sansCompte ? 'Profil bénéficiaire' : '')}</p>
+                {membre.sansCompte && membre.canManagePhoto && membre.beneficiaireId != null && onUploadBeneficiaire && (
+                  <label className="inline-flex mt-1 text-xs font-semibold text-christmas-red hover:underline cursor-pointer">
+                    {uploadingBeneficiaireId === membre.beneficiaireId ? 'Envoi…' : membre.avatar_url ? 'Changer la photo' : 'Ajouter une photo'}
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      className="sr-only"
+                      disabled={uploadingBeneficiaireId === membre.beneficiaireId}
+                      onChange={async (event) => {
+                        const file = event.target.files?.[0];
+                        event.target.value = '';
+                        if (file) await onUploadBeneficiaire(membre.beneficiaireId!, file);
+                      }}
+                    />
+                  </label>
+                )}
               </div>
             </div>
           ))}
