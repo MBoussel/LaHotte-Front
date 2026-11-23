@@ -4,13 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { useFamille } from '../hooks/useFamille';
 import { useCadeaux } from '../hooks/useCadeaux';
-import { famillesAPI } from '../services/api';
+import { famillesAPI, beneficiairesAPI } from '../services/api';
 import Invitations from '../components/familles/Invitations';
 import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
 import CadeauForm, { type CadeauFormData } from '../components/cadeaux/CadeauForm';
 import ContributionModal from '../components/cadeaux/ContributionModal';
-import type { Cadeau } from '../types';
+import type { BeneficiaireProfil, Cadeau } from '../types';
 import DemandesAdhesion from '../components/familles/DemandesAdhesion';
 
 const FamilleDetail = () => {
@@ -30,6 +30,10 @@ const FamilleDetail = () => {
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
+  const [beneficiaires, setBeneficiaires] = useState<BeneficiaireProfil[]>([]);
+  const [showBeneficiaireModal, setShowBeneficiaireModal] = useState(false);
+  const [beneficiaireNom, setBeneficiaireNom] = useState('');
+  const [responsableIds, setResponsableIds] = useState<number[]>(user?.id ? [user.id] : []);
   const [viewMode, setViewMode] = useState<'personne' | 'tous'>('personne');
   const [detailCadeau, setDetailCadeau] = useState<Cadeau | null>(null);
   const [noelType, setNoelType] = useState<"pere_noel" | "mere_noel">("pere_noel");
@@ -71,6 +75,19 @@ const FamilleDetail = () => {
   useEffect(() => {
     if (famille?.noel_type) setNoelType(famille.noel_type);
   }, [famille?.noel_type]);
+
+  useEffect(() => {
+    if (!familleId) return;
+    beneficiairesAPI.getByFamille(familleId)
+      .then((response) => setBeneficiaires(response.data))
+      .catch((error) => console.error('Erreur chargement bénéficiaires:', error));
+  }, [familleId]);
+
+  useEffect(() => {
+    if (user?.id && !responsableIds.includes(user.id)) {
+      setResponsableIds((ids) => [...ids, user.id]);
+    }
+  }, [user?.id]);
   const [selectedCadeau, setSelectedCadeau] = useState<{
     id: number;
     titre: string;
@@ -85,6 +102,21 @@ const FamilleDetail = () => {
   const handleCreateCadeau = async (data: CadeauFormData) => {
     await createCadeau(data);
     setShowCadeauModal(false);
+  };
+
+  const handleCreateBeneficiaire = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!familleId || !beneficiaireNom.trim()) return;
+    try {
+      await beneficiairesAPI.create(familleId, { nom: beneficiaireNom.trim(), responsable_ids: responsableIds });
+      const response = await beneficiairesAPI.getByFamille(familleId);
+      setBeneficiaires(response.data);
+      setBeneficiaireNom('');
+      setResponsableIds(user?.id ? [user.id] : []);
+      setShowBeneficiaireModal(false);
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Impossible de créer le bénéficiaire');
+    }
   };
 
   const handleEditFamille = () => {
@@ -134,9 +166,12 @@ const FamilleDetail = () => {
   const isPereNoel = user?.id === famille.pere_noel_id;
   const canSeeRecap = isPereNoel || (isCreator && famille.pere_noel_id != null);
   const canManagePereNoel = isCreator;
-  const cadeauxParMembre = (famille.membres || [])
-    .map((membre) => ({ membre, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id) }))
-    .filter((groupe) => groupe.cadeaux.length > 0);
+  const groupesCadeaux = [
+    ...(famille.membres || [])
+      .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id && !cadeau.beneficiaire_profil_id) }))
+      .filter((groupe) => groupe.cadeaux.length > 0),
+    ...beneficiaires.map((profil) => ({ id: 'beneficiaire-' + profil.id, nom: profil.nom, ownerId: null as number | null, beneficiaireId: profil.id, cadeaux: cadeaux.filter((cadeau) => cadeau.beneficiaire_profil_id === profil.id) })),
+  ];
 
   const handleSetNoelType = async (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedType = event.target.value as "pere_noel" | "mere_noel";
