@@ -334,35 +334,43 @@ const FamilleDetail = () => {
 
         return (
           <div key={membre.id} className="relative">
-            <section className="card h-full relative overflow-hidden border border-amber-200/80 bg-gradient-to-br from-white via-amber-50/40 to-white shadow-sm">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-christmas-green via-amber-400 to-christmas-red" />
-              <div className="rounded-xl border border-amber-100 bg-amber-50/70 px-3 py-3 mb-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span aria-hidden="true" className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white border border-amber-200 text-christmas-green text-lg">✦</span>
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-bold text-gray-800 truncate">{membre.username}</h3>
-                      <p className="text-xs text-gray-500">Sa liste de Noël</p>
-                    </div>
+            <section className="card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm">
+              <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
+                <div className="flex items-center gap-3 min-w-0">
+                  {membre.avatar_url ? (
+                    <img
+                      src={membre.avatar_url}
+                      alt={`Photo de profil de ${membre.username}`}
+                      className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-amber-300"
+                      onError={(event) => {
+                        event.currentTarget.style.display = 'none';
+                        const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
+                        fallback?.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${membre.avatar_url ? 'hidden' : ''}`}>
+                    {membre.username.charAt(0).toUpperCase()}
                   </div>
-                  <span className="flex-shrink-0 rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-semibold text-christmas-green shadow-sm">
-                    {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
-                  </span>
+                  <h3 className="text-lg font-bold text-gray-900 truncate">{membre.username}</h3>
                 </div>
+                <span className="flex-shrink-0 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950">
+                  {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
+                </span>
               </div>
-              <div className="rounded-xl border border-gray-100 bg-white/80 p-2">
-                <div className="divide-y divide-gray-100">
+              <div className="rounded-xl border border-amber-200 bg-white p-2">
+                <div className="divide-y divide-gray-200">
                   {cadeauxMembre.map((cadeau) => (
                     <button
                       key={cadeau.id}
                       type="button"
                       onClick={() => setDetailCadeau(cadeau)}
                       aria-pressed={detailCadeau?.id === cadeau.id}
-                      className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-amber-50/60'}`}
+                      className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
                     >
-                      <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-700">{cadeau.titre}</span>
+                      <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}</span>
                       <span className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
+                        <span className="text-sm font-semibold text-red-800">{cadeau.prix} €</span>
                         <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
                       </span>
                     </button>
