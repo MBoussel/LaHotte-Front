@@ -388,17 +388,17 @@ const FamilleDetail = () => {
       ))}
     </div>
   ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
-      {groupesCadeaux.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }, index) => {
-        const detailPositionClass = `left-full ml-4 ${index % 2 === 1 ? 'sm:left-auto sm:right-full sm:mr-4 sm:ml-0' : ''} ${index % 3 === 2 ? 'lg:left-auto lg:right-full lg:mr-4 lg:ml-0' : 'lg:left-full lg:right-auto lg:ml-4 lg:mr-0'}`;
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 auto-rows-fr gap-4 content-start">
+      {groupesCadeaux.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }) => {
+        const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id);
 
         return (
-          <div key={groupeId} className="relative">
+          <div key={groupeId} className={`relative ${isExpanded ? 'lg:col-span-2' : ''}`}>
             {(() => {
               const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
               const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
               return (
-            <section className="card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm">
+            <section className={`card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm ${isExpanded ? 'lg:w-[calc(50%-0.5rem)]' : ''}`}>
               <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
                 <div className="flex items-center gap-3 min-w-0">
                   {avatarUrl ? (
@@ -449,8 +449,8 @@ const FamilleDetail = () => {
               );
             })()}
 
-            {((beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id)) && (
-              <div className={`hidden lg:block absolute z-30 top-0 w-full ${detailPositionClass}`}>
+            {isExpanded && detailCadeau && (
+              <div className="hidden lg:block absolute right-0 top-0 w-1/2 pl-4">
                 <div className="flex justify-end mb-2">
                   <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
                     Fermer <span aria-hidden="true" className="text-base">×</span>
