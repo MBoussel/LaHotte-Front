@@ -380,6 +380,7 @@ const FamilleDetail = () => {
           </div>
         );
       })}
+    </div>
   )}
 
   {viewMode === 'personne' && detailCadeau && (
