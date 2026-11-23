@@ -343,7 +343,7 @@ const FamilleDetail = () => {
     </div>
   </div>
 
-  {(cadeaux.length === 0 && (viewMode === 'tous' || beneficiaires.length === 0)) ? (
+  {cadeaux.length === 0 ? (
     <div className="card text-center py-12">
       <p className="text-lg md:text-xl text-gray-600 mb-4">
         Aucun cadeau pour l'instant
