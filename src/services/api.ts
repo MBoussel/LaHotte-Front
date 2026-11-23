@@ -87,8 +87,15 @@ export const authAPI = {
   
   getMe: () => api.get<User>('/auth/me'),
   
-  updateAvatar: (avatar_url: string) =>  
+  updateAvatar: (avatar_url: string) =>
     api.put('/auth/me/avatar', null, { params: { avatar_url } }),
+  uploadAvatar: (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post<{ avatar_url: string }>('/auth/me/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 // Familles
 export const famillesAPI = {
@@ -125,6 +132,13 @@ export const beneficiairesAPI = {
     api.post<BeneficiaireProfil>('/beneficiaires/famille/' + familleId, data),
   updateResponsables: (beneficiaireId: number, responsable_ids: number[]) =>
     api.put<BeneficiaireProfil>('/beneficiaires/' + beneficiaireId + '/responsables', { responsable_ids }),
+  uploadAvatar: (beneficiaireId: number, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post<{ avatar_url: string }>('/beneficiaires/' + beneficiaireId + '/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 // Cadeaux
