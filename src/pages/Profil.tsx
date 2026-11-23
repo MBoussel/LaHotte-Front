@@ -1,5 +1,5 @@
 import AppIcon from '../components/ui/AppIcon';
-import { useState, useEffect, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { useAuth } from '../utils/AuthContext';
 import { authAPI } from '../services/api';
 
@@ -9,7 +9,6 @@ const Profil = ({ effectsEnabled, onToggleEffects }: ProfilProps) => {
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {}, []);
 
   const handleUploadAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,7 +39,6 @@ const Profil = ({ effectsEnabled, onToggleEffects }: ProfilProps) => {
       await authAPI.updateAvatar('');
       const meRes = await authAPI.getMe();
       setUser(meRes.data);
-      setAvatarUrl('');
       alert('Avatar supprimé ✅');
     } catch (error) {
       alert('Erreur lors de la suppression');
