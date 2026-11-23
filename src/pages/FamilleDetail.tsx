@@ -328,13 +328,13 @@ const FamilleDetail = () => {
       ))}
     </div>
   ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
       {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }, index) => {
         const detailPositionClass = `left-full ml-4 ${index % 2 === 1 ? 'sm:left-auto sm:right-full sm:mr-4 sm:ml-0' : ''} ${index % 3 === 2 ? 'lg:left-auto lg:right-full lg:mr-4 lg:ml-0' : 'lg:left-full lg:right-auto lg:ml-4 lg:mr-0'}`;
 
         return (
           <div key={membre.id} className="relative">
-            <section className="card">
+            <section className="card h-full">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <h3 className="text-lg font-bold">{membre.username}</h3>
                 <span className="text-xs text-gray-500 bg-gray-100 rounded-full px-3 py-1">
