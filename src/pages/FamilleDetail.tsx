@@ -334,29 +334,40 @@ const FamilleDetail = () => {
 
         return (
           <div key={membre.id} className="relative">
-            <section className="card h-full">
-              <div className="flex items-center justify-between gap-3 mb-3">
-                <h3 className="text-lg font-bold">{membre.username}</h3>
-                <span className="text-xs text-gray-500 bg-gray-100 rounded-full px-3 py-1">
-                  {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
-                </span>
+            <section className="card h-full relative overflow-hidden border border-amber-200/80 bg-gradient-to-br from-white via-amber-50/40 to-white shadow-sm">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-christmas-green via-amber-400 to-christmas-red" />
+              <div className="rounded-xl border border-amber-100 bg-amber-50/70 px-3 py-3 mb-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span aria-hidden="true" className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white border border-amber-200 text-christmas-green text-lg">✦</span>
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-bold text-gray-800 truncate">{membre.username}</h3>
+                      <p className="text-xs text-gray-500">Sa liste de Noël</p>
+                    </div>
+                  </div>
+                  <span className="flex-shrink-0 rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-semibold text-christmas-green shadow-sm">
+                    {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
+                  </span>
+                </div>
               </div>
-              <div className="divide-y divide-gray-100">
-                {cadeauxMembre.map((cadeau) => (
-                  <button
-                    key={cadeau.id}
-                    type="button"
-                    onClick={() => setDetailCadeau(cadeau)}
-                    aria-pressed={detailCadeau?.id === cadeau.id}
-                    className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-gray-50'}`}
-                  >
-                    <span className="font-medium text-sm md:text-base min-w-0 truncate">{cadeau.titre}</span>
-                    <span className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
-                      <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
-                    </span>
-                  </button>
-                ))}
+              <div className="rounded-xl border border-gray-100 bg-white/80 p-2">
+                <div className="divide-y divide-gray-100">
+                  {cadeauxMembre.map((cadeau) => (
+                    <button
+                      key={cadeau.id}
+                      type="button"
+                      onClick={() => setDetailCadeau(cadeau)}
+                      aria-pressed={detailCadeau?.id === cadeau.id}
+                      className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-amber-50/60'}`}
+                    >
+                      <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-700">{cadeau.titre}</span>
+                      <span className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
+                        <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </section>
 
