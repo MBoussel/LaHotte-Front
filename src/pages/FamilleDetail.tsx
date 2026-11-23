@@ -329,57 +329,54 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 content-start">
-      {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }) => {
-        const cartePersonne = (
-          <section key={membre.id} className="card">
-            <div className="flex items-center justify-between gap-3 mb-3">
-              <h3 className="text-lg font-bold">{membre.username}</h3>
-              <span className="text-xs text-gray-500 bg-gray-100 rounded-full px-3 py-1">
-                {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
-              </span>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {cadeauxMembre.map((cadeau) => (
-                <button
-                  key={cadeau.id}
-                  type="button"
-                  onClick={() => setDetailCadeau(cadeau)}
-                  aria-pressed={detailCadeau?.id === cadeau.id}
-                  className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-gray-50'}`}
-                >
-                  <span className="font-medium text-sm md:text-base min-w-0 truncate">{cadeau.titre}</span>
-                  <span className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
-                    <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
-                  </span>
-                </button>
-              ))}
-            </div>
-          </section>
-        );
-
-        if (detailCadeau?.owner_id !== membre.id) {
-          return cartePersonne;
-        }
+      {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }, index) => {
+        const detailPositionClass = `left-full ml-4 ${index % 2 === 1 ? 'sm:left-auto sm:right-full sm:mr-4 sm:ml-0' : ''} ${index % 3 === 2 ? 'lg:left-auto lg:right-full lg:mr-4 lg:ml-0' : 'lg:left-full lg:right-auto lg:ml-4 lg:mr-0'}`;
 
         return (
-          <div key={membre.id} className="col-span-full grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-            {cartePersonne}
-            <div className="hidden lg:block lg:sticky lg:top-6">
-              <div className="flex justify-end mb-2">
-                <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
-                  Fermer <span aria-hidden="true" className="text-base">×</span>
-                </button>
+          <div key={membre.id} className="relative">
+            <section className="card">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <h3 className="text-lg font-bold">{membre.username}</h3>
+                <span className="text-xs text-gray-500 bg-gray-100 rounded-full px-3 py-1">
+                  {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
+                </span>
               </div>
-              <CadeauCard
-                cadeau={detailCadeau}
-                contributions={contributions[detailCadeau.id] || []}
-                membres={famille.membres}
-                currentUserId={user?.id}
-                canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
-                onContribute={setSelectedCadeau}
-              />
-            </div>
+              <div className="divide-y divide-gray-100">
+                {cadeauxMembre.map((cadeau) => (
+                  <button
+                    key={cadeau.id}
+                    type="button"
+                    onClick={() => setDetailCadeau(cadeau)}
+                    aria-pressed={detailCadeau?.id === cadeau.id}
+                    className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-gray-50'}`}
+                  >
+                    <span className="font-medium text-sm md:text-base min-w-0 truncate">{cadeau.titre}</span>
+                    <span className="flex items-center gap-2 flex-shrink-0">
+                      <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
+                      <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {detailCadeau?.owner_id === membre.id && (
+              <div className={`hidden lg:block absolute z-30 top-0 w-full ${detailPositionClass}`}>
+                <div className="flex justify-end mb-2">
+                  <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
+                    Fermer <span aria-hidden="true" className="text-base">×</span>
+                  </button>
+                </div>
+                <CadeauCard
+                  cadeau={detailCadeau}
+                  contributions={contributions[detailCadeau.id] || []}
+                  membres={famille.membres}
+                  currentUserId={user?.id}
+                  canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+                  onContribute={setSelectedCadeau}
+                />
+              </div>
+            )}
           </div>
         );
       })}
