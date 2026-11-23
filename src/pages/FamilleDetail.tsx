@@ -328,9 +328,9 @@ const FamilleDetail = () => {
       ))}
     </div>
   ) : (
-    <div className={detailCadeau ? "grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] gap-4 lg:gap-6 items-start" : "grid grid-cols-1 gap-4"}>
-      <div className={`grid ${detailCadeau ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'} gap-4 content-start`}>
-        {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 content-start">
+      {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }) => {
+        const cartePersonne = (
           <section key={membre.id} className="card">
             <div className="flex items-center justify-between gap-3 mb-3">
               <h3 className="text-lg font-bold">{membre.username}</h3>
@@ -356,26 +356,33 @@ const FamilleDetail = () => {
               ))}
             </div>
           </section>
-        ))}
-      </div>
+        );
 
-      {detailCadeau && (
-        <div className="hidden lg:block lg:sticky lg:top-6">
-          <div className="flex justify-end mb-2">
-            <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
-              Fermer <span aria-hidden="true" className="text-base">×</span>
-            </button>
+        if (detailCadeau?.owner_id !== membre.id) {
+          return cartePersonne;
+        }
+
+        return (
+          <div key={membre.id} className="col-span-full grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            {cartePersonne}
+            <div className="hidden lg:block lg:sticky lg:top-6">
+              <div className="flex justify-end mb-2">
+                <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
+                  Fermer <span aria-hidden="true" className="text-base">×</span>
+                </button>
+              </div>
+              <CadeauCard
+                cadeau={detailCadeau}
+                contributions={contributions[detailCadeau.id] || []}
+                membres={famille.membres}
+                currentUserId={user?.id}
+                canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+                onContribute={setSelectedCadeau}
+              />
+            </div>
           </div>
-          <CadeauCard
-            cadeau={detailCadeau}
-            contributions={contributions[detailCadeau.id] || []}
-            membres={famille.membres}
-            currentUserId={user?.id}
-            canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
-            onContribute={setSelectedCadeau}
-          />
-        </div>
-      )}
+        );
+      })}
     </div>
   )}
 
