@@ -384,7 +384,7 @@ const FamilleDetail = () => {
       <div className="bg-white w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl p-4" onClick={(event) => event.stopPropagation()}>
         <div className="flex justify-end mb-3">
           <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-600 hover:text-gray-900 px-2 py-1">
-            Fermer <AppIcon name="x" size={16} />
+            Fermer <span aria-hidden="true" className="text-base">×</span>
           </button>
         </div>
         <CadeauCard
