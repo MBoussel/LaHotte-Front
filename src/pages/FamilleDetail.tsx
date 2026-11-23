@@ -31,6 +31,7 @@ const FamilleDetail = () => {
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
   const [beneficiaires, setBeneficiaires] = useState<BeneficiaireProfil[]>([]);
+  const [uploadingBeneficiaireId, setUploadingBeneficiaireId] = useState<number | null>(null);
   const [showBeneficiaireModal, setShowBeneficiaireModal] = useState(false);
   const [beneficiaireNom, setBeneficiaireNom] = useState('');
   const [responsableIds, setResponsableIds] = useState<number[]>(user?.id ? [user.id] : []);
@@ -102,6 +103,24 @@ const FamilleDetail = () => {
   const handleCreateCadeau = async (data: CadeauFormData) => {
     await createCadeau(data);
     setShowCadeauModal(false);
+  };
+
+  const handleUploadBeneficiaire = async (beneficiaireId: number, file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La photo ne doit pas dépasser 5 Mo.');
+      return;
+    }
+    setUploadingBeneficiaireId(beneficiaireId);
+    try {
+      const response = await beneficiairesAPI.uploadAvatar(beneficiaireId, file);
+      setBeneficiaires((current) => current.map((profil) =>
+        profil.id === beneficiaireId ? { ...profil, avatar_url: response.data.avatar_url } : profil
+      ));
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Impossible de mettre à jour la photo');
+    } finally {
+      setUploadingBeneficiaireId(null);
+    }
   };
 
   const handleCreateBeneficiaire = async (event: FormEvent<HTMLFormElement>) => {
@@ -317,6 +336,8 @@ const FamilleDetail = () => {
         pereNoelId={famille.pere_noel_id}
         noelType={famille.noel_type}
         currentUserId={user?.id}
+        onUploadBeneficiaire={handleUploadBeneficiaire}
+        uploadingBeneficiaireId={uploadingBeneficiaireId}
       />
 
 {/* Liste des cadeaux */}
