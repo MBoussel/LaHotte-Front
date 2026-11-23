@@ -1,6 +1,6 @@
 import AppIcon from '../ui/AppIcon';
 import { useState, type FormEvent } from 'react';
-import type { Famille } from '../../types';
+import type { Famille, BeneficiaireProfil } from '../../types';
 
 export interface CadeauFormData {
   titre: string;
@@ -9,17 +9,19 @@ export interface CadeauFormData {
   photo_url: string;
   lien_achat: string;
   famille_ids: number[];
-  beneficiaire_ids: number[];  
+  beneficiaire_ids: number[];
+  beneficiaire_profil_id?: number;  
 }
 
 interface CadeauFormProps {
   currentFamilleId: number;
   mesFamilles: Famille[];
+  beneficiaires: BeneficiaireProfil[];
   onSubmit: (data: CadeauFormData) => void;
   onCancel: () => void;
 }
 
-const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: CadeauFormProps) => {
+const CadeauForm = ({ currentFamilleId, mesFamilles, beneficiaires, onSubmit, onCancel }: CadeauFormProps) => {
   const [formData, setFormData] = useState<CadeauFormData>({
     titre: '',
     prix: 0,
@@ -27,7 +29,8 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
     photo_url: '',
     lien_achat: '',
     famille_ids: [currentFamilleId],
-    beneficiaire_ids: [],  
+    beneficiaire_ids: [],
+    beneficiaire_profil_id: undefined,  
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -46,11 +49,27 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, onSubmit, onCancel }: Cadea
       lien_achat: formData.lien_achat,
       famille_ids: formData.famille_ids,
       beneficiaire_ids: formData.beneficiaire_ids,
+      beneficiaire_profil_id: formData.beneficiaire_profil_id,
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium mb-1">Pour qui est ce cadeau ?</label>
+        <select
+          className="input"
+          value={formData.beneficiaire_profil_id ?? ''}
+          onChange={(e) => setFormData({ ...formData, beneficiaire_profil_id: e.target.value ? Number(e.target.value) : undefined })}
+        >
+          <option value="">Ma liste personnelle</option>
+          {beneficiaires.map((profil) => (
+            <option key={profil.id} value={profil.id}>{profil.nom}</option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-gray-500">Choisis un bénéficiaire si ce cadeau est destiné à un enfant ou à une personne sans compte.</p>
+      </div>
+
       {/* Titre */}
       <div>
         <label className="block text-sm font-medium mb-1">
