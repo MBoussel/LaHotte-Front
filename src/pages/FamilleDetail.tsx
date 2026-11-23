@@ -350,7 +350,7 @@ const FamilleDetail = () => {
                   <span className="font-medium text-sm md:text-base min-w-0 truncate">{cadeau.titre}</span>
                   <span className="flex items-center gap-2 flex-shrink-0">
                     <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
-                    <AppIcon name="chevron-right" size={17} />
+                    <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
                   </span>
                 </button>
               ))}
@@ -363,7 +363,7 @@ const FamilleDetail = () => {
         <div className="hidden lg:block lg:sticky lg:top-6">
           <div className="flex justify-end mb-2">
             <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
-              Fermer <AppIcon name="x" size={16} />
+              Fermer <span aria-hidden="true" className="text-base">×</span>
             </button>
           </div>
           <CadeauCard
