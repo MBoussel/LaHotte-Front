@@ -270,12 +270,14 @@ const FamilleDetail = () => {
           </div>
 
           {!isEditingFamille && (
-            <button
-              onClick={() => setShowCadeauModal(true)}
-              className="btn-primary w-full md:w-auto whitespace-nowrap"
-            >
-              + Ajouter un cadeau
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <button onClick={() => setShowCadeauModal(true)} className="btn-primary w-full md:w-auto whitespace-nowrap">
+                + Ajouter un cadeau
+              </button>
+              <button onClick={() => { setBeneficiaireNom(''); setResponsableIds(user?.id ? [user.id] : []); setShowBeneficiaireModal(true); }} className="btn-secondary w-full md:w-auto whitespace-nowrap">
+                + Ajouter un bénéficiaire
+              </button>
+            </div>
           )}
           {canSeeRecap && (
   <button
@@ -339,7 +341,7 @@ const FamilleDetail = () => {
     </div>
   </div>
 
-  {cadeaux.length === 0 ? (
+  {(cadeaux.length === 0 && (viewMode === 'tous' || beneficiaires.length === 0)) ? (
     <div className="card text-center py-12">
       <p className="text-lg md:text-xl text-gray-600 mb-4">
         Aucun cadeau pour l'instant
@@ -364,11 +366,11 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
-      {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }, index) => {
+      {groupesCadeaux.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }, index) => {
         const detailPositionClass = `left-full ml-4 ${index % 2 === 1 ? 'sm:left-auto sm:right-full sm:mr-4 sm:ml-0' : ''} ${index % 3 === 2 ? 'lg:left-auto lg:right-full lg:mr-4 lg:ml-0' : 'lg:left-full lg:right-auto lg:ml-4 lg:mr-0'}`;
 
         return (
-          <div key={membre.id} className="relative">
+          <div key={groupeId} className="relative">
             <section className="card h-full relative overflow-hidden border border-amber-200/80 bg-gradient-to-br from-white via-amber-50/40 to-white shadow-sm">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-christmas-green via-amber-400 to-christmas-red" />
               <div className="rounded-xl border border-amber-100 bg-amber-50/70 px-3 py-3 mb-4">
@@ -376,7 +378,7 @@ const FamilleDetail = () => {
                   <div className="flex items-center gap-2 min-w-0">
                     <span aria-hidden="true" className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white border border-amber-200 text-christmas-green text-lg">✦</span>
                     <div className="min-w-0">
-                      <h3 className="text-lg font-bold text-gray-800 truncate">{membre.username}</h3>
+                      <h3 className="text-lg font-bold text-gray-800 truncate">{groupeNom}</h3>
                       <p className="text-xs text-gray-500">Sa liste de Noël</p>
                     </div>
                   </div>
@@ -386,6 +388,9 @@ const FamilleDetail = () => {
                 </div>
               </div>
               <div className="rounded-xl border border-gray-100 bg-white/80 p-2">
+                {cadeauxMembre.length === 0 ? (
+                  <p className="px-3 py-5 text-center text-sm text-gray-400">Aucun cadeau pour le moment</p>
+                ) : (
                 <div className="divide-y divide-gray-100">
                   {cadeauxMembre.map((cadeau) => (
                     <button
@@ -403,10 +408,11 @@ const FamilleDetail = () => {
                     </button>
                   ))}
                 </div>
+                )}
               </div>
             </section>
 
-            {detailCadeau?.owner_id === membre.id && (
+            {((beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id)) && (
               <div className={`hidden lg:block absolute z-30 top-0 w-full ${detailPositionClass}`}>
                 <div className="flex justify-end mb-2">
                   <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
