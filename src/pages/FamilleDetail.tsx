@@ -396,13 +396,14 @@ const FamilleDetail = () => {
           <div key={groupeId} className="relative">
             {(() => {
               const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
+              const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
               return (
             <section className="card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm">
               <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
                 <div className="flex items-center gap-3 min-w-0">
-                  {membre?.avatar_url ? (
+                  {avatarUrl ? (
                     <img
-                      src={membre.avatar_url}
+                      src={avatarUrl}
                       alt={`Photo de profil de ${groupeNom}`}
                       className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-amber-300"
                       onError={(event) => {
@@ -412,7 +413,7 @@ const FamilleDetail = () => {
                       }}
                     />
                   ) : null}
-                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${membre?.avatar_url ? 'hidden' : ''}`}>
+                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${avatarUrl ? 'hidden' : ''}`}>
                     {groupeNom.charAt(0).toUpperCase()}
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
