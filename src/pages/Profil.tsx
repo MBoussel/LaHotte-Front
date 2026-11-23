@@ -1,5 +1,5 @@
 import AppIcon from '../components/ui/AppIcon';
-import { useState, useEffect } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { useAuth } from '../utils/AuthContext';
 import { authAPI } from '../services/api';
 
@@ -7,33 +7,28 @@ type ProfilProps = { effectsEnabled: boolean; onToggleEffects: () => void; };
 
 const Profil = ({ effectsEnabled, onToggleEffects }: ProfilProps) => {
   const { user, setUser } = useAuth();
-  const [avatarUrl, setAvatarUrl] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (user?.avatar_url) {
-      setAvatarUrl(user.avatar_url);
+
+  const handleUploadAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La photo ne doit pas dépasser 5 Mo.');
+      return;
     }
-  }, [user]);
-
-  const handleUpdateAvatar = async (e: React.FormEvent) => {
-    e.preventDefault();
     setLoading(true);
-
     try {
-      await authAPI.updateAvatar(avatarUrl);
-      
-      // Rafraîchir les infos utilisateur
+      await authAPI.uploadAvatar(file);
       const meRes = await authAPI.getMe();
       setUser(meRes.data);
-      
-      setIsEditing(false);
-      alert('Avatar mis à jour ! ✅');
+      alert('Photo de profil mise à jour !');
     } catch (error: any) {
-      alert(error.response?.data?.detail || 'Erreur lors de la mise à jour');
+      alert(error.response?.data?.detail || 'Erreur lors de l’envoi de la photo');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleRemoveAvatar = async () => {
@@ -44,7 +39,6 @@ const Profil = ({ effectsEnabled, onToggleEffects }: ProfilProps) => {
       await authAPI.updateAvatar('');
       const meRes = await authAPI.getMe();
       setUser(meRes.data);
-      setAvatarUrl('');
       alert('Avatar supprimé ✅');
     } catch (error) {
       alert('Erreur lors de la suppression');
@@ -75,92 +69,22 @@ const Profil = ({ effectsEnabled, onToggleEffects }: ProfilProps) => {
       {/* Carte Avatar */}
       <div className="card mb-6">
         <h2 className="text-xl font-bold mb-4">Photo de profil</h2>
-        
         <div className="flex flex-col md:flex-row items-center gap-6">
-          {/* Avatar actuel */}
           <div className="flex-shrink-0">
             {user.avatar_url ? (
-              <img
-                src={user.avatar_url}
-                alt={user.username}
-                className="w-32 h-32 rounded-full object-cover border-4 border-christmas-red"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
+              <img src={user.avatar_url} alt={user.username} className="w-32 h-32 rounded-full object-cover border-4 border-christmas-red" />
             ) : (
-              <div className="w-32 h-32 bg-christmas-red text-white rounded-full flex items-center justify-center text-5xl font-bold">
-                {user.username.charAt(0).toUpperCase()}
-              </div>
+              <div className="w-32 h-32 bg-christmas-red text-white rounded-full flex items-center justify-center text-5xl font-bold">{user.username.charAt(0).toUpperCase()}</div>
             )}
           </div>
-
-          {/* Formulaire ou infos */}
-          <div className="flex-1 w-full">
-            {isEditing ? (
-              <form onSubmit={handleUpdateAvatar} className="space-y-3">
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    URL de votre photo
-                  </label>
-                  <input
-                    type="url"
-                    className="input"
-                    placeholder="https://exemple.com/ma-photo.jpg"
-                    value={avatarUrl}
-                    onChange={(e) => setAvatarUrl(e.target.value)}
-                    required
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Utilisez un lien direct vers une image (JPG, PNG, etc.)
-                  </p>
-                </div>
-
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn-primary flex-1"
-                  >
-                    {loading ? 'Enregistrement...' : '✅ Enregistrer'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditing(false);
-                      setAvatarUrl(user.avatar_url || '');
-                    }}
-                    className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition"
-                  >
-                    Annuler
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="space-y-3">
-                <p className="text-gray-600">
-                  {user.avatar_url
-                    ? 'Vous avez une photo de profil personnalisée'
-                    : 'Vous utilisez une initiale comme photo de profil'}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="btn-primary"
-                  >
-                    {user.avatar_url ? '✏️ Modifier' : '➕ Ajouter une photo'}
-                  </button>
-                  {user.avatar_url && (
-                    <button
-                      onClick={handleRemoveAvatar}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                    >
-                      <AppIcon name="trash" size={17} /> Supprimer
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
+          <div className="flex-1 w-full space-y-3">
+            <p className="text-gray-600">{user.avatar_url ? 'Votre photo de profil actuelle' : 'Aucune photo : votre initiale est affichée'}</p>
+            <label className={`inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold cursor-pointer ${loading ? 'bg-gray-300 text-gray-500' : 'btn-primary'}`}>
+              {loading ? 'Envoi en cours…' : user.avatar_url ? 'Modifier ma photo' : 'Ajouter une photo'}
+              <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={handleUploadAvatar} disabled={loading} />
+            </label>
+            <p className="text-xs text-gray-500">Formats JPG, PNG ou WebP · 5 Mo maximum</p>
+            {user.avatar_url && <button type="button" onClick={handleRemoveAvatar} disabled={loading} className="ml-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white px-4 py-2 rounded-lg transition"><AppIcon name="trash" size={17} /> Supprimer</button>}
           </div>
         </div>
       </div>

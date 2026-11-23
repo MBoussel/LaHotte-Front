@@ -27,6 +27,7 @@ export interface BeneficiaireProfil {
   id: number;
   famille_id: number;
   nom: string;
+  avatar_url?: string | null;
   created_by_id: number;
   responsables: Array<{ id: number; username: string }>;
 }

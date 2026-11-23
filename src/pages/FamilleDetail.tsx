@@ -31,6 +31,7 @@ const FamilleDetail = () => {
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
   const [beneficiaires, setBeneficiaires] = useState<BeneficiaireProfil[]>([]);
+  const [uploadingBeneficiaireId, setUploadingBeneficiaireId] = useState<number | null>(null);
   const [showBeneficiaireModal, setShowBeneficiaireModal] = useState(false);
   const [beneficiaireNom, setBeneficiaireNom] = useState('');
   const [responsableIds, setResponsableIds] = useState<number[]>(user?.id ? [user.id] : []);
@@ -102,6 +103,24 @@ const FamilleDetail = () => {
   const handleCreateCadeau = async (data: CadeauFormData) => {
     await createCadeau(data);
     setShowCadeauModal(false);
+  };
+
+  const handleUploadBeneficiaire = async (beneficiaireId: number, file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La photo ne doit pas dépasser 5 Mo.');
+      return;
+    }
+    setUploadingBeneficiaireId(beneficiaireId);
+    try {
+      const response = await beneficiairesAPI.uploadAvatar(beneficiaireId, file);
+      setBeneficiaires((current) => current.map((profil) =>
+        profil.id === beneficiaireId ? { ...profil, avatar_url: response.data.avatar_url } : profil
+      ));
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Impossible de mettre à jour la photo');
+    } finally {
+      setUploadingBeneficiaireId(null);
+    }
   };
 
   const handleCreateBeneficiaire = async (event: FormEvent<HTMLFormElement>) => {
@@ -317,6 +336,8 @@ const FamilleDetail = () => {
         pereNoelId={famille.pere_noel_id}
         noelType={famille.noel_type}
         currentUserId={user?.id}
+        onUploadBeneficiaire={handleUploadBeneficiaire}
+        uploadingBeneficiaireId={uploadingBeneficiaireId}
       />
 
 {/* Liste des cadeaux */}
@@ -375,13 +396,14 @@ const FamilleDetail = () => {
           <div key={groupeId} className="relative">
             {(() => {
               const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
+              const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
               return (
             <section className="card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm">
               <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
                 <div className="flex items-center gap-3 min-w-0">
-                  {membre?.avatar_url ? (
+                  {avatarUrl ? (
                     <img
-                      src={membre.avatar_url}
+                      src={avatarUrl}
                       alt={`Photo de profil de ${groupeNom}`}
                       className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-amber-300"
                       onError={(event) => {
@@ -391,7 +413,7 @@ const FamilleDetail = () => {
                       }}
                     />
                   ) : null}
-                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${membre?.avatar_url ? 'hidden' : ''}`}>
+                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${avatarUrl ? 'hidden' : ''}`}>
                     {groupeNom.charAt(0).toUpperCase()}
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
