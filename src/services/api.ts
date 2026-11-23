@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
-import type { User, Famille, Cadeau, Invitation, Contribution, ContributionWithUser } from '../types';
+import type { User, Famille, Cadeau, Invitation, Contribution, ContributionWithUser, BeneficiaireProfil } from '../types';
 
 
 // Configuration Axios
@@ -116,6 +116,15 @@ export const famillesAPI = {
     api.delete(`/familles/demandes/${demandeId}`),
   getContributionsRecap: (familleId: number) => 
     api.get(`/familles/${familleId}/contributions-recap`),
+};
+
+// Profils bénéficiaires sans compte
+export const beneficiairesAPI = {
+  getByFamille: (familleId: number) => api.get<BeneficiaireProfil[]>('/beneficiaires/famille/' + familleId),
+  create: (familleId: number, data: { nom: string; responsable_ids: number[] }) =>
+    api.post<BeneficiaireProfil>('/beneficiaires/famille/' + familleId, data),
+  updateResponsables: (beneficiaireId: number, responsable_ids: number[]) =>
+    api.put<BeneficiaireProfil>('/beneficiaires/' + beneficiaireId + '/responsables', { responsable_ids }),
 };
 
 // Cadeaux

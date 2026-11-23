@@ -23,6 +23,14 @@ export interface Famille {
   membres?: Membre[];
 }
 
+export interface BeneficiaireProfil {
+  id: number;
+  famille_id: number;
+  nom: string;
+  created_by_id: number;
+  responsables: Array<{ id: number; username: string }>;
+}
+
 export interface Membre {
   id: number;
   username: string;
@@ -40,7 +48,9 @@ export interface Cadeau {
   photo_url?: string;
   lien_achat?: string;
   owner_id: number;
-  beneficiaires?: Array<{ id: number; username: string }>;  
+  beneficiaires?: Array<{ id: number; username: string }>;
+  beneficiaire_profil_id?: number | null;
+  beneficiaire_profil_nom?: string | null;  
 }
 
 export interface Invitation {

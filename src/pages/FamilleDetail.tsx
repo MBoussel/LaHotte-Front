@@ -4,13 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { useFamille } from '../hooks/useFamille';
 import { useCadeaux } from '../hooks/useCadeaux';
-import { famillesAPI } from '../services/api';
+import { famillesAPI, beneficiairesAPI } from '../services/api';
 import Invitations from '../components/familles/Invitations';
 import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
 import CadeauForm, { type CadeauFormData } from '../components/cadeaux/CadeauForm';
 import ContributionModal from '../components/cadeaux/ContributionModal';
-import type { Cadeau } from '../types';
+import type { BeneficiaireProfil, Cadeau } from '../types';
 import DemandesAdhesion from '../components/familles/DemandesAdhesion';
 
 const FamilleDetail = () => {
@@ -30,6 +30,10 @@ const FamilleDetail = () => {
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
+  const [beneficiaires, setBeneficiaires] = useState<BeneficiaireProfil[]>([]);
+  const [showBeneficiaireModal, setShowBeneficiaireModal] = useState(false);
+  const [beneficiaireNom, setBeneficiaireNom] = useState('');
+  const [responsableIds, setResponsableIds] = useState<number[]>(user?.id ? [user.id] : []);
   const [viewMode, setViewMode] = useState<'personne' | 'tous'>('personne');
   const [detailCadeau, setDetailCadeau] = useState<Cadeau | null>(null);
   const [noelType, setNoelType] = useState<"pere_noel" | "mere_noel">("pere_noel");
@@ -71,6 +75,19 @@ const FamilleDetail = () => {
   useEffect(() => {
     if (famille?.noel_type) setNoelType(famille.noel_type);
   }, [famille?.noel_type]);
+
+  useEffect(() => {
+    if (!familleId) return;
+    beneficiairesAPI.getByFamille(familleId)
+      .then((response) => setBeneficiaires(response.data))
+      .catch((error) => console.error('Erreur chargement bénéficiaires:', error));
+  }, [familleId]);
+
+  useEffect(() => {
+    if (user?.id) {
+      setResponsableIds((ids) => ids.includes(user.id) ? ids : [...ids, user.id]);
+    }
+  }, [user?.id]);
   const [selectedCadeau, setSelectedCadeau] = useState<{
     id: number;
     titre: string;
@@ -85,6 +102,21 @@ const FamilleDetail = () => {
   const handleCreateCadeau = async (data: CadeauFormData) => {
     await createCadeau(data);
     setShowCadeauModal(false);
+  };
+
+  const handleCreateBeneficiaire = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!familleId || !beneficiaireNom.trim()) return;
+    try {
+      await beneficiairesAPI.create(familleId, { nom: beneficiaireNom.trim(), responsable_ids: responsableIds });
+      const response = await beneficiairesAPI.getByFamille(familleId);
+      setBeneficiaires(response.data);
+      setBeneficiaireNom('');
+      setResponsableIds(user?.id ? [user.id] : []);
+      setShowBeneficiaireModal(false);
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Impossible de créer le bénéficiaire');
+    }
   };
 
   const handleEditFamille = () => {
@@ -134,9 +166,12 @@ const FamilleDetail = () => {
   const isPereNoel = user?.id === famille.pere_noel_id;
   const canSeeRecap = isPereNoel || (isCreator && famille.pere_noel_id != null);
   const canManagePereNoel = isCreator;
-  const cadeauxParMembre = (famille.membres || [])
-    .map((membre) => ({ membre, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id) }))
-    .filter((groupe) => groupe.cadeaux.length > 0);
+  const groupesCadeaux = [
+    ...(famille.membres || [])
+      .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id && !cadeau.beneficiaire_profil_id) }))
+      .filter((groupe) => groupe.cadeaux.length > 0),
+    ...beneficiaires.map((profil) => ({ id: 'beneficiaire-' + profil.id, nom: profil.nom, ownerId: null as number | null, beneficiaireId: profil.id, cadeaux: cadeaux.filter((cadeau) => cadeau.beneficiaire_profil_id === profil.id) })),
+  ];
 
   const handleSetNoelType = async (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedType = event.target.value as "pere_noel" | "mere_noel";
@@ -235,12 +270,14 @@ const FamilleDetail = () => {
           </div>
 
           {!isEditingFamille && (
-            <button
-              onClick={() => setShowCadeauModal(true)}
-              className="btn-primary w-full md:w-auto whitespace-nowrap"
-            >
-              + Ajouter un cadeau
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <button onClick={() => setShowCadeauModal(true)} className="btn-primary w-full md:w-auto whitespace-nowrap">
+                + Ajouter un cadeau
+              </button>
+              <button onClick={() => { setBeneficiaireNom(''); setResponsableIds(user?.id ? [user.id] : []); setShowBeneficiaireModal(true); }} className="btn-secondary w-full md:w-auto whitespace-nowrap">
+                + Ajouter un bénéficiaire
+              </button>
+            </div>
           )}
           {canSeeRecap && (
   <button
@@ -304,7 +341,7 @@ const FamilleDetail = () => {
     </div>
   </div>
 
-  {cadeaux.length === 0 ? (
+  {(cadeaux.length === 0 && (viewMode === 'tous' || beneficiaires.length === 0)) ? (
     <div className="card text-center py-12">
       <p className="text-lg md:text-xl text-gray-600 mb-4">
         Aucun cadeau pour l'instant
@@ -329,18 +366,21 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
-      {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }, index) => {
+      {groupesCadeaux.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }, index) => {
         const detailPositionClass = `left-full ml-4 ${index % 2 === 1 ? 'sm:left-auto sm:right-full sm:mr-4 sm:ml-0' : ''} ${index % 3 === 2 ? 'lg:left-auto lg:right-full lg:mr-4 lg:ml-0' : 'lg:left-full lg:right-auto lg:ml-4 lg:mr-0'}`;
 
         return (
-          <div key={membre.id} className="relative">
+          <div key={groupeId} className="relative">
+            {(() => {
+              const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
+              return (
             <section className="card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm">
               <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
                 <div className="flex items-center gap-3 min-w-0">
-                  {membre.avatar_url ? (
+                  {membre?.avatar_url ? (
                     <img
                       src={membre.avatar_url}
-                      alt={`Photo de profil de ${membre.username}`}
+                      alt={`Photo de profil de ${groupeNom}`}
                       className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-amber-300"
                       onError={(event) => {
                         event.currentTarget.style.display = 'none';
@@ -349,16 +389,19 @@ const FamilleDetail = () => {
                       }}
                     />
                   ) : null}
-                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${membre.avatar_url ? 'hidden' : ''}`}>
-                    {membre.username.charAt(0).toUpperCase()}
+                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${membre?.avatar_url ? 'hidden' : ''}`}>
+                    {groupeNom.charAt(0).toUpperCase()}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 truncate">{membre.username}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
                 </div>
                 <span className="flex-shrink-0 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950">
                   {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
                 </span>
               </div>
               <div className="rounded-xl border border-amber-200 bg-white p-2">
+                {cadeauxMembre.length === 0 ? (
+                  <p className="px-3 py-5 text-center text-sm text-gray-400">Aucun cadeau pour le moment</p>
+                ) : (
                 <div className="divide-y divide-gray-200">
                   {cadeauxMembre.map((cadeau) => (
                     <button
@@ -376,10 +419,13 @@ const FamilleDetail = () => {
                     </button>
                   ))}
                 </div>
+                )}
               </div>
             </section>
+              );
+            })()}
 
-            {detailCadeau?.owner_id === membre.id && (
+            {((beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id)) && (
               <div className={`hidden lg:block absolute z-30 top-0 w-full ${detailPositionClass}`}>
                 <div className="flex justify-end mb-2">
                   <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
@@ -433,9 +479,47 @@ const FamilleDetail = () => {
       <CadeauForm
         currentFamilleId={familleId}
         mesFamilles={mesFamilles}
+        beneficiaires={beneficiaires.filter((profil) => profil.responsables.some((responsable) => responsable.id === user?.id))}
         onSubmit={handleCreateCadeau}
         onCancel={() => setShowCadeauModal(false)}
       />
+    </div>
+  </div>
+)}
+
+{/* Modal Création Bénéficiaire */}
+{showBeneficiaireModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="card max-w-lg w-full">
+      <h2 className="text-xl font-bold mb-2">Ajouter un bénéficiaire</h2>
+      <p className="text-sm text-gray-600 mb-4">Crée une liste pour une personne qui n'a pas besoin de compte, comme un enfant.</p>
+      <form onSubmit={handleCreateBeneficiaire} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">Prénom ou nom affiché</label>
+          <input className="input" value={beneficiaireNom} onChange={(event) => setBeneficiaireNom(event.target.value)} maxLength={100} required placeholder="Ex. Timothée" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Qui pourra ajouter des cadeaux à cette liste ?</label>
+          <p className="text-xs text-gray-500 mb-2">Tu es automatiquement responsable. Tu peux autoriser d'autres membres, comme ton conjoint ou ta conjointe.</p>
+          <div className="max-h-44 overflow-y-auto rounded-lg border border-gray-200 p-2 space-y-1">
+            {(famille.membres || []).map((membre) => (
+              <label key={membre.id} className="flex items-center gap-2 rounded-lg p-2 hover:bg-gray-50">
+                <input
+                  type="checkbox"
+                  checked={responsableIds.includes(membre.id)}
+                  disabled={membre.id === user?.id}
+                  onChange={() => setResponsableIds((ids) => ids.includes(membre.id) ? ids.filter((id) => id !== membre.id) : [...ids, membre.id])}
+                />
+                <span className="text-sm">{membre.username}{membre.id === user?.id ? ' (toi)' : ''}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-3 pt-2">
+          <button type="button" onClick={() => setShowBeneficiaireModal(false)} className="flex-1 rounded-lg bg-gray-200 px-4 py-2 font-semibold text-gray-700">Annuler</button>
+          <button type="submit" className="btn-primary flex-1">Créer la liste</button>
+        </div>
+      </form>
     </div>
   </div>
 )}
