@@ -10,6 +10,7 @@ import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
 import CadeauForm, { type CadeauFormData } from '../components/cadeaux/CadeauForm';
 import ContributionModal from '../components/cadeaux/ContributionModal';
+import type { Cadeau } from '../types';
 import DemandesAdhesion from '../components/familles/DemandesAdhesion';
 
 const FamilleDetail = () => {
@@ -29,6 +30,8 @@ const FamilleDetail = () => {
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
+  const [viewMode, setViewMode] = useState<'personne' | 'tous'>('personne');
+  const [detailCadeau, setDetailCadeau] = useState<Cadeau | null>(null);
   const [noelType, setNoelType] = useState<"pere_noel" | "mere_noel">("pere_noel");
   const [santaMove, setSantaMove] = useState(0);
   const [biscuitMove, setBiscuitMove] = useState(0);
@@ -131,6 +134,9 @@ const FamilleDetail = () => {
   const isPereNoel = user?.id === famille.pere_noel_id;
   const canSeeRecap = isPereNoel || (isCreator && famille.pere_noel_id != null);
   const canManagePereNoel = isCreator;
+  const cadeauxParMembre = (famille.membres || [])
+    .map((membre) => ({ membre, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id) }))
+    .filter((groupe) => groupe.cadeaux.length > 0);
 
   const handleSetNoelType = async (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedType = event.target.value as "pere_noel" | "mere_noel";
@@ -276,7 +282,27 @@ const FamilleDetail = () => {
 
 {/* Liste des cadeaux */}
 <div>
-  <h2 className="text-xl md:text-2xl font-bold mb-4 inline-flex items-center gap-2"><AppIcon name="gift" size={24} /> Cadeaux de la famille</h2>
+  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+    <h2 className="text-xl md:text-2xl font-bold inline-flex items-center gap-2"><AppIcon name="gift" size={24} /> Cadeaux de la famille</h2>
+    <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm self-start sm:self-auto" role="group" aria-label="Affichage des cadeaux">
+      <button
+        type="button"
+        onClick={() => { setViewMode('personne'); setDetailCadeau(null); }}
+        aria-pressed={viewMode === 'personne'}
+        className={`px-3 py-2 rounded-lg text-sm font-semibold transition ${viewMode === 'personne' ? 'bg-christmas-green text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}
+      >
+        <AppIcon name="members" size={16} /> Par personne
+      </button>
+      <button
+        type="button"
+        onClick={() => { setViewMode('tous'); setDetailCadeau(null); }}
+        aria-pressed={viewMode === 'tous'}
+        className={`px-3 py-2 rounded-lg text-sm font-semibold transition ${viewMode === 'tous' ? 'bg-christmas-green text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'}`}
+      >
+        <AppIcon name="gift" size={16} /> Tous les cadeaux
+      </button>
+    </div>
+  </div>
 
   {cadeaux.length === 0 ? (
     <div className="card text-center py-12">
@@ -287,26 +313,94 @@ const FamilleDetail = () => {
         Ajouter le premier cadeau
       </button>
     </div>
+  ) : viewMode === 'tous' ? (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      {cadeaux.map((cadeau) => (
+        <CadeauCard
+          key={cadeau.id}
+          cadeau={cadeau}
+          contributions={contributions[cadeau.id] || []}
+          membres={famille.membres}
+          currentUserId={user?.id}
+          canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
+          onContribute={setSelectedCadeau}
+        />
+      ))}
+    </div>
   ) : (
-    <>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        {cadeaux.map((cadeau) => (
-          <CadeauCard
-            key={cadeau.id}
-            cadeau={cadeau}
-            contributions={contributions[cadeau.id] || []}
-            membres={famille.membres}
-            currentUserId={user?.id}
-            canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
-            onContribute={setSelectedCadeau}
-          />
+    <div className={detailCadeau ? "grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.9fr)] gap-4 lg:gap-6 items-start" : "grid grid-cols-1 gap-4"}>
+      <div className="space-y-4">
+        {cadeauxParMembre.map(({ membre, cadeaux: cadeauxMembre }) => (
+          <section key={membre.id} className="card">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h3 className="text-lg font-bold">{membre.username}</h3>
+              <span className="text-xs text-gray-500 bg-gray-100 rounded-full px-3 py-1">
+                {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
+              </span>
+            </div>
+            <div className="divide-y divide-gray-100">
+              {cadeauxMembre.map((cadeau) => (
+                <button
+                  key={cadeau.id}
+                  type="button"
+                  onClick={() => setDetailCadeau(cadeau)}
+                  aria-pressed={detailCadeau?.id === cadeau.id}
+                  className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-gray-50'}`}
+                >
+                  <span className="font-medium text-sm md:text-base min-w-0 truncate">{cadeau.titre}</span>
+                  <span className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-sm font-semibold text-christmas-red">{cadeau.prix} €</span>
+                    <AppIcon name="chevron-right" size={17} />
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
         ))}
       </div>
-    </>
+
+      {detailCadeau && (
+        <div className="hidden lg:block lg:sticky lg:top-6">
+          <div className="flex justify-end mb-2">
+            <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
+              Fermer <AppIcon name="x" size={16} />
+            </button>
+          </div>
+          <CadeauCard
+            cadeau={detailCadeau}
+            contributions={contributions[detailCadeau.id] || []}
+            membres={famille.membres}
+            currentUserId={user?.id}
+            canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+            onContribute={setSelectedCadeau}
+          />
+        </div>
+      )}
+    </div>
+  )}
+
+  {viewMode === 'personne' && detailCadeau && (
+    <div className="lg:hidden fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setDetailCadeau(null)}>
+      <div className="bg-white w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl p-4" onClick={(event) => event.stopPropagation()}>
+        <div className="flex justify-end mb-3">
+          <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-600 hover:text-gray-900 px-2 py-1">
+            Fermer <AppIcon name="x" size={16} />
+          </button>
+        </div>
+        <CadeauCard
+          cadeau={detailCadeau}
+          contributions={contributions[detailCadeau.id] || []}
+          membres={famille.membres}
+          currentUserId={user?.id}
+          canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+          onContribute={setSelectedCadeau}
+        />
+      </div>
+    </div>
   )}
 </div>
 
-      {/* Modal Création Cadeau */}
+{/* Modal Création Cadeau */}
 {showCadeauModal && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
     <div className="card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
