@@ -8,16 +8,17 @@ interface CadeauCardProps {
   currentUserId?: number;
   canSeeContributions?: boolean;
   onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
+  embedded?: boolean;
 }
 
-const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContributions = false, onContribute }: CadeauCardProps) => {
+const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContributions = false, onContribute, embedded = false }: CadeauCardProps) => {
   const totalContribue = contributions.reduce((sum, c) => sum + c.montant, 0);
   const reste = cadeau.prix - totalContribue;
   const pourcentage = Math.min((totalContribue / cadeau.prix) * 100, 100);
   const isOwner = currentUserId === cadeau.owner_id;
 
   return (
-    <div className="card hover:shadow-xl transition">
+    <div className={embedded ? "min-w-0" : "card hover:shadow-xl transition"}>
       {cadeau.photo_url && (
         <img
           src={cadeau.photo_url}

@@ -388,84 +388,79 @@ const FamilleDetail = () => {
       ))}
     </div>
   ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 auto-rows-fr gap-4 content-start">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
       {groupesCadeaux.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }) => {
         const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id);
+        const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
+        const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
 
         return (
-          <div key={groupeId} className={`relative ${isExpanded ? 'lg:col-span-2' : ''}`}>
-            {(() => {
-              const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
-              const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
-              return (
-            <section className={`card h-full relative overflow-hidden border border-amber-200 bg-amber-50 shadow-sm ${isExpanded ? 'lg:w-[calc(50%-0.5rem)]' : ''}`}>
-              <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
-                <div className="flex items-center gap-3 min-w-0">
-                  {avatarUrl ? (
-                    <img
-                      src={avatarUrl}
-                      alt={`Photo de profil de ${groupeNom}`}
-                      className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-amber-300"
-                      onError={(event) => {
-                        event.currentTarget.style.display = 'none';
-                        const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
-                        fallback?.classList.remove('hidden');
-                      }}
-                    />
-                  ) : null}
-                  <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${avatarUrl ? 'hidden' : ''}`}>
-                    {groupeNom.charAt(0).toUpperCase()}
+          <div key={groupeId} className={`min-w-0 ${isExpanded ? 'lg:col-span-2' : ''}`}>
+            <section className={`card h-full min-w-0 border border-amber-200 bg-amber-50 shadow-sm ${isExpanded ? 'lg:grid lg:grid-cols-2 lg:gap-4' : ''}`}>
+              <div className="min-w-0">
+                <div className="flex items-center justify-between gap-3 px-1 pb-3 mb-3 border-b border-amber-200">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt={`Photo de profil de ${groupeNom}`}
+                        className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-amber-300"
+                        onError={(event) => {
+                          event.currentTarget.style.display = 'none';
+                          const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
+                          fallback?.classList.remove('hidden');
+                        }}
+                      />
+                    ) : null}
+                    <div className={`w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center bg-amber-200 text-amber-950 font-bold text-lg border-2 border-amber-300 ${avatarUrl ? 'hidden' : ''}`}>
+                      {groupeNom.charAt(0).toUpperCase()}
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
+                  <span className="flex-shrink-0 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950">
+                    {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
+                  </span>
                 </div>
-                <span className="flex-shrink-0 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950">
-                  {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
-                </span>
-              </div>
-              <div className="rounded-xl border border-amber-200 bg-white p-2">
-                {cadeauxMembre.length === 0 ? (
-                  <p className="px-3 py-5 text-center text-sm text-gray-400">Aucun cadeau pour le moment</p>
-                ) : (
-                <div className="divide-y divide-gray-200">
-                  {cadeauxMembre.map((cadeau) => (
-                    <button
-                      key={cadeau.id}
-                      type="button"
-                      onClick={() => setDetailCadeau(cadeau)}
-                      aria-pressed={detailCadeau?.id === cadeau.id}
-                      className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
-                    >
-                      <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}</span>
-                      <span className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-sm font-semibold text-red-800">{cadeau.prix} €</span>
-                        <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
-                      </span>
-                    </button>
-                  ))}
+                <div className="rounded-xl border border-amber-200 bg-white p-2">
+                  <div className="divide-y divide-gray-200">
+                    {cadeauxMembre.map((cadeau) => (
+                      <button
+                        key={cadeau.id}
+                        type="button"
+                        onClick={() => setDetailCadeau(cadeau)}
+                        aria-pressed={detailCadeau?.id === cadeau.id}
+                        className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
+                      >
+                        <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}</span>
+                        <span className="flex items-center gap-2 flex-shrink-0">
+                          <span className="text-sm font-semibold text-red-800">{cadeau.prix} €</span>
+                          <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                )}
               </div>
-            </section>
-              );
-            })()}
 
-            {isExpanded && detailCadeau && (
-              <div className="hidden lg:block absolute right-0 top-0 w-1/2 pl-4">
-                <div className="flex justify-end mb-2">
-                  <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
-                    Fermer <span aria-hidden="true" className="text-base">×</span>
-                  </button>
+              {isExpanded && detailCadeau && (
+                <div className="min-w-0 lg:border-l lg:border-amber-200 lg:pl-4">
+                  <div className="flex justify-end mb-2">
+                    <button type="button" onClick={() => setDetailCadeau(null)} className="text-sm text-gray-500 hover:text-gray-800">
+                      Fermer <span aria-hidden="true" className="text-base">×</span>
+                    </button>
+                  </div>
+                  <CadeauCard
+                    embedded
+                    cadeau={detailCadeau}
+                    contributions={contributions[detailCadeau.id] || []}
+                    membres={famille.membres}
+                    currentUserId={user?.id}
+                    canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+                    onContribute={setSelectedCadeau}
+                  />
                 </div>
-                <CadeauCard
-                  cadeau={detailCadeau}
-                  contributions={contributions[detailCadeau.id] || []}
-                  membres={famille.membres}
-                  currentUserId={user?.id}
-                  canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
-                  onContribute={setSelectedCadeau}
-                />
-              </div>
-            )}
+              )}
+            </section>
           </div>
         );
       })}
