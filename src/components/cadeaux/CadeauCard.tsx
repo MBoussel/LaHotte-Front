@@ -30,7 +30,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       <div className="flex items-center gap-2 text-sm mb-3 text-gray-600">
         <span className="font-semibold">Liste de :</span>
         <span className="bg-gray-100 px-3 py-1 rounded-full">
-          {membres?.find((m) => m.id === cadeau.owner_id)?.username || ("User #" + cadeau.owner_id)}
+          {cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === cadeau.owner_id)?.username || ("User #" + cadeau.owner_id)}
         </span>
       </div>
 
