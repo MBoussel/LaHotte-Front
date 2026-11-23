@@ -150,6 +150,8 @@ export const cadeauxAPI = {
   create: (data: Partial<Cadeau>) => api.post<Cadeau>('/cadeaux/', data),
   update: (id: number, data: Partial<Cadeau>) => api.put<Cadeau>(`/cadeaux/${id}`, data),
   delete: (id: number) => api.delete(`/cadeaux/${id}`),
+  extractProductImage: (url: string) =>
+    api.post<{ photo_url: string; titre?: string | null }>('/produits/extraire-image', { url }),
 };
 
 // Contributions
