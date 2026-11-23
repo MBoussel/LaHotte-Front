@@ -84,8 +84,8 @@ const FamilleDetail = () => {
   }, [familleId]);
 
   useEffect(() => {
-    if (user?.id && !responsableIds.includes(user.id)) {
-      setResponsableIds((ids) => [...ids, user.id]);
+    if (user?.id) {
+      setResponsableIds((ids) => ids.includes(user.id) ? ids : [...ids, user.id]);
     }
   }, [user?.id]);
   const [selectedCadeau, setSelectedCadeau] = useState<{
@@ -466,9 +466,47 @@ const FamilleDetail = () => {
       <CadeauForm
         currentFamilleId={familleId}
         mesFamilles={mesFamilles}
+        beneficiaires={beneficiaires.filter((profil) => profil.responsables.some((responsable) => responsable.id === user?.id))}
         onSubmit={handleCreateCadeau}
         onCancel={() => setShowCadeauModal(false)}
       />
+    </div>
+  </div>
+)}
+
+{/* Modal Création Bénéficiaire */}
+{showBeneficiaireModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="card max-w-lg w-full">
+      <h2 className="text-xl font-bold mb-2">Ajouter un bénéficiaire</h2>
+      <p className="text-sm text-gray-600 mb-4">Crée une liste pour une personne qui n'a pas besoin de compte, comme un enfant.</p>
+      <form onSubmit={handleCreateBeneficiaire} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">Prénom ou nom affiché</label>
+          <input className="input" value={beneficiaireNom} onChange={(event) => setBeneficiaireNom(event.target.value)} maxLength={100} required placeholder="Ex. Timothée" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Qui pourra ajouter des cadeaux à cette liste ?</label>
+          <p className="text-xs text-gray-500 mb-2">Tu es automatiquement responsable. Tu peux autoriser d'autres membres, comme ton conjoint ou ta conjointe.</p>
+          <div className="max-h-44 overflow-y-auto rounded-lg border border-gray-200 p-2 space-y-1">
+            {(famille.membres || []).map((membre) => (
+              <label key={membre.id} className="flex items-center gap-2 rounded-lg p-2 hover:bg-gray-50">
+                <input
+                  type="checkbox"
+                  checked={responsableIds.includes(membre.id)}
+                  disabled={membre.id === user?.id}
+                  onChange={() => setResponsableIds((ids) => ids.includes(membre.id) ? ids.filter((id) => id !== membre.id) : [...ids, membre.id])}
+                />
+                <span className="text-sm">{membre.username}{membre.id === user?.id ? ' (toi)' : ''}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-3 pt-2">
+          <button type="button" onClick={() => setShowBeneficiaireModal(false)} className="flex-1 rounded-lg bg-gray-200 px-4 py-2 font-semibold text-gray-700">Annuler</button>
+          <button type="submit" className="btn-primary flex-1">Créer la liste</button>
+        </div>
+      </form>
     </div>
   </div>
 )}
