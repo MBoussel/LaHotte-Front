@@ -152,6 +152,13 @@ export const cadeauxAPI = {
   delete: (id: number) => api.delete(`/cadeaux/${id}`),
   extractProductImage: (url: string) =>
     api.post<{ photo_url: string; titre?: string | null }>('/produits/extraire-image', { url }),
+  uploadPhoto: (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post<{ photo_url: string }>('/cadeaux/photo', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 // Contributions
