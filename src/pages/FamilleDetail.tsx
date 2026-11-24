@@ -487,6 +487,7 @@ const FamilleDetail = () => {
           </button>
         </div>
         <CadeauCard
+          embedded
           cadeau={detailCadeau}
           contributions={contributions[detailCadeau.id] || []}
           membres={famille.membres}
