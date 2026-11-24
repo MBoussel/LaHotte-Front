@@ -1069,3 +1069,31 @@ html[data-effects='off'] *::after {
   -webkit-backdrop-filter: none !important;
   filter: none !important;
 }
+
+
+/* Favoris : effet festif uniquement dans la liste avant ouverture ; fiche sobre avec badge scintillant */
+.gift-favorite-overview {
+  border: 1px solid rgba(217, 158, 45, .72);
+  background: linear-gradient(105deg, #fff8df 0%, #ffedb5 22%, #fffdf2 48%, #ffe6a0 72%, #fff8df 100%);
+  background-size: 240% 100%;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.72), 0 2px 9px rgba(180, 124, 25, .16);
+  animation: gift-favorite-holiday 4.5s ease-in-out infinite;
+}
+.gift-favorite-overview:hover {
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.8), 0 3px 13px rgba(180, 124, 25, .24);
+}
+.gift-favorite-label {
+  animation: gift-favorite-twinkle 2.2s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes gift-favorite-holiday {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes gift-favorite-twinkle {
+  0%, 100% { filter: drop-shadow(0 0 1px rgba(245, 185, 66, .2)); opacity: .92; }
+  50% { filter: drop-shadow(0 0 5px rgba(245, 185, 66, .8)); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gift-favorite-overview, .gift-favorite-label { animation: none !important; }
+}
