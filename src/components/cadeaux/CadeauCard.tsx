@@ -19,7 +19,12 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
   const isOwner = currentUserId === cadeau.owner_id;
 
   return (
-    <div className={`${embedded ? "min-w-0" : "card hover:shadow-xl transition"} ${cadeau.is_favorite ? "rounded-xl bg-amber-50/30 ring-2 ring-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.20)]" : ""}`}>
+    <div
+      className={cadeau.is_favorite
+        ? `rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 shadow-[0_0_18px_rgba(245,158,11,0.28),0_0_38px_rgba(245,158,11,0.18)] ${embedded ? "" : "p-6"} ${!embedded ? "transition" : ""}`
+        : embedded ? "min-w-0" : "card hover:shadow-xl transition"}
+      style={cadeau.is_favorite ? { backgroundSize: "220% 100%", animation: "gold-flow 3s ease-in-out infinite" } : undefined}
+    >
       {cadeau.photo_url && (
         <img
           src={cadeau.photo_url}
@@ -38,11 +43,10 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
 
       <div className="flex items-start justify-between gap-3 mb-2">
         <h3 className="text-xl font-bold min-w-0">{cadeau.titre}</h3>
-        {cadeau.is_favorite && <span className="flex-shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-900">★ Favori</span>}
       </div>
       {isOwner && onToggleFavorite && (
         <button type="button" onClick={() => onToggleFavorite(cadeau.id, !cadeau.is_favorite)} aria-pressed={!!cadeau.is_favorite} className={`mb-3 inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${cadeau.is_favorite ? "border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100" : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"}`}>
-          <span aria-hidden="true">★</span> {cadeau.is_favorite ? "Retirer des favoris" : "Marquer comme favori"}
+          {cadeau.is_favorite ? "Retirer des favoris" : "Marquer comme favori"}
         </button>
       )}
       <p className="text-2xl font-bold text-christmas-red mb-2">{cadeau.prix} €</p>
