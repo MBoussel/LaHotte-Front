@@ -1122,3 +1122,7 @@ html[data-theme='dark'] .gift-favorite-overview .text-gray-900 {
 html[data-theme='dark'] .gift-favorite-overview .text-red-800 {
   color: #713018 !important;
 }
+
+
+/* Ouverture des cartes : surlignage discret du cadeau sélectionné */
+/* Le fond reste presque blanc et le contour doré est volontairement léger. */
