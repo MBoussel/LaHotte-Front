@@ -441,7 +441,7 @@ const FamilleDetail = () => {
                         aria-pressed={detailCadeau?.id === cadeau.id}
                         className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
                       >
-                        <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}{cadeau.is_favorite && <span className="ml-2 text-amber-700 text-xs font-bold">★ Favori</span>}</span>
+                        <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}</span>
                         <span className="flex items-center gap-2 flex-shrink-0">
                           <span className="text-sm font-semibold text-red-800">{cadeau.prix} €</span>
                           <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
@@ -487,6 +487,7 @@ const FamilleDetail = () => {
           </button>
         </div>
         <CadeauCard
+          embedded
           cadeau={detailCadeau}
           contributions={contributions[detailCadeau.id] || []}
           membres={famille.membres}
