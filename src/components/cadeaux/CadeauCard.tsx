@@ -22,7 +22,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
     <div
       className={cadeau.is_favorite && !embedded
         ? `gift-favorite-magic rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 shadow-[0_0_18px_rgba(245,158,11,0.32),0_0_38px_rgba(245,158,11,0.22)] p-6`
-        : embedded ? "min-w-0" : "card hover:shadow-xl transition"}
+        : embedded ? "card" : "card hover:shadow-xl transition"}
       style={cadeau.is_favorite && !embedded ? { backgroundSize: "220% 100%", animation: "gold-flow 3s ease-in-out infinite" } : undefined}
     >
       {cadeau.photo_url && (
