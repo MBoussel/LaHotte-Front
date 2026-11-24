@@ -1106,3 +1106,19 @@ html[data-effects='off'] *::after {
 .gift-favorite-overview .text-gray-900 {
   color: #3b2a12 !important;
 }
+
+
+/* Contraste du nom et du prix du cadeau favori sur le fond doré.
+   Le sélecteur thème sombre est volontairement plus spécifique que les règles globales du thème. */
+.gift-favorite-overview .text-gray-900 {
+  color: #3b2a12 !important;
+}
+.gift-favorite-overview .text-red-800 {
+  color: #713018 !important;
+}
+html[data-theme='dark'] .gift-favorite-overview .text-gray-900 {
+  color: #3b2a12 !important;
+}
+html[data-theme='dark'] .gift-favorite-overview .text-red-800 {
+  color: #713018 !important;
+}
