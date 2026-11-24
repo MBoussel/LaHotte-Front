@@ -20,10 +20,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
 
   return (
     <div
-      className={cadeau.is_favorite && !embedded
-        ? `gift-favorite-magic rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 shadow-[0_0_18px_rgba(245,158,11,0.32),0_0_38px_rgba(245,158,11,0.22)] p-6`
-        : embedded ? "card" : "card hover:shadow-xl transition"}
-      style={cadeau.is_favorite && !embedded ? { backgroundSize: "220% 100%", animation: "gold-flow 3s ease-in-out infinite" } : undefined}
+      className={embedded ? "card" : "card hover:shadow-xl transition"}
     >
       {cadeau.photo_url && (
         <img
@@ -44,8 +41,8 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex flex-wrap items-center gap-2 min-w-0">
           <h3 className="text-xl font-bold min-w-0">{cadeau.titre}</h3>
-          {embedded && cadeau.is_favorite && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+          {cadeau.is_favorite && (
+            <span className="gift-favorite-label inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
               <span aria-hidden="true">★</span> Favori
             </span>
           )}
