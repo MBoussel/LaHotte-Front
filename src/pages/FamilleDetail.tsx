@@ -439,9 +439,12 @@ const FamilleDetail = () => {
                         type="button"
                         onClick={() => setDetailCadeau(cadeau)}
                         aria-pressed={detailCadeau?.id === cadeau.id}
-                        className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
+                        className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${cadeau.is_favorite ? 'gift-favorite-overview' : detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
                       >
-                        <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}</span>
+                        <span className="flex items-center gap-2 min-w-0">
+                          <span className="font-medium text-sm md:text-base truncate text-gray-900">{cadeau.titre}</span>
+                          {cadeau.is_favorite && <span className="gift-favorite-label inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 py-1 text-[11px] font-bold text-amber-800"><span aria-hidden="true">★</span> Favori</span>}
+                        </span>
                         <span className="flex items-center gap-2 flex-shrink-0">
                           <span className="text-sm font-semibold text-red-800">{cadeau.prix} €</span>
                           <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
