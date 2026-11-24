@@ -26,8 +26,16 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+const capitalizeInitial = (value: string): string => {
+  const trimmed = value.trim();
+  return trimmed ? trimmed.charAt(0).toLocaleUpperCase('fr-FR') + trimmed.slice(1) : trimmed;
+};
+
+const displayNameFields = new Set(['username', 'first_name', 'last_name', 'nom', 'titre']);
+
 api.interceptors.response.use((response) => {
-  // Convertir les strings numériques (Decimal de PostgreSQL) en nombres
+  // Normaliser les noms et titres reçus, y compris les anciennes données.
+  // Convertir également les strings numériques (Decimal de PostgreSQL) en nombres
   const convertDecimals = (obj: any): any => {
     if (obj === null || obj === undefined) return obj;
     
@@ -43,6 +51,8 @@ api.interceptors.response.use((response) => {
             key === 'reste' || key === 'total_contributions') {
           const value = obj[key];
           converted[key] = typeof value === 'string' ? parseFloat(value) : value;
+        } else if (displayNameFields.has(key) && typeof obj[key] === 'string') {
+          converted[key] = capitalizeInitial(obj[key]);
         } else {
           converted[key] = convertDecimals(obj[key]);
         }
