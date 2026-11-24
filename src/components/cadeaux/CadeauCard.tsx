@@ -19,7 +19,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
   const isOwner = currentUserId === cadeau.owner_id;
 
   return (
-    <div className={embedded ? "min-w-0" : "card hover:shadow-xl transition"}>
+    <div className={`${embedded ? "min-w-0" : "card hover:shadow-xl transition"} ${cadeau.is_favorite ? "rounded-xl bg-amber-50/30 ring-2 ring-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.20)]" : ""}`}>
       {cadeau.photo_url && (
         <img
           src={cadeau.photo_url}
