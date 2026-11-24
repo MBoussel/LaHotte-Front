@@ -202,6 +202,21 @@ const FamilleDetail = () => {
       .filter((groupe) => groupe.cadeaux.length > 0),
   ];
 
+  // Si le troisième groupe est ouvert, on le place au milieu de la grille
+  // pour qu'il s'étende vers la gauche sans passer à la ligne suivante.
+  const groupesCadeauxAffiches = (() => {
+    if (!detailCadeau || groupesCadeaux.length < 3) return groupesCadeaux;
+    const indexOuvert = groupesCadeaux.findIndex((groupe) =>
+      groupe.beneficiaireId !== null
+        ? detailCadeau.beneficiaire_profil_id === groupe.beneficiaireId
+        : detailCadeau.owner_id === groupe.ownerId && !detailCadeau.beneficiaire_profil_id
+    );
+    if (indexOuvert !== 2) return groupesCadeaux;
+    const groupes = [...groupesCadeaux];
+    [groupes[1], groupes[2]] = [groupes[2], groupes[1]];
+    return groupes;
+  })();
+
   const handleSetNoelType = async (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedType = event.target.value as "pere_noel" | "mere_noel";
     setNoelType(selectedType);
@@ -399,7 +414,7 @@ const FamilleDetail = () => {
     </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
-      {groupesCadeaux.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }) => {
+      {groupesCadeauxAffiches.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }) => {
         const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id);
         const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
         const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
@@ -439,7 +454,7 @@ const FamilleDetail = () => {
                         type="button"
                         onClick={() => setDetailCadeau(cadeau)}
                         aria-pressed={detailCadeau?.id === cadeau.id}
-                        className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${cadeau.is_favorite ? 'gift-favorite-overview' : detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
+                        className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${cadeau.is_favorite ? 'gift-favorite-overview' : detailCadeau?.id === cadeau.id ? 'bg-amber-50/60 ring-1 ring-amber-200' : 'hover:bg-amber-50'}`}
                       >
                         <span className="flex items-center gap-2 min-w-0">
                           <span className="font-medium text-sm md:text-base truncate text-gray-900">{cadeau.titre}</span>
