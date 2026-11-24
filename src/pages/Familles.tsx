@@ -1,13 +1,14 @@
 import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
-import { famillesAPI } from '../services/api';
+import { famillesAPI, beneficiairesAPI } from '../services/api';
 import type { Famille } from '../types';
 import RechercherFamilles from './RechercherFamilles';
 
 const Familles = () => {
   const navigate = useNavigate();  // ✅ Hook appelé DANS le composant
   const [familles, setFamilles] = useState<Famille[]>([]);
+  const [beneficiairesCounts, setBeneficiairesCounts] = useState<Record<number, number>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [formData, setFormData] = useState({
@@ -24,10 +25,21 @@ const Familles = () => {
     try {
       const response = await famillesAPI.getAll();
       setFamilles(response.data);
+      const counts = await Promise.all(response.data.map(async (famille) => {
+        try {
+          const profils = await beneficiairesAPI.getByFamille(famille.id);
+          return [famille.id, profils.data.length] as const;
+        } catch (error) {
+          console.error(`Erreur chargement bénéficiaires de la famille ${famille.id}:`, error);
+          return [famille.id, 0] as const;
+        }
+      }));
+      setBeneficiairesCounts(Object.fromEntries(counts));
     } catch (error) {
       console.error('Erreur:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -99,7 +111,7 @@ const Familles = () => {
                 {famille.description}
               </p>
               <p className="text-xs md:text-sm text-gray-500">
-                <AppIcon name="members" size={16} /> {famille.membres?.length || 0} membres
+                <AppIcon name="members" size={16} /> {(famille.membres?.length || 0) + (beneficiairesCounts[famille.id] || 0)} membres
               </p>
             </div>
           ))}
