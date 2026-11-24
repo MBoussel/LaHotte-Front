@@ -20,10 +20,10 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
 
   return (
     <div
-      className={cadeau.is_favorite
-        ? `rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 shadow-[0_0_18px_rgba(245,158,11,0.28),0_0_38px_rgba(245,158,11,0.18)] ${embedded ? "" : "p-6"} ${!embedded ? "transition" : ""}`
+      className={cadeau.is_favorite && !embedded
+        ? `gift-favorite-magic rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 shadow-[0_0_18px_rgba(245,158,11,0.32),0_0_38px_rgba(245,158,11,0.22)] p-6`
         : embedded ? "min-w-0" : "card hover:shadow-xl transition"}
-      style={cadeau.is_favorite ? { backgroundSize: "220% 100%", animation: "gold-flow 3s ease-in-out infinite" } : undefined}
+      style={cadeau.is_favorite && !embedded ? { backgroundSize: "220% 100%", animation: "gold-flow 3s ease-in-out infinite" } : undefined}
     >
       {cadeau.photo_url && (
         <img
@@ -42,11 +42,18 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       </div>
 
       <div className="flex items-start justify-between gap-3 mb-2">
-        <h3 className="text-xl font-bold min-w-0">{cadeau.titre}</h3>
+        <div className="flex flex-wrap items-center gap-2 min-w-0">
+          <h3 className="text-xl font-bold min-w-0">{cadeau.titre}</h3>
+          {embedded && cadeau.is_favorite && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+              <span aria-hidden="true">★</span> Favori
+            </span>
+          )}
+        </div>
       </div>
-      {isOwner && onToggleFavorite && (
+      {embedded && isOwner && onToggleFavorite && (
         <button type="button" onClick={() => onToggleFavorite(cadeau.id, !cadeau.is_favorite)} aria-pressed={!!cadeau.is_favorite} className={`mb-3 inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${cadeau.is_favorite ? "border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100" : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"}`}>
-          {cadeau.is_favorite ? "Retirer des favoris" : "Marquer comme favori"}
+          {cadeau.is_favorite ? "Retirer des favoris" : "Ajouter aux favoris"}
         </button>
       )}
       <p className="text-2xl font-bold text-christmas-red mb-2">{cadeau.prix} €</p>
