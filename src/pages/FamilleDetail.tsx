@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { useFamille } from '../hooks/useFamille';
 import { useCadeaux } from '../hooks/useCadeaux';
-import { famillesAPI, beneficiairesAPI } from '../services/api';
+import { famillesAPI, beneficiairesAPI, cadeauxAPI } from '../services/api';
 import Invitations from '../components/familles/Invitations';
 import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
@@ -103,6 +103,15 @@ const FamilleDetail = () => {
   const handleCreateCadeau = async (data: CadeauFormData) => {
     await createCadeau(data);
     setShowCadeauModal(false);
+  };
+
+  const handleToggleFavorite = async (cadeauId: number, isFavorite: boolean) => {
+    try {
+      await cadeauxAPI.update(cadeauId, { is_favorite: isFavorite });
+      await reloadCadeaux();
+    } catch (error: any) {
+      alert(error.response?.data?.detail || "Impossible de modifier le favori.");
+    }
   };
 
   const handleUploadBeneficiaire = async (beneficiaireId: number, file: File) => {
@@ -384,6 +393,7 @@ const FamilleDetail = () => {
           currentUserId={user?.id}
           canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
           onContribute={setSelectedCadeau}
+          onToggleFavorite={handleToggleFavorite}
         />
       ))}
     </div>
@@ -431,7 +441,7 @@ const FamilleDetail = () => {
                         aria-pressed={detailCadeau?.id === cadeau.id}
                         className={`w-full flex items-center justify-between gap-3 rounded-lg px-3 py-3 text-left transition ${detailCadeau?.id === cadeau.id ? 'bg-amber-100 ring-1 ring-amber-400' : 'hover:bg-amber-50'}`}
                       >
-                        <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}</span>
+                        <span className="font-medium text-sm md:text-base min-w-0 truncate text-gray-900">{cadeau.titre}{cadeau.is_favorite && <span className="ml-2 text-amber-700 text-xs font-bold">★ Favori</span>}</span>
                         <span className="flex items-center gap-2 flex-shrink-0">
                           <span className="text-sm font-semibold text-red-800">{cadeau.prix} €</span>
                           <span aria-hidden="true" className="text-gray-400 text-lg">›</span>
@@ -457,6 +467,7 @@ const FamilleDetail = () => {
                     currentUserId={user?.id}
                     canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
                     onContribute={setSelectedCadeau}
+                    onToggleFavorite={handleToggleFavorite}
                   />
                 </div>
               )}
@@ -482,6 +493,7 @@ const FamilleDetail = () => {
           currentUserId={user?.id}
           canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
           onContribute={setSelectedCadeau}
+          onToggleFavorite={handleToggleFavorite}
         />
       </div>
     </div>
