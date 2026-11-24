@@ -166,7 +166,7 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, beneficiaires, onSubmit, on
         )}
       </div>
 
-      <label className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 cursor-pointer">
+      <label className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-all duration-300 ease-out ${formData.is_favorite ? "border-amber-400 bg-amber-50 shadow-[0_0_14px_rgba(245,158,11,0.28)] ring-1 ring-amber-200" : "border-gray-200 bg-white hover:border-amber-200"}`}>
         <input type="checkbox" checked={formData.is_favorite} onChange={(event) => setFormData({ ...formData, is_favorite: event.target.checked })} className="mt-1 rounded" />
         <span><span className="block text-sm font-semibold text-amber-900">★ C'est mon cadeau favori</span><span className="block text-xs text-amber-800 mt-1">Indique aux autres que c'est le cadeau que tu souhaites le plus.</span></span>
       </label>
