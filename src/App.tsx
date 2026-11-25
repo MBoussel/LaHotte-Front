@@ -84,13 +84,38 @@ function App() {
     window.localStorage.getItem('lahotte-effects') !== 'off'
   );
 
+  // Désactive temporairement les effets pendant un zoom tactile (Safari/Chrome iOS).
+  const [zoomActive, setZoomActive] = useState<boolean>(() =>
+    (window.visualViewport?.scale ?? 1) > 1.01
+  );
+
+  const visualEffectsEnabled = effectsEnabled && !zoomActive;
+
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
   useEffect(() => {
-    document.documentElement.dataset.effects = effectsEnabled ? 'on' : 'off';
-  }, [effectsEnabled]);
+    document.documentElement.dataset.effects = visualEffectsEnabled ? 'on' : 'off';
+  }, [visualEffectsEnabled]);
+
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const syncZoomState = () => {
+      setZoomActive(viewport.scale > 1.01);
+    };
+
+    syncZoomState();
+    viewport.addEventListener('resize', syncZoomState, { passive: true });
+    viewport.addEventListener('scroll', syncZoomState, { passive: true });
+
+    return () => {
+      viewport.removeEventListener('resize', syncZoomState);
+      viewport.removeEventListener('scroll', syncZoomState);
+    };
+  }, []);
 
   useEffect(() => {
     if (window.localStorage.getItem('lahotte-theme')) return;
@@ -116,7 +141,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <div className="app-shell min-h-screen bg-gray-50">
-          <CursorStarTrail enabled={effectsEnabled} />
+          <CursorStarTrail enabled={visualEffectsEnabled} />
           <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <Routes>
             {/* Routes publiques */}
@@ -124,7 +149,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/invitation/:token" element={<AcceptInvitation />} />
-            
+
             {/* Routes protégées */}
             <Route
               path="/familles"
@@ -159,21 +184,21 @@ function App() {
               }
             />
             <Route
-  path="/profil"
-  element={
-    <ProtectedRoute>
-      <Profil effectsEnabled={effectsEnabled} onToggleEffects={toggleEffects} />
-    </ProtectedRoute>
-  }
-/>
+              path="/profil"
+              element={
+                <ProtectedRoute>
+                  <Profil effectsEnabled={effectsEnabled} onToggleEffects={toggleEffects} />
+                </ProtectedRoute>
+              }
+            />
             <Route
-  path="/familles/:id/contributions-recap"
-  element={
-    <ProtectedRoute>
-      <RecapContributions/>
-    </ProtectedRoute> 
-  }
-/>
+              path="/familles/:id/contributions-recap"
+              element={
+                <ProtectedRoute>
+                  <RecapContributions/>
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/rechercher"
