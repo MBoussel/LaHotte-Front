@@ -12,7 +12,6 @@ interface CadeauCardProps {
 const CadeauCard = ({ cadeau, membres, currentUserId, embedded = false, onToggleFavorite }: CadeauCardProps) => {
   const isOwner = currentUserId === cadeau.owner_id;
   const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
-  const isBeneficiaire = cadeau.beneficiaire_profil_id == null && currentUserId === beneficiaireUserId;
 
   return (
     <div
