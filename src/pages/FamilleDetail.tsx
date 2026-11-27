@@ -9,7 +9,6 @@ import Invitations from '../components/familles/Invitations';
 import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
 import CadeauForm, { type CadeauFormData } from '../components/cadeaux/CadeauForm';
-import ContributionModal from '../components/cadeaux/ContributionModal';
 import BeneficiaireContributionModal from '../components/familles/BeneficiaireContributionModal';
 import type { BeneficiaireProfil, Cadeau } from '../types';
 import DemandesAdhesion from '../components/familles/DemandesAdhesion';
@@ -90,14 +89,6 @@ const FamilleDetail = () => {
     }
   }, [user?.id]);
   const [selectedBeneficiaireCagnotte, setSelectedBeneficiaireCagnotte] = useState<{ type: 'utilisateur' | 'profil'; id: number; nom: string } | null>(null);
-  const [selectedCadeau, setSelectedCadeau] = useState<{
-    id: number;
-    titre: string;
-    prix: number;
-    owner_id: number;
-    beneficiaire_user_id?: number;
-    beneficiaire_profil_id?: number;
-  } | null>(null);
   const [isEditingFamille, setIsEditingFamille] = useState(false);
   const [familleName, setFamilleName] = useState('');
   const [familleDescription, setFamilleDescription] = useState('');
@@ -408,7 +399,6 @@ const FamilleDetail = () => {
           cadeau={cadeau}
           membres={famille.membres}
           currentUserId={user?.id}
-          onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
       ))}
@@ -443,18 +433,6 @@ const FamilleDetail = () => {
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedBeneficiaireCagnotte({
-                      type: beneficiaireId !== null ? 'profil' : 'utilisateur',
-                      id: beneficiaireId !== null ? beneficiaireId : ownerId!,
-                      nom: groupeNom,
-                    })}
-                    className="flex-shrink-0 inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950 hover:bg-amber-200"
-                    aria-label={`Participer à la cagnotte de ${groupeNom}`}
-                  >
-                    <span aria-hidden="true">💰</span> Cagnotte
-                  </button>
                 </div>
                 <div className="rounded-xl border border-amber-200 bg-white p-2">
                   <div className="divide-y divide-gray-200">
@@ -478,6 +456,20 @@ const FamilleDetail = () => {
                     ))}
                   </div>
                 </div>
+                <div className="mt-3 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBeneficiaireCagnotte({
+                      type: beneficiaireId !== null ? 'profil' : 'utilisateur',
+                      id: beneficiaireId !== null ? beneficiaireId : ownerId!,
+                      nom: groupeNom,
+                    })}
+                    className="inline-flex min-w-36 items-center justify-center gap-2 rounded-full border border-amber-300 bg-amber-100 px-5 py-2 text-sm font-bold text-amber-950 transition hover:bg-amber-200"
+                    aria-label={`Contribuer à la cagnotte de ${groupeNom}`}
+                  >
+                    <AppIcon name="contribution" size={17} /> Contribuer
+                  </button>
+                </div>
               </div>
 
               {isExpanded && detailCadeau && (
@@ -492,7 +484,6 @@ const FamilleDetail = () => {
                     cadeau={detailCadeau}
                     membres={famille.membres}
                     currentUserId={user?.id}
-                    onContribute={setSelectedCadeau}
                     onToggleFavorite={handleToggleFavorite}
                   />
                 </div>
@@ -597,19 +588,6 @@ const FamilleDetail = () => {
   </div>
 )}
 
-      {/* Modal Contribution */}
-      {selectedCadeau && (
-        <ContributionModal
-          cadeauId={selectedCadeau.id}
-          cadeauTitre={selectedCadeau.titre}
-          onClose={() => setSelectedCadeau(null)}
-          onSuccess={reloadCadeaux}
-          showDetails={selectedCadeau.beneficiaire_profil_id != null
-            ? isPereNoel
-            : (isPereNoel && selectedCadeau.beneficiaire_user_id !== famille.pere_noel_id)
-              || (isCreator && famille.pere_noel_id != null && selectedCadeau.beneficiaire_user_id === famille.pere_noel_id)}
-        />
-      )}
     </div>
   );
 };
