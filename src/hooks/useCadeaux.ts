@@ -18,11 +18,12 @@ export const useCadeaux = (familleId: number | undefined, userId: number | undef
 
       const contribsData: Record<number, ContributionWithUser[]> = {};
       await Promise.all(response.data.map(async (cadeau: Cadeau) => {
+        const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
         const canSee =
-          (userId === pereNoelId && cadeau.owner_id !== pereNoelId) ||
-          (userId === creatorId && pereNoelId != null && cadeau.owner_id === pereNoelId);
+          (userId === pereNoelId && (cadeau.beneficiaire_profil_id != null || beneficiaireUserId !== pereNoelId)) ||
+          (userId === creatorId && pereNoelId != null && beneficiaireUserId === pereNoelId);
 
-        if (canSee && cadeau.owner_id !== userId) {
+        if (canSee && (cadeau.beneficiaire_profil_id != null || beneficiaireUserId !== userId)) {
           try {
             const contribRes = await contributionsAPI.getForCadeau(cadeau.id);
             contribsData[cadeau.id] = contribRes.data;
