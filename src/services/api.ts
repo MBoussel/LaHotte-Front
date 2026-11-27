@@ -189,6 +189,10 @@ export const contributionsAPI = {
     api.get<Contribution[]>('/contributions/mes-contributions'),
   getStats: () =>
     api.get<{ total_contribue: number; nombre_contributions: number }>('/contributions/statistics'),
+  getFamilyContributorTotals: (familleId: number) =>
+    api.get<{ contributions_par_contributeur: { contributeur_id: number; contributeur: string; total_donne: number; nb_contributions: number }[] }>(
+      `/contributions/familles/${familleId}/recap-contributeurs`
+    ),
   update: (id: number, data: { montant?: number; message?: string;  }) =>  // ✅ NOUVEAU
     api.put<Contribution>(`/contributions/${id}`, data),
   delete: (id: number) => 
