@@ -5,12 +5,11 @@ interface CadeauCardProps {
   cadeau: Cadeau;
   membres?: Membre[];
   currentUserId?: number;
-  onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number; beneficiaire_user_id?: number; beneficiaire_profil_id?: number }) => void;
   embedded?: boolean;
   onToggleFavorite?: (cadeauId: number, isFavorite: boolean) => void;
 }
 
-const CadeauCard = ({ cadeau, membres, currentUserId, onContribute, embedded = false, onToggleFavorite }: CadeauCardProps) => {
+const CadeauCard = ({ cadeau, membres, currentUserId, embedded = false, onToggleFavorite }: CadeauCardProps) => {
   const isOwner = currentUserId === cadeau.owner_id;
   const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
   const isBeneficiaire = cadeau.beneficiaire_profil_id == null && currentUserId === beneficiaireUserId;
@@ -68,14 +67,6 @@ const CadeauCard = ({ cadeau, membres, currentUserId, onContribute, embedded = f
           <a href={cadeau.lien_achat} target="_blank" rel="noopener noreferrer" className="block text-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
             <AppIcon name="cart" size={17} /> Voir le produit
           </a>
-        )}
-        {!isBeneficiaire && (
-          <button
-            onClick={() => onContribute({ id: cadeau.id, titre: cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === beneficiaireUserId)?.username || cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id, beneficiaire_user_id: cadeau.beneficiaire_profil_id == null ? beneficiaireUserId : undefined, beneficiaire_profil_id: cadeau.beneficiaire_profil_id ?? undefined })}
-            className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
-          >
-            <AppIcon name="contribution" size={17} /> Contribuer à la cagnotte
-          </button>
         )}
       </div>
     </div>
