@@ -1,18 +1,16 @@
 import AppIcon from '../ui/AppIcon';
-import type { Cadeau, ContributionWithUser, Membre } from '../../types';
+import type { Cadeau, Membre } from '../../types';
 
 interface CadeauCardProps {
   cadeau: Cadeau;
-  contributions: ContributionWithUser[];
   membres?: Membre[];
   currentUserId?: number;
-  canSeeContributions?: boolean;
   onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
   embedded?: boolean;
   onToggleFavorite?: (cadeauId: number, isFavorite: boolean) => void;
 }
 
-const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContributions = false, onContribute, embedded = false, onToggleFavorite }: CadeauCardProps) => {
+const CadeauCard = ({ cadeau, membres, currentUserId, onContribute, embedded = false, onToggleFavorite }: CadeauCardProps) => {
   const isOwner = currentUserId === cadeau.owner_id;
   const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
   const isBeneficiaire = currentUserId === beneficiaireUserId;
