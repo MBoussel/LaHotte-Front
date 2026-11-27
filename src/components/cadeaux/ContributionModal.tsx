@@ -6,13 +6,12 @@ import type { ContributionWithUser } from '../../types';
 interface ContributionModalProps {
   cadeauId: number;
   cadeauTitre: string;
-  prixTotal: number;
   onClose: () => void;
   onSuccess: () => void;
   showDetails?: boolean;
 }
 
-const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSuccess, showDetails = false }: ContributionModalProps) => {
+const ContributionModal = ({ cadeauId, cadeauTitre, onClose, onSuccess, showDetails = false }: ContributionModalProps) => {
   const [contributions, setContributions] = useState<ContributionWithUser[]>([]);
   const [formData, setFormData] = useState({ montant: '', message: '' });
   const [loading, setLoading] = useState(false);
