@@ -1,22 +1,17 @@
 import AppIcon from '../ui/AppIcon';
-import type { Cadeau, ContributionWithUser, Membre } from '../../types';
+import type { Cadeau, Membre } from '../../types';
 
 interface CadeauCardProps {
   cadeau: Cadeau;
-  contributions: ContributionWithUser[];
   membres?: Membre[];
   currentUserId?: number;
-  canSeeContributions?: boolean;
-  onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
   embedded?: boolean;
   onToggleFavorite?: (cadeauId: number, isFavorite: boolean) => void;
 }
 
-const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContributions = false, onContribute, embedded = false, onToggleFavorite }: CadeauCardProps) => {
-  const totalContribue = contributions.reduce((sum, c) => sum + c.montant, 0);
-  const reste = cadeau.prix - totalContribue;
-  const pourcentage = Math.min((totalContribue / cadeau.prix) * 100, 100);
+const CadeauCard = ({ cadeau, membres, currentUserId, embedded = false, onToggleFavorite }: CadeauCardProps) => {
   const isOwner = currentUserId === cadeau.owner_id;
+  const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
 
   return (
     <div
@@ -34,7 +29,7 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       <div className="flex items-center gap-2 text-sm mb-3 text-gray-600">
         <span className="font-semibold">Liste de :</span>
         <span className="bg-gray-100 px-3 py-1 rounded-full">
-          {cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === cadeau.owner_id)?.username || ("User #" + cadeau.owner_id)}
+          {cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === beneficiaireUserId)?.username || ("User #" + cadeau.owner_id)}
         </span>
       </div>
 
@@ -66,52 +61,11 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
 
       {cadeau.description && <p className="text-gray-600 mb-4">{cadeau.description}</p>}
 
-      {canSeeContributions && !isOwner && contributions.length > 0 && (
-        <div className="mb-4">
-          <div className="flex justify-between text-xs mb-1">
-            <span className="font-semibold text-christmas-green">{totalContribue.toFixed(2)} € collectés</span>
-            <span className="text-gray-500">{contributions.length} contribution{contributions.length > 1 ? 's' : ''}</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div className="bg-christmas-green h-2.5 rounded-full transition-all duration-500" style={{ width: pourcentage + '%' }} />
-          </div>
-          {reste > 0 ? (
-            <p className="text-xs text-gray-600 mt-1">Reste : <span className="font-bold">{reste.toFixed(2)} €</span></p>
-          ) : (
-            <p className="text-xs text-christmas-green font-bold mt-1">Objectif atteint !</p>
-          )}
-        </div>
-      )}
-
-      {canSeeContributions && !isOwner && contributions.length > 0 && (
-        <div className="mb-3 p-2 bg-gray-50 rounded">
-          <p className="text-xs font-semibold mb-1">Contributeurs :</p>
-          <div className="flex flex-wrap gap-1">
-            {contributions.slice(0, 3).map((contrib) => (
-              <span key={contrib.id} className="text-xs bg-white px-2 py-0.5 rounded-full border">
-                {contrib.contributeur}
-              </span>
-            ))}
-            {contributions.length > 3 && (
-              <span className="text-xs text-gray-500">+{contributions.length - 3} autre{contributions.length - 3 > 1 ? 's' : ''}</span>
-            )}
-          </div>
-        </div>
-      )}
-
       <div className="space-y-2">
         {cadeau.lien_achat && (
           <a href={cadeau.lien_achat} target="_blank" rel="noopener noreferrer" className="block text-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
             <AppIcon name="cart" size={17} /> Voir le produit
           </a>
-        )}
-        {!isOwner && (
-          <button
-            onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
-            className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
-          >
-            <AppIcon name="contribution" size={17} /> Contribuer à ce cadeau
-          </button>
         )}
       </div>
     </div>

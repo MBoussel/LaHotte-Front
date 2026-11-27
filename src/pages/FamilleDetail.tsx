@@ -9,7 +9,7 @@ import Invitations from '../components/familles/Invitations';
 import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
 import CadeauForm, { type CadeauFormData } from '../components/cadeaux/CadeauForm';
-import ContributionModal from '../components/cadeaux/ContributionModal';
+import BeneficiaireContributionModal from '../components/familles/BeneficiaireContributionModal';
 import type { BeneficiaireProfil, Cadeau } from '../types';
 import DemandesAdhesion from '../components/familles/DemandesAdhesion';
 
@@ -23,10 +23,9 @@ const FamilleDetail = () => {
   const { famille, mesFamilles, loading: familleLoading, reload: reloadFamille } = useFamille(familleId);
   const {
     cadeaux,
-    contributions,
     createCadeau,
     reload: reloadCadeaux,
-  } = useCadeaux(familleId, user?.id, famille?.creator_id, famille?.pere_noel_id);
+  } = useCadeaux(familleId);
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
@@ -89,12 +88,7 @@ const FamilleDetail = () => {
       setResponsableIds((ids) => ids.includes(user.id) ? ids : [...ids, user.id]);
     }
   }, [user?.id]);
-  const [selectedCadeau, setSelectedCadeau] = useState<{
-    id: number;
-    titre: string;
-    prix: number;
-    owner_id: number;
-  } | null>(null);
+  const [selectedBeneficiaireCagnotte, setSelectedBeneficiaireCagnotte] = useState<{ type: 'utilisateur' | 'profil'; id: number; nom: string } | null>(null);
   const [isEditingFamille, setIsEditingFamille] = useState(false);
   const [familleName, setFamilleName] = useState('');
   const [familleDescription, setFamilleDescription] = useState('');
@@ -196,7 +190,7 @@ const FamilleDetail = () => {
   const canManagePereNoel = isCreator;
   const groupesCadeaux = [
     ...(famille.membres || [])
-      .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id && !cadeau.beneficiaire_profil_id) }))
+      .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => !cadeau.beneficiaire_profil_id && (cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id) === membre.id) }))
       .filter((groupe) => groupe.cadeaux.length > 0),
     ...beneficiaires.map((profil) => ({ id: 'beneficiaire-' + profil.id, nom: profil.nom, ownerId: null as number | null, beneficiaireId: profil.id, cadeaux: cadeaux.filter((cadeau) => cadeau.beneficiaire_profil_id === profil.id) }))
       .filter((groupe) => groupe.cadeaux.length > 0),
@@ -403,11 +397,8 @@ const FamilleDetail = () => {
         <CadeauCard
           key={cadeau.id}
           cadeau={cadeau}
-          contributions={contributions[cadeau.id] || []}
           membres={famille.membres}
           currentUserId={user?.id}
-          canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
-          onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
       ))}
@@ -415,7 +406,7 @@ const FamilleDetail = () => {
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
       {groupesCadeauxAffiches.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }) => {
-        const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id);
+        const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && (detailCadeau?.beneficiaires?.[0]?.id ?? detailCadeau?.owner_id) === ownerId && !detailCadeau?.beneficiaire_profil_id);
         const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
         const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
 
@@ -442,8 +433,8 @@ const FamilleDetail = () => {
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
                   </div>
-                  <span className="flex-shrink-0 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950">
-                    {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
+                  <span className="flex-shrink-0 rounded-full bg-amber-200 px-2.5 py-1 text-xs font-bold text-amber-950" aria-label={`${cadeauxMembre.length} cadeaux`}>
+                    {cadeauxMembre.length}
                   </span>
                 </div>
                 <div className="rounded-xl border border-amber-200 bg-white p-2">
@@ -468,6 +459,20 @@ const FamilleDetail = () => {
                     ))}
                   </div>
                 </div>
+                <div className="mt-3 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBeneficiaireCagnotte({
+                      type: beneficiaireId !== null ? 'profil' : 'utilisateur',
+                      id: beneficiaireId !== null ? beneficiaireId : ownerId!,
+                      nom: groupeNom,
+                    })}
+                    className="inline-flex min-w-36 items-center justify-center gap-2 rounded-full border border-amber-300 bg-amber-100 px-5 py-2 text-sm font-bold text-amber-950 transition hover:bg-amber-200"
+                    aria-label={`Contribuer à la cagnotte de ${groupeNom}`}
+                  >
+                    <AppIcon name="contribution" size={17} /> Contribuer
+                  </button>
+                </div>
               </div>
 
               {isExpanded && detailCadeau && (
@@ -480,11 +485,8 @@ const FamilleDetail = () => {
                   <CadeauCard
                     embedded
                     cadeau={detailCadeau}
-                    contributions={contributions[detailCadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
-                    canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
-                    onContribute={setSelectedCadeau}
                     onToggleFavorite={handleToggleFavorite}
                   />
                 </div>
@@ -507,17 +509,35 @@ const FamilleDetail = () => {
         <CadeauCard
           embedded
           cadeau={detailCadeau}
-          contributions={contributions[detailCadeau.id] || []}
           membres={famille.membres}
           currentUserId={user?.id}
-          canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
-          onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
       </div>
     </div>
   )}
 </div>
+
+{selectedBeneficiaireCagnotte && (
+  <BeneficiaireContributionModal
+    type={selectedBeneficiaireCagnotte.type}
+    beneficiaireId={selectedBeneficiaireCagnotte.id}
+    beneficiaireNom={selectedBeneficiaireCagnotte.nom}
+    familleId={familleId}
+    showDetails={
+      selectedBeneficiaireCagnotte.type === 'profil'
+        ? (() => {
+            const profil = beneficiaires.find((item) => item.id === selectedBeneficiaireCagnotte.id);
+            const profilEstSanta = profil?.responsables.some((responsable) => responsable.id === famille.pere_noel_id) ?? false;
+            return (isPereNoel && !profilEstSanta) || (isCreator && profilEstSanta);
+          })()
+        : (isPereNoel && selectedBeneficiaireCagnotte.id !== famille.pere_noel_id)
+          || (isCreator && famille.pere_noel_id != null && selectedBeneficiaireCagnotte.id === famille.pere_noel_id)
+    }
+    onClose={() => setSelectedBeneficiaireCagnotte(null)}
+    onSuccess={reloadCadeaux}
+  />
+)}
 
 {/* Modal Création Cadeau */}
 {showCadeauModal && (
@@ -574,17 +594,6 @@ const FamilleDetail = () => {
   </div>
 )}
 
-      {/* Modal Contribution */}
-      {selectedCadeau && (
-        <ContributionModal
-          cadeauId={selectedCadeau.id}
-          cadeauTitre={selectedCadeau.titre}
-          prixTotal={selectedCadeau.prix}
-          onClose={() => setSelectedCadeau(null)}
-          onSuccess={reloadCadeaux}
-          showDetails={(isPereNoel && selectedCadeau.owner_id !== famille.pere_noel_id) || (isCreator && selectedCadeau.owner_id === famille.pere_noel_id)}
-        />
-      )}
     </div>
   );
 };

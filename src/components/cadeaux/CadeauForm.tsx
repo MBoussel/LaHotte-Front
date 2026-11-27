@@ -96,15 +96,27 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, beneficiaires, onSubmit, on
         <label className="block text-sm font-medium mb-1">Pour qui est ce cadeau ?</label>
         <select
           className="input"
-          value={formData.beneficiaire_profil_id ?? ''}
-          onChange={(e) => setFormData({ ...formData, beneficiaire_profil_id: e.target.value ? Number(e.target.value) : undefined })}
+          value={formData.beneficiaire_profil_id ? `profil:${formData.beneficiaire_profil_id}` : formData.beneficiaire_ids[0] ? `user:${formData.beneficiaire_ids[0]}` : 'owner'}
+          onChange={(event) => {
+            const value = event.target.value;
+            if (value.startsWith('profil:')) {
+              setFormData({ ...formData, beneficiaire_profil_id: Number(value.slice(7)), beneficiaire_ids: [] });
+            } else if (value.startsWith('user:')) {
+              setFormData({ ...formData, beneficiaire_profil_id: undefined, beneficiaire_ids: [Number(value.slice(5))] });
+            } else {
+              setFormData({ ...formData, beneficiaire_profil_id: undefined, beneficiaire_ids: [] });
+            }
+          }}
         >
-          <option value="">Ma liste personnelle</option>
+          <option value="owner">Ma liste personnelle</option>
+          {mesFamilles.find((famille) => famille.id === currentFamilleId)?.membres?.map((membre) => (
+            <option key={`user:${membre.id}`} value={`user:${membre.id}`}>{membre.username}</option>
+          ))}
           {beneficiaires.map((profil) => (
-            <option key={profil.id} value={profil.id}>{profil.nom}</option>
+            <option key={`profil:${profil.id}`} value={`profil:${profil.id}`}>{profil.nom}</option>
           ))}
         </select>
-        <p className="mt-1 text-xs text-gray-500">Choisis un bénéficiaire si ce cadeau est destiné à un enfant ou à une personne sans compte.</p>
+        <p className="mt-1 text-xs text-gray-500">Un cadeau est associé à une seule personne. Les contributions alimentent sa cagnotte globale.</p>
       </div>
 
       <div>
@@ -173,38 +185,6 @@ const CadeauForm = ({ currentFamilleId, mesFamilles, beneficiaires, onSubmit, on
 
       <div className="rounded-lg bg-gray-50 p-3 text-sm text-gray-600">
         Ce cadeau sera ajouté uniquement à cette famille.
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium mb-2">
-          <AppIcon name="members" size={18} /> Bénéficiaires (optionnel)
-        </label>
-        <p className="text-xs text-gray-600 mb-2">
-          Si ce cadeau est pour plusieurs personnes (ex: toi et ton/ta partenaire)
-        </p>
-        <div className="space-y-2 max-h-40 overflow-y-auto border rounded p-2">
-          {mesFamilles
-            .filter(fam => formData.famille_ids.includes(fam.id))
-            .flatMap(fam => fam.membres || [])
-            .filter((membre, index, self) => self.findIndex(m => m.id === membre.id) === index)
-            .map(membre => (
-              <label key={membre.id} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-                <input type="checkbox" checked={formData.beneficiaire_ids.includes(membre.id)}
-                  onChange={() => {
-                    const newIds = formData.beneficiaire_ids.includes(membre.id)
-                      ? formData.beneficiaire_ids.filter(id => id !== membre.id)
-                      : [...formData.beneficiaire_ids, membre.id];
-                    setFormData({ ...formData, beneficiaire_ids: newIds });
-                  }} className="rounded" />
-                <span className="text-sm">{membre.username}</span>
-              </label>
-            ))}
-        </div>
-        {formData.beneficiaire_ids.length > 0 && (
-          <p className="text-xs text-green-600 mt-1">
-            {formData.beneficiaire_ids.length} bénéficiaire(s) sélectionné(s)
-          </p>
-        )}
       </div>
 
       <div className="flex gap-3 pt-2">
