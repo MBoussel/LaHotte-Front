@@ -113,7 +113,7 @@ const MesContributions = () => {
               ) : (
                 <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold mb-1">{contrib.cadeau?.titre || 'Cadeau supprimé'}</h3>
+                    <h3 className="text-lg font-bold mb-1">{contrib.cadeau?.titre || 'Contribution à une cagnotte'}</h3>
                     <p className="text-2xl font-bold text-christmas-green mb-2">{contrib.montant} €</p>
                     {contrib.cadeau && <p className="text-sm text-gray-600 mb-2">Prix total du cadeau : {contrib.cadeau.prix} €</p>}
                     {contrib.message && <p className="text-sm text-gray-700 italic mb-2"><AppIcon name="message" size={16} /> "{contrib.message}"</p>}
