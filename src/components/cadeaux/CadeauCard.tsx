@@ -13,9 +13,6 @@ interface CadeauCardProps {
 }
 
 const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContributions = false, onContribute, embedded = false, onToggleFavorite }: CadeauCardProps) => {
-  const totalContribue = contributions.reduce((sum, c) => sum + c.montant, 0);
-  const reste = cadeau.prix - totalContribue;
-  const pourcentage = Math.min((totalContribue / cadeau.prix) * 100, 100);
   const isOwner = currentUserId === cadeau.owner_id;
   const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
   const isBeneficiaire = currentUserId === beneficiaireUserId;
@@ -67,39 +64,6 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
       )}
 
       {cadeau.description && <p className="text-gray-600 mb-4">{cadeau.description}</p>}
-
-      {canSeeContributions && !isOwner && contributions.length > 0 && (
-        <div className="mb-4">
-          <div className="flex justify-between text-xs mb-1">
-            <span className="font-semibold text-christmas-green">{totalContribue.toFixed(2)} € collectés</span>
-            <span className="text-gray-500">{contributions.length} contribution{contributions.length > 1 ? 's' : ''}</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div className="bg-christmas-green h-2.5 rounded-full transition-all duration-500" style={{ width: pourcentage + '%' }} />
-          </div>
-          {reste > 0 ? (
-            <p className="text-xs text-gray-600 mt-1">Reste : <span className="font-bold">{reste.toFixed(2)} €</span></p>
-          ) : (
-            <p className="text-xs text-christmas-green font-bold mt-1">Objectif atteint !</p>
-          )}
-        </div>
-      )}
-
-      {canSeeContributions && !isOwner && contributions.length > 0 && (
-        <div className="mb-3 p-2 bg-gray-50 rounded">
-          <p className="text-xs font-semibold mb-1">Contributeurs :</p>
-          <div className="flex flex-wrap gap-1">
-            {contributions.slice(0, 3).map((contrib) => (
-              <span key={contrib.id} className="text-xs bg-white px-2 py-0.5 rounded-full border">
-                {contrib.contributeur}
-              </span>
-            ))}
-            {contributions.length > 3 && (
-              <span className="text-xs text-gray-500">+{contributions.length - 3} autre{contributions.length - 3 > 1 ? 's' : ''}</span>
-            )}
-          </div>
-        </div>
-      )}
 
       <div className="space-y-2">
         {cadeau.lien_achat && (
