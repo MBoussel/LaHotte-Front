@@ -60,7 +60,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
       <div className="card max-w-2xl w-full my-8">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Contribuer à : {cadeauTitre}</h2>
+          <h2 className="text-2xl font-bold">Contribuer à la cagnotte de {cadeauTitre}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
         </div>
 
@@ -68,7 +68,7 @@ const ContributionModal = ({ cadeauId, cadeauTitre, prixTotal, onClose, onSucces
           <div className="mb-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="font-semibold">{totalContribue.toFixed(2)} € collectés</span>
-              <span className="text-gray-600">{prixTotal.toFixed(2)} € total</span>
+              <span className="text-gray-600">Cagnotte de la personne</span>
             </div>
             <p className="text-sm text-gray-600">{contributions.length} contribution(s) enregistrée(s)</p>
           </div>
