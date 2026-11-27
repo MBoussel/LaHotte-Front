@@ -511,7 +511,6 @@ const FamilleDetail = () => {
           cadeau={detailCadeau}
           membres={famille.membres}
           currentUserId={user?.id}
-          onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
       </div>
