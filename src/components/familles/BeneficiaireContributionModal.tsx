@@ -78,7 +78,6 @@ const BeneficiaireContributionModal = ({
                 <div key={contribution.id} className="flex justify-between gap-3 text-sm border-t border-green-100 pt-2">
                   <div>
                     <p className="font-semibold">{contribution.contributeur}</p>
-                    {contribution.message && <p className="text-gray-600 italic">{contribution.message}</p>}
                     <p className="text-xs text-gray-500">{new Date(contribution.created_at).toLocaleDateString('fr-FR')}</p>
                   </div>
                   <span className="font-bold whitespace-nowrap">{contribution.montant.toFixed(2)} €</span>
