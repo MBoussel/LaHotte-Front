@@ -408,7 +408,7 @@ const FamilleDetail = () => {
           contributions={contributions[cadeau.id] || []}
           membres={famille.membres}
           currentUserId={user?.id}
-          canSeeContributions={(isPereNoel && cadeau.owner_id !== famille.pere_noel_id) || (isCreator && cadeau.owner_id === famille.pere_noel_id)}
+          canSeeContributions={(isPereNoel && (cadeau.beneficiaire_profil_id != null || (cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id) !== famille.pere_noel_id)) || (isCreator && famille.pere_noel_id != null && (cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id) === famille.pere_noel_id)}
           onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
@@ -494,7 +494,7 @@ const FamilleDetail = () => {
                     contributions={contributions[detailCadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
-                    canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+                    canSeeContributions={(isPereNoel && (detailCadeau.beneficiaire_profil_id != null || (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) !== famille.pere_noel_id)) || (isCreator && famille.pere_noel_id != null && (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) === famille.pere_noel_id)}
                     onContribute={setSelectedCadeau}
                     onToggleFavorite={handleToggleFavorite}
                   />
@@ -521,7 +521,7 @@ const FamilleDetail = () => {
           contributions={contributions[detailCadeau.id] || []}
           membres={famille.membres}
           currentUserId={user?.id}
-          canSeeContributions={(isPereNoel && detailCadeau.owner_id !== famille.pere_noel_id) || (isCreator && detailCadeau.owner_id === famille.pere_noel_id)}
+          canSeeContributions={(isPereNoel && (detailCadeau.beneficiaire_profil_id != null || (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) !== famille.pere_noel_id)) || (isCreator && famille.pere_noel_id != null && (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) === famille.pere_noel_id)}
           onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
