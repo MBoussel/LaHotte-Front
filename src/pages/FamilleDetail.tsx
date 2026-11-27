@@ -526,7 +526,11 @@ const FamilleDetail = () => {
     familleId={familleId}
     showDetails={
       selectedBeneficiaireCagnotte.type === 'profil'
-        ? isPereNoel
+        ? (() => {
+            const profil = beneficiaires.find((item) => item.id === selectedBeneficiaireCagnotte.id);
+            const profilEstSanta = profil?.responsables.some((responsable) => responsable.id === famille.pere_noel_id) ?? false;
+            return (isPereNoel && !profilEstSanta) || (isCreator && profilEstSanta);
+          })()
         : (isPereNoel && selectedBeneficiaireCagnotte.id !== famille.pere_noel_id)
           || (isCreator && famille.pere_noel_id != null && selectedBeneficiaireCagnotte.id === famille.pere_noel_id)
     }
