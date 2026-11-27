@@ -67,7 +67,9 @@ export interface Invitation {
 
 export interface Contribution {
   id: number;
-  cadeau_id: number;
+  cadeau_id: number | null;
+  beneficiaire_user_id?: number | null;
+  beneficiaire_profil_id?: number | null;
   user_id: number;
   montant: number;
   message: string;
