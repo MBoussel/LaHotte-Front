@@ -20,6 +20,10 @@ const MesContributions = () => {
     try {
       const [contribRes, statsRes] = await Promise.all([contributionsAPI.getMine(), contributionsAPI.getStats()]);
       const contribsWithCadeau = await Promise.all(contribRes.data.map(async (contrib) => {
+        // Une contribution à une cagnotte globale n'est plus liée à un cadeau.
+        if (contrib.cadeau_id === null) {
+          return { ...contrib, cadeau: undefined };
+        }
         try {
           const cadeauRes = await cadeauxAPI.getOne(contrib.cadeau_id);
           return { ...contrib, cadeau: { id: cadeauRes.data.id, titre: cadeauRes.data.titre, prix: cadeauRes.data.prix } };
@@ -90,7 +94,7 @@ const MesContributions = () => {
             <div key={contrib.id} className="card">
               {editingId === contrib.id ? (
                 <div className="space-y-3">
-                  <h3 className="text-lg font-bold mb-2">{contrib.cadeau?.titre || 'Cadeau supprimé'}</h3>
+                  <h3 className="text-lg font-bold mb-2">{contrib.cadeau?.titre || 'Contribution à une cagnotte'}</h3>
                   <div>
                     <label className="block text-sm font-medium mb-1">Montant (€)</label>
                     <input type="number" step="0.01" min="0" className="input" value={editFormData.montant}
