@@ -17,6 +17,8 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
   const reste = cadeau.prix - totalContribue;
   const pourcentage = Math.min((totalContribue / cadeau.prix) * 100, 100);
   const isOwner = currentUserId === cadeau.owner_id;
+  const beneficiaireUserId = cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id;
+  const isBeneficiaire = currentUserId === beneficiaireUserId;
 
   return (
     <div
@@ -105,12 +107,12 @@ const CadeauCard = ({ cadeau, contributions, membres, currentUserId, canSeeContr
             <AppIcon name="cart" size={17} /> Voir le produit
           </a>
         )}
-        {!isOwner && (
+        {!isBeneficiaire && (
           <button
-            onClick={() => onContribute({ id: cadeau.id, titre: cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
+            onClick={() => onContribute({ id: cadeau.id, titre: cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === beneficiaireUserId)?.username || cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
             className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
           >
-            <AppIcon name="contribution" size={17} /> Contribuer à ce cadeau
+            <AppIcon name="contribution" size={17} /> Contribuer à la cagnotte
           </button>
         )}
       </div>
