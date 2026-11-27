@@ -70,6 +70,7 @@ export interface Contribution {
   cadeau_id: number | null;
   beneficiaire_user_id?: number | null;
   beneficiaire_profil_id?: number | null;
+  beneficiaire_nom?: string | null;
   user_id: number;
   montant: number;
   message: string;
