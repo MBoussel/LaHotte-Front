@@ -1,7 +1,7 @@
 import AppIcon from '../components/ui/AppIcon';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { famillesAPI } from '../services/api';
+import { famillesAPI, contributionsAPI } from '../services/api';
 
 interface Contribution {
   id: number;
@@ -17,6 +17,13 @@ interface BeneficiaireRecap {
   total_contribue: number;
   nb_contributions: number;
   contributions: Contribution[];
+}
+
+interface ContributeurRecap {
+  contributeur_id: number;
+  contributeur: string;
+  total_donne: number;
+  nb_contributions: number;
 }
 
 interface RecapData {
@@ -35,14 +42,26 @@ const RecapContributions = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<RecapData | null>(null);
+  const [contributorTotals, setContributorTotals] = useState<ContributeurRecap[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       if (!id) return;
       try {
-        const response = await famillesAPI.getContributionsRecap(parseInt(id, 10));
+        const familleId = parseInt(id, 10);
+        const response = await famillesAPI.getContributionsRecap(familleId);
         setData(response.data);
+
+        // Cette route est volontairement réservée au Père/Mère Noël.
+        // Le créateur conserve uniquement son récapitulatif des cagnottes Noël.
+        try {
+          const totalsResponse = await contributionsAPI.getFamilyContributorTotals(familleId);
+          setContributorTotals(totalsResponse.data.contributions_par_contributeur);
+        } catch (totalsError: any) {
+          if (totalsError.response?.status !== 403) throw totalsError;
+          setContributorTotals(null);
+        }
       } catch (error: any) {
         if (error.response?.status === 403) {
           alert("Vous n'avez pas accès à ce récapitulatif");
@@ -106,6 +125,36 @@ const RecapContributions = () => {
           <p className="text-xs md:text-sm text-gray-600">Contributeurs</p>
         </div>
       </div>
+
+      {contributorTotals !== null && (
+        <section className="card mb-6">
+          <div className="mb-4">
+            <h2 className="text-lg md:text-xl font-bold">Total donné par contributeur</h2>
+            <p className="text-sm text-gray-600">
+              Montant cumulé dans les cagnottes dont vous pouvez consulter les contributions.
+            </p>
+          </div>
+          {contributorTotals.length === 0 ? (
+            <p className="text-sm text-gray-600">Aucune contribution enregistrée.</p>
+          ) : (
+            <div className="space-y-2">
+              {contributorTotals.map((item) => (
+                <div key={item.contributeur_id} className="bg-gray-50 p-3 rounded-lg flex justify-between items-center gap-3">
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">{item.contributeur}</p>
+                    <p className="text-xs text-gray-500">
+                      {item.nb_contributions} contribution{item.nb_contributions > 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <p className="font-bold text-christmas-green whitespace-nowrap">
+                    {item.total_donne.toFixed(2)} €
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       <div className="space-y-4">
         {data.contributions_par_beneficiaire.length === 0 ? (
