@@ -414,7 +414,7 @@ const FamilleDetail = () => {
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 content-start">
       {groupesCadeauxAffiches.map(({ id: groupeId, nom: groupeNom, ownerId, beneficiaireId, cadeaux: cadeauxMembre }) => {
-        const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && detailCadeau?.owner_id === ownerId && !detailCadeau?.beneficiaire_profil_id);
+        const isExpanded = (beneficiaireId !== null && detailCadeau?.beneficiaire_profil_id === beneficiaireId) || (beneficiaireId === null && (detailCadeau?.beneficiaires?.[0]?.id ?? detailCadeau?.owner_id) === ownerId && !detailCadeau?.beneficiaire_profil_id);
         const membre = ownerId !== null ? famille.membres?.find((item) => item.id === ownerId) : undefined;
         const avatarUrl = membre?.avatar_url || (beneficiaireId !== null ? beneficiaires.find((profil) => profil.id === beneficiaireId)?.avatar_url : undefined);
 
