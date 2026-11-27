@@ -5,7 +5,7 @@ interface CadeauCardProps {
   cadeau: Cadeau;
   membres?: Membre[];
   currentUserId?: number;
-  onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number }) => void;
+  onContribute: (cadeau: { id: number; titre: string; prix: number; owner_id: number; beneficiaire_user_id?: number; beneficiaire_profil_id?: number }) => void;
   embedded?: boolean;
   onToggleFavorite?: (cadeauId: number, isFavorite: boolean) => void;
 }
@@ -71,7 +71,7 @@ const CadeauCard = ({ cadeau, membres, currentUserId, onContribute, embedded = f
         )}
         {!isBeneficiaire && (
           <button
-            onClick={() => onContribute({ id: cadeau.id, titre: cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === beneficiaireUserId)?.username || cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id })}
+            onClick={() => onContribute({ id: cadeau.id, titre: cadeau.beneficiaire_profil_nom || membres?.find((m) => m.id === beneficiaireUserId)?.username || cadeau.titre, prix: cadeau.prix, owner_id: cadeau.owner_id, beneficiaire_user_id: cadeau.beneficiaire_profil_id == null ? beneficiaireUserId : undefined, beneficiaire_profil_id: cadeau.beneficiaire_profil_id ?? undefined })}
             className="w-full bg-christmas-green hover:bg-green-800 text-white px-4 py-2 rounded-lg transition font-semibold"
           >
             <AppIcon name="contribution" size={17} /> Contribuer à la cagnotte
