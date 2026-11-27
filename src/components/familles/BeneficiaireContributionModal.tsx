@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent, type ChangeEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { contributionsAPI } from '../../services/api';
 import type { ContributionWithUser } from '../../types';
 
@@ -17,7 +17,6 @@ const BeneficiaireContributionModal = ({
 }: Props) => {
   const [contributions, setContributions] = useState<ContributionWithUser[]>([]);
   const [montant, setMontant] = useState('');
-  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const loadDetails = async () => {
@@ -40,14 +39,13 @@ const BeneficiaireContributionModal = ({
     event.preventDefault();
     setLoading(true);
     try {
-      const payload = { montant: Number(montant), message };
+      const payload = { montant: Number(montant) };
       if (type === 'profil') {
         await contributionsAPI.contributeToProfile(beneficiaireId, payload);
       } else {
         await contributionsAPI.contributeToUser(beneficiaireId, familleId, payload);
       }
       setMontant('');
-      setMessage('');
       if (showDetails) await loadDetails();
       onSuccess();
       onClose();
@@ -56,11 +54,6 @@ const BeneficiaireContributionModal = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (event.target.name === 'montant') setMontant(event.target.value);
-    else setMessage(event.target.value);
   };
 
   const total = contributions.reduce((sum, contribution) => sum + contribution.montant, 0);
@@ -98,11 +91,7 @@ const BeneficiaireContributionModal = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Montant (€) *</label>
-            <input name="montant" type="number" step="0.01" min="0.01" className="input" value={montant} onChange={handleChange} required placeholder="Montant souhaité" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Message (optionnel)</label>
-            <textarea name="message" rows={3} className="input" value={message} onChange={handleChange} placeholder="Un petit message..." />
+            <input name="montant" type="number" step="0.01" min="0.01" className="input" value={montant} onChange={(event) => setMontant(event.target.value)} required placeholder="Montant souhaité" />
           </div>
           <button type="submit" className="btn-primary w-full" disabled={loading}>
             {loading ? 'Contribution...' : 'Participer à la cagnotte'}
