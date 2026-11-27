@@ -600,7 +600,6 @@ const FamilleDetail = () => {
         <ContributionModal
           cadeauId={selectedCadeau.id}
           cadeauTitre={selectedCadeau.titre}
-          prixTotal={selectedCadeau.prix}
           onClose={() => setSelectedCadeau(null)}
           onSuccess={reloadCadeaux}
           showDetails={(isPereNoel && selectedCadeau.owner_id !== famille.pere_noel_id) || (isCreator && selectedCadeau.owner_id === famille.pere_noel_id)}
