@@ -24,10 +24,9 @@ const FamilleDetail = () => {
   const { famille, mesFamilles, loading: familleLoading, reload: reloadFamille } = useFamille(familleId);
   const {
     cadeaux,
-    contributions,
     createCadeau,
     reload: reloadCadeaux,
-  } = useCadeaux(familleId, user?.id, famille?.creator_id, famille?.pere_noel_id);
+  } = useCadeaux(familleId);
 
   // States locaux
   const [showCadeauModal, setShowCadeauModal] = useState(false);
@@ -405,10 +404,8 @@ const FamilleDetail = () => {
         <CadeauCard
           key={cadeau.id}
           cadeau={cadeau}
-          contributions={contributions[cadeau.id] || []}
           membres={famille.membres}
           currentUserId={user?.id}
-          canSeeContributions={(isPereNoel && (cadeau.beneficiaire_profil_id != null || (cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id) !== famille.pere_noel_id)) || (isCreator && famille.pere_noel_id != null && (cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id) === famille.pere_noel_id)}
           onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
@@ -491,10 +488,8 @@ const FamilleDetail = () => {
                   <CadeauCard
                     embedded
                     cadeau={detailCadeau}
-                    contributions={contributions[detailCadeau.id] || []}
                     membres={famille.membres}
                     currentUserId={user?.id}
-                    canSeeContributions={(isPereNoel && (detailCadeau.beneficiaire_profil_id != null || (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) !== famille.pere_noel_id)) || (isCreator && famille.pere_noel_id != null && (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) === famille.pere_noel_id)}
                     onContribute={setSelectedCadeau}
                     onToggleFavorite={handleToggleFavorite}
                   />
@@ -518,10 +513,8 @@ const FamilleDetail = () => {
         <CadeauCard
           embedded
           cadeau={detailCadeau}
-          contributions={contributions[detailCadeau.id] || []}
           membres={famille.membres}
           currentUserId={user?.id}
-          canSeeContributions={(isPereNoel && (detailCadeau.beneficiaire_profil_id != null || (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) !== famille.pere_noel_id)) || (isCreator && famille.pere_noel_id != null && (detailCadeau.beneficiaires?.[0]?.id ?? detailCadeau.owner_id) === famille.pere_noel_id)}
           onContribute={setSelectedCadeau}
           onToggleFavorite={handleToggleFavorite}
         />
