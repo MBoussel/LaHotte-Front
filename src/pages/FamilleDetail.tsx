@@ -95,6 +95,8 @@ const FamilleDetail = () => {
     titre: string;
     prix: number;
     owner_id: number;
+    beneficiaire_user_id?: number;
+    beneficiaire_profil_id?: number;
   } | null>(null);
   const [isEditingFamille, setIsEditingFamille] = useState(false);
   const [familleName, setFamilleName] = useState('');
@@ -602,7 +604,10 @@ const FamilleDetail = () => {
           cadeauTitre={selectedCadeau.titre}
           onClose={() => setSelectedCadeau(null)}
           onSuccess={reloadCadeaux}
-          showDetails={(isPereNoel && selectedCadeau.owner_id !== famille.pere_noel_id) || (isCreator && selectedCadeau.owner_id === famille.pere_noel_id)}
+          showDetails={selectedCadeau.beneficiaire_profil_id != null
+            ? isPereNoel
+            : (isPereNoel && selectedCadeau.beneficiaire_user_id !== famille.pere_noel_id)
+              || (isCreator && famille.pere_noel_id != null && selectedCadeau.beneficiaire_user_id === famille.pere_noel_id)}
         />
       )}
     </div>
