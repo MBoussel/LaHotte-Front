@@ -10,6 +10,7 @@ import MembresSection from '../components/familles/MembresSection';
 import CadeauCard from '../components/cadeaux/CadeauCard';
 import CadeauForm, { type CadeauFormData } from '../components/cadeaux/CadeauForm';
 import ContributionModal from '../components/cadeaux/ContributionModal';
+import BeneficiaireContributionModal from '../components/familles/BeneficiaireContributionModal';
 import type { BeneficiaireProfil, Cadeau } from '../types';
 import DemandesAdhesion from '../components/familles/DemandesAdhesion';
 
@@ -89,6 +90,7 @@ const FamilleDetail = () => {
       setResponsableIds((ids) => ids.includes(user.id) ? ids : [...ids, user.id]);
     }
   }, [user?.id]);
+  const [selectedBeneficiaireCagnotte, setSelectedBeneficiaireCagnotte] = useState<{ type: 'utilisateur' | 'profil'; id: number; nom: string } | null>(null);
   const [selectedCadeau, setSelectedCadeau] = useState<{
     id: number;
     titre: string;
@@ -196,7 +198,7 @@ const FamilleDetail = () => {
   const canManagePereNoel = isCreator;
   const groupesCadeaux = [
     ...(famille.membres || [])
-      .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => cadeau.owner_id === membre.id && !cadeau.beneficiaire_profil_id) }))
+      .map((membre) => ({ id: 'membre-' + membre.id, nom: membre.username, ownerId: membre.id, beneficiaireId: null as number | null, cadeaux: cadeaux.filter((cadeau) => !cadeau.beneficiaire_profil_id && (cadeau.beneficiaires?.[0]?.id ?? cadeau.owner_id) === membre.id) }))
       .filter((groupe) => groupe.cadeaux.length > 0),
     ...beneficiaires.map((profil) => ({ id: 'beneficiaire-' + profil.id, nom: profil.nom, ownerId: null as number | null, beneficiaireId: profil.id, cadeaux: cadeaux.filter((cadeau) => cadeau.beneficiaire_profil_id === profil.id) }))
       .filter((groupe) => groupe.cadeaux.length > 0),
@@ -442,9 +444,18 @@ const FamilleDetail = () => {
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
                   </div>
-                  <span className="flex-shrink-0 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950">
-                    {cadeauxMembre.length} cadeau{cadeauxMembre.length > 1 ? 'x' : ''}
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBeneficiaireCagnotte({
+                      type: beneficiaireId !== null ? 'profil' : 'utilisateur',
+                      id: beneficiaireId !== null ? beneficiaireId : ownerId!,
+                      nom: groupeNom,
+                    })}
+                    className="flex-shrink-0 inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-950 hover:bg-amber-200"
+                    aria-label={`Participer à la cagnotte de ${groupeNom}`}
+                  >
+                    <span aria-hidden="true">💰</span> Cagnotte
+                  </button>
                 </div>
                 <div className="rounded-xl border border-amber-200 bg-white p-2">
                   <div className="divide-y divide-gray-200">
@@ -518,6 +529,23 @@ const FamilleDetail = () => {
     </div>
   )}
 </div>
+
+{selectedBeneficiaireCagnotte && (
+  <BeneficiaireContributionModal
+    type={selectedBeneficiaireCagnotte.type}
+    beneficiaireId={selectedBeneficiaireCagnotte.id}
+    beneficiaireNom={selectedBeneficiaireCagnotte.nom}
+    familleId={familleId}
+    showDetails={
+      selectedBeneficiaireCagnotte.type === 'profil'
+        ? isPereNoel
+        : (isPereNoel && selectedBeneficiaireCagnotte.id !== famille.pere_noel_id)
+          || (isCreator && famille.pere_noel_id != null && selectedBeneficiaireCagnotte.id === famille.pere_noel_id)
+    }
+    onClose={() => setSelectedBeneficiaireCagnotte(null)}
+    onSuccess={reloadCadeaux}
+  />
+)}
 
 {/* Modal Création Cadeau */}
 {showCadeauModal && (
