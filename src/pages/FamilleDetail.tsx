@@ -433,6 +433,9 @@ const FamilleDetail = () => {
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 truncate">{groupeNom}</h3>
                   </div>
+                  <span className="flex-shrink-0 rounded-full bg-amber-200 px-2.5 py-1 text-xs font-bold text-amber-950" aria-label={`${cadeauxMembre.length} cadeaux`}>
+                    {cadeauxMembre.length}
+                  </span>
                 </div>
                 <div className="rounded-xl border border-amber-200 bg-white p-2">
                   <div className="divide-y divide-gray-200">
