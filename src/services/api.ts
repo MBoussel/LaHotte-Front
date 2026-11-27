@@ -177,6 +177,14 @@ export const contributionsAPI = {
     api.post<Contribution>(`/contributions/cadeaux/${cadeauId}`, data),
   getForCadeau: (cadeauId: number) => 
     api.get<ContributionWithUser[]>(`/contributions/cadeaux/${cadeauId}`),
+  contributeToUser: (userId: number, familleId: number, data: { montant: number; message?: string }) =>
+    api.post<Contribution>(`/contributions/personnes/utilisateurs/${userId}?famille_id=${familleId}`, data),
+  getForUser: (userId: number, familleId: number) =>
+    api.get<ContributionWithUser[]>(`/contributions/personnes/utilisateurs/${userId}?famille_id=${familleId}`),
+  contributeToProfile: (profilId: number, data: { montant: number; message?: string }) =>
+    api.post<Contribution>(`/contributions/personnes/profils/${profilId}`, data),
+  getForProfile: (profilId: number) =>
+    api.get<ContributionWithUser[]>(`/contributions/personnes/profils/${profilId}`),
   getMine: () => 
     api.get<Contribution[]>('/contributions/mes-contributions'),
   getStats: () =>
